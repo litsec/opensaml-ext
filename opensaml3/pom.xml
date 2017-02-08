@@ -1,0 +1,320 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>se.litsec.opensaml</groupId>
+  <artifactId>opensaml3-ext</artifactId>
+  <packaging>jar</packaging>
+  <version>0.9-SNAPSHOT</version>
+
+  <name>Litsec :: OpenSAML 3.X utility extensions</name>
+  <description>OpenSAML 3.X utility extension library</description>
+  <url>https://github.com/litsec/opensaml-ext</url>
+
+  <licenses>
+    <license>
+      <name>GNU General Public License, Version 3</name>
+      <url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+      <distribution>repo</distribution>
+      <comments>A free, copyleft license for software and other kinds of works</comments>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:https://github.com/litsec/opensaml-ext.git</connection>
+    <developerConnection>scm:https://github.com/litsec/opensaml-ext.git</developerConnection>
+    <url>https://github.com/litsec/opensaml-ext/tree/master</url>
+  </scm>
+
+  <developers>
+    <developer>
+      <name>Martin Lindström</name>
+      <email>martin.lindstrom@litsec.se</email>
+      <organization>Litsec AB</organization>
+      <organizationUrl>http://www.litsec.se</organizationUrl>      
+    </developer>
+  </developers>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.8</java.version>
+
+    <!-- Versions on dependencies -->
+    <opensaml.version>3.2.0</opensaml.version>
+
+    <slf4j.version>1.7.5</slf4j.version>
+
+    <junit.version>4.12</junit.version>
+
+  </properties>
+  
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+    <id>ossrh</id>
+    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>  
+
+  <dependencies>
+
+    <!-- OpenSAML -->
+    <dependency>
+      <groupId>org.opensaml</groupId>
+      <artifactId>opensaml-core</artifactId>
+      <version>${opensaml.version}</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opensaml</groupId>
+      <artifactId>opensaml-saml-api</artifactId>
+      <version>${opensaml.version}</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opensaml</groupId>
+      <artifactId>opensaml-saml-impl</artifactId>
+      <version>${opensaml.version}</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>net.shibboleth.utilities</groupId>
+      <artifactId>java-support</artifactId>
+      <version>7.1.1</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>2.7</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.4</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- For logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+      <type>jar</type>
+    </dependency>
+
+    <!-- For testing -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>${slf4j.version}</version>
+      <type>jar</type>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.16</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.mail</groupId>
+          <artifactId>mail</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.jms</groupId>
+          <artifactId>jms</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.sun.jdmk</groupId>
+          <artifactId>jmxtools</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.sun.jmx</groupId>
+          <artifactId>jmxri</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.6</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.6.1</version>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>test-output</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+  <profiles>
+
+    <profile>
+      <id>release</id>
+      
+      <!-- See http://central.sonatype.org/pages/apache-maven.html for setup -->
+      
+      <build>
+        <plugins>
+        
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.7</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>false</autoReleaseAfterClose>
+              <!--
+                Allows manual inspection of the staging repo before deploying
+                it to the central repo.
+                Use 'mvn nexus-staging:release -Prelease' to release and
+                'mvn nexus-staging:drop' to abort. 
+               -->
+            </configuration>
+          </plugin>        
+        
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.0.1</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>attach-test-sources</id>
+                <goals>
+                  <goal>test-jar-no-fork</goal>
+                </goals>
+              </execution>              
+            </executions>
+          </plugin>
+          
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.10.4</version>
+            <executions>
+              <execution>
+                <id>attach-javadoc</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+            
+              <doctitle>OpenSAML 3.x utility extensions - ${project.version}</doctitle>
+              <windowtitle>OpenSAML 3.x utility extensions - ${project.version}</windowtitle>             
+              <links>
+                <!-- 
+                  Doesn't work since the Shib webserver sets X-Frame-Options to SAMEORIGIN
+                  which makes it impossible to use frames. 
+                -->
+                <!--               
+                <link>https://build.shibboleth.net/nexus/content/sites/site/java-opensaml/3.2.0/apidocs/</link>
+                <link>https://build.shibboleth.net/nexus/content/sites/site/java-support/7.2.0/apidocs/</link>
+                <link>https://build.shibboleth.net/nexus/content/sites/site/spring-extensions/5.2.0/apidocs/</link>
+                -->
+                <link>http://www.atetric.com/atetric/javadoc/org.opensaml/opensaml-core/${opensaml.version}/</link>
+                <link>http://www.atetric.com/atetric/javadoc/org.opensaml/opensaml-messaging-api/${opensaml.version}/</link>
+                <link>http://www.atetric.com/atetric/javadoc/org.opensaml/opensaml-messaging-impl/${opensaml.version}/</link>
+                <link>http://www.atetric.com/atetric/javadoc/org.opensaml/opensaml-profile-api/${opensaml.version}/</link>
+                <link>http://www.atetric.com/atetric/javadoc/org.opensaml/opensaml-profile-impl/${opensaml.version}/</link>
+                <link>http://www.atetric.com/atetric/javadoc/org.opensaml/opensaml-saml-api/${opensaml.version}/</link>
+                <link>http://www.atetric.com/atetric/javadoc/org.opensaml/opensaml-saml-impl/${opensaml.version}/</link>
+                <link>http://www.atetric.com/atetric/javadoc/org.opensaml/opensaml-security-api/${opensaml.version}/</link>
+                <link>http://www.atetric.com/atetric/javadoc/org.opensaml/opensaml-security-impl/${opensaml.version}/</link>
+                <link>http://www.atetric.com/atetric/javadoc/org.opensaml/opensaml-soap-api/${opensaml.version}/</link>
+                <link>http://www.atetric.com/atetric/javadoc/org.opensaml/opensaml-soap-impl/${opensaml.version}/</link>
+                <link>http://www.atetric.com/atetric/javadoc/org.opensaml/opensaml-storage-api/${opensaml.version}/</link>
+                <link>http://www.atetric.com/atetric/javadoc/org.opensaml/opensaml-storage-impl/${opensaml.version}/</link>
+                <link>http://www.atetric.com/atetric/javadoc/org.opensaml/opensaml-xmlsec-api/${opensaml.version}/</link>
+                <link>http://www.atetric.com/atetric/javadoc/org.opensaml/opensaml-xmlsec-impl/${opensaml.version}/</link>
+              </links>
+              <detectJavaApiLink>true</detectJavaApiLink>
+            </configuration>
+          </plugin>
+
+        </plugins>
+      </build>
+
+    </profile>
+
+
+  </profiles>
+
+</project>
