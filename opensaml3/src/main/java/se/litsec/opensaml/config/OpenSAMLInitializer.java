@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- package se.litsec.opensaml.config;
+package se.litsec.opensaml.config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -96,7 +96,7 @@ public class OpenSAMLInitializer {
     logger.debug("Initializing OpenSAML 3.X library ...");
 
     InitializationService.initialize();
-    
+
     XMLObjectProviderRegistry registry = null;
     synchronized (ConfigurationService.class) {
       registry = ConfigurationService.get(XMLObjectProviderRegistry.class);
@@ -145,7 +145,7 @@ public class OpenSAMLInitializer {
     }
     return this.parserPool;
   }
-  
+
   // Hidden constructor
   private OpenSAMLInitializer() {
   }
