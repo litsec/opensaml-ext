@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<md:EntitiesDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="metadata_part1" cacheDuration="PT10M0.000S" validUntil="2020-05-04T21:17:39.086Z">
+  <md:EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" entityID="http://skatteverket.inttest.underskriftstjanst.se/metadata/af7ee8cfc56f4e08"
+    xml:base="eid2-test-sp/comfact-test-sp.xml" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
+    <md:Extensions>
+      <mdattr:EntityAttributes>
+        <saml:Attribute Name="http://macedir.org/entity-category" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="xs:string">http://id.elegnamnden.se/st/1.0/sigservice</saml:AttributeValue>
+          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="xs:string">http://id.elegnamnden.se/ec/1.0/loa3-pnr</saml:AttributeValue>
+        </saml:Attribute>
+      </mdattr:EntityAttributes>
+    </md:Extensions>
+    <md:SPSSODescriptor AuthnRequestsSigned="true" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+      <md:Extensions>
+        <mdui:UIInfo>
+          <mdui:DisplayName xml:lang="sv">Skatteverkets underskrifttjänst</mdui:DisplayName>
+          <mdui:DisplayName xml:lang="en">Skatteverkets Secure Signature Creation Device</mdui:DisplayName>
+          <mdui:Description xml:lang="sv">Detta är en tjänst för elektroniska underskrifter.</mdui:Description>
+          <mdui:Description xml:lang="en">This is a service for electronic signatures.</mdui:Description>
+          <mdui:Logo height="66" width="193">https://www.skatteverket.se/images/200.3aa8c78a1466c584587dfb5/1408962396786/SkatteverketLogo.png
+          </mdui:Logo>
+        </mdui:UIInfo>
+      </md:Extensions>
+      <md:KeyDescriptor use="signing">
+        <ds:KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+          <ds:X509Data>
+            <ds:X509Certificate>MIIDUDCCAjgCCQDrC+5d6RdC3jANBgkqhkiG9w0BAQUFADBqMQswCQYDVQQGEwJTRTEaMBgGA1UEChMRQ3liZXJjb20gR3JvdXAgQUIxHTAbBgNVBAsTFFVuZGVyc2tyaWZ0c3RqYW5zdGVuMSAwHgYDVQQDExdTaWduaW5nIFNlcnZpY2UgU0tWIEludDAeFw0xNTAzMjQxNDM3NTVaFw0xNjAzMjMxNDM3NTVaMGoxCzAJBgNVBAYTAlNFMRowGAYDVQQKExFDeWJlcmNvbSBHcm91cCBBQjEdMBsGA1UECxMUVW5kZXJza3JpZnRzdGphbnN0ZW4xIDAeBgNVBAMTF1NpZ25pbmcgU2VydmljZSBTS1YgSW50MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtAtGYSo1j4u1pql04rjM4vLemh9vqhRbFyPcfdJUQKjXesXPDRs1BfNp4TQ6XYsoJWaoNxtBme8sRJAKGMP5gcmnD2xFcNyuukzyuB9gzxZDErtvDzIW6F6qADMODbV9fwx6RCkowvSocGj7IR/6qbYZt1nJxpYdZVCMGh3WGtUR/3HhhrmoxkKoFtj4vWtH4UYXpe5bG0//8O9Ma0PrG4q5JsjcaprxzqySHadzgvtqjYKZmaTfXhW3lTnGlI8mwPmc+MxcE6fXM2DpK8oiIANb65hz/wnpkzRRhrqPVP3rDvpJ1QB9CkTmbLLJR6CBZ7NQnJWoxAryOD/v33PBpwIDAQABMA0GCSqGSIb3DQEBBQUAA4IBAQAJ2ypd4UfROtNlTgBis4Ifm8jQKri0ga+pA6FBn+N/0b/UkAwjf6FY8YxuIheuSaWVC5Qna3I2kuVLLalvwzZpFbgl5JFPM+BH9DentY347uWheLATihkB7jVX1HFghOmmxs5Z3ik8mihTUmjLuGyg0917WDTUiLZwgJetfy1ZA4WHT7BHenJ2SEuYow7BT7Kv/Rwt8Y0KOp3XUNg+Us+ZFaqhCS5/XnhZqugg8BDh1QdLJc+Br5p97kz2+oIKOq2+yivU0QtIBHam6rOMSM6K6BySSf2DbmYmRdhPJiQf8cf3xfJXHfpqEuOwYkN5+vTnuXLRtZQw+MnJGhxaPTGM
+            </ds:X509Certificate>
+          </ds:X509Data>
+        </ds:KeyInfo>
+      </md:KeyDescriptor>
+      <md:KeyDescriptor use="encryption">
+        <ds:KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+          <ds:X509Data>
+            <ds:X509Certificate>MIIDUDCCAjgCCQDrC+5d6RdC3jANBgkqhkiG9w0BAQUFADBqMQswCQYDVQQGEwJTRTEaMBgGA1UEChMRQ3liZXJjb20gR3JvdXAgQUIxHTAbBgNVBAsTFFVuZGVyc2tyaWZ0c3RqYW5zdGVuMSAwHgYDVQQDExdTaWduaW5nIFNlcnZpY2UgU0tWIEludDAeFw0xNTAzMjQxNDM3NTVaFw0xNjAzMjMxNDM3NTVaMGoxCzAJBgNVBAYTAlNFMRowGAYDVQQKExFDeWJlcmNvbSBHcm91cCBBQjEdMBsGA1UECxMUVW5kZXJza3JpZnRzdGphbnN0ZW4xIDAeBgNVBAMTF1NpZ25pbmcgU2VydmljZSBTS1YgSW50MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtAtGYSo1j4u1pql04rjM4vLemh9vqhRbFyPcfdJUQKjXesXPDRs1BfNp4TQ6XYsoJWaoNxtBme8sRJAKGMP5gcmnD2xFcNyuukzyuB9gzxZDErtvDzIW6F6qADMODbV9fwx6RCkowvSocGj7IR/6qbYZt1nJxpYdZVCMGh3WGtUR/3HhhrmoxkKoFtj4vWtH4UYXpe5bG0//8O9Ma0PrG4q5JsjcaprxzqySHadzgvtqjYKZmaTfXhW3lTnGlI8mwPmc+MxcE6fXM2DpK8oiIANb65hz/wnpkzRRhrqPVP3rDvpJ1QB9CkTmbLLJR6CBZ7NQnJWoxAryOD/v33PBpwIDAQABMA0GCSqGSIb3DQEBBQUAA4IBAQAJ2ypd4UfROtNlTgBis4Ifm8jQKri0ga+pA6FBn+N/0b/UkAwjf6FY8YxuIheuSaWVC5Qna3I2kuVLLalvwzZpFbgl5JFPM+BH9DentY347uWheLATihkB7jVX1HFghOmmxs5Z3ik8mihTUmjLuGyg0917WDTUiLZwgJetfy1ZA4WHT7BHenJ2SEuYow7BT7Kv/Rwt8Y0KOp3XUNg+Us+ZFaqhCS5/XnhZqugg8BDh1QdLJc+Br5p97kz2+oIKOq2+yivU0QtIBHam6rOMSM6K6BySSf2DbmYmRdhPJiQf8cf3xfJXHfpqEuOwYkN5+vTnuXLRtZQw+MnJGhxaPTGM
+            </ds:X509Certificate>
+          </ds:X509Data>
+        </ds:KeyInfo>
+      </md:KeyDescriptor>
+      <md:ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
+        Location="https://skatteverket.inttest.underskriftstjanst.se/mission/acs/af7ee8cfc56f4e08/Shibboleth.sso/Artifact/SOAP" index="1" />
+      <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
+        Location="https://skatteverket.inttest.underskriftstjanst.se/mission/acs/af7ee8cfc56f4e08/Shibboleth.sso/SLO/SOAP" />
+      <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        Location="https://skatteverket.inttest.underskriftstjanst.se/mission/acs/af7ee8cfc56f4e08/Shibboleth.sso/SLO/Redirect" />
+      <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+        Location="https://skatteverket.inttest.underskriftstjanst.se/mission/acs/af7ee8cfc56f4e08/Shibboleth.sso/SLO/POST" />
+      <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+        Location="https://skatteverket.inttest.underskriftstjanst.se/mission/acs/af7ee8cfc56f4e08/Shibboleth.sso/SLO/Artifact" />
+      <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+        Location="https://skatteverket.inttest.underskriftstjanst.se/mission/acs/af7ee8cfc56f4e08/Shibboleth.sso/SAML2/POST" index="1" />
+      <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign"
+        Location="https://skatteverket.inttest.underskriftstjanst.se/mission/acs/af7ee8cfc56f4e08/Shibboleth.sso/SAML2/POST-SimpleSign"
+        index="2" />
+      <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+        Location="https://skatteverket.inttest.underskriftstjanst.se/mission/acs/af7ee8cfc56f4e08/Shibboleth.sso/SAML2/Artifact" index="3" />
+      <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:PAOS"
+        Location="https://skatteverket.inttest.underskriftstjanst.se/mission/acs/af7ee8cfc56f4e08/Shibboleth.sso/SAML2/ECP" index="4" />
+    </md:SPSSODescriptor>
+    <md:Organization>
+      <md:OrganizationName xml:lang="sv">Skatteverket</md:OrganizationName>
+      <md:OrganizationName xml:lang="en">Skatteverket</md:OrganizationName>
+      <md:OrganizationDisplayName xml:lang="sv">Skatteverket</md:OrganizationDisplayName>
+      <md:OrganizationDisplayName xml:lang="en">Skatteverket</md:OrganizationDisplayName>
+      <md:OrganizationURL xml:lang="sv">https://www.skatteverket.se/</md:OrganizationURL>
+      <md:OrganizationURL xml:lang="en">https://www.skatteverket.se/</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="support">
+      <md:Company>Skatteverket</md:Company>
+      <md:EmailAddress>andreas.persson@skatteverket.se</md:EmailAddress>
+    </md:ContactPerson>
+    <md:ContactPerson contactType="technical">
+      <md:Company>Skatteverket</md:Company>
+      <md:EmailAddress>andreas.persson@skatteverket.se</md:EmailAddress>
+      <md:TelephoneNumber>+46105722141</md:TelephoneNumber>
+    </md:ContactPerson>
+    <md:ContactPerson contactType="billing">
+      <md:Company>Skatteverket</md:Company>
+      <md:EmailAddress>andreas.persson@skatteverket.se</md:EmailAddress>
+    </md:ContactPerson>
+    <md:ContactPerson contactType="administrative">
+      <md:Company>Skatteverket</md:Company>
+      <md:EmailAddress>andreas.persson@skatteverket.se</md:EmailAddress>
+    </md:ContactPerson>
+  </md:EntityDescriptor>
+  <md:EntityDescriptor xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" entityID="https://pmd11289.ppm.nu:8443/saml/SSO/alias/ms-auth"
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
+    <md:Extensions>
+      <mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">
+        <saml:Attribute Name="http://macedir.org/entity-category" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="xs:string">http://id.elegnamnden.se/ec/1.0/loa3-pnr</saml:AttributeValue>
+        </saml:Attribute>
+      </mdattr:EntityAttributes>
+    </md:Extensions>
+    <md:SPSSODescriptor AuthnRequestsSigned="true" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+      <md:Extensions>
+        <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
+          <mdui:DisplayName xml:lang="sv">Test av eID2 Pensionsmyndigheten</mdui:DisplayName>
+          <mdui:Logo height="90" width="160">https://secure.pensionsmyndigheten.se/images/18.70e56c27145a7fdc9582ce35/1288944571165/PM_logo.gif
+          </mdui:Logo>
+        </mdui:UIInfo>
+      </md:Extensions>
+      <md:KeyDescriptor>
+        <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+          <ds:X509Data>
+            <ds:X509SubjectName>CN=Test, OU=Test, O=Pensionsmyndigheten, L=Stockholm, ST=Unknown, C=SE</ds:X509SubjectName>
+            <ds:X509Certificate>MIIDfTCCAmWgAwIBAgIEcNAuDjANBgkqhkiG9w0BAQsFADBvMQswCQYDVQQGEwJTRTEQMA4GA1UECBMHVW5rbm93bjESMBAGA1UEBxMJU3RvY2tob2xtMRwwGgYDVQQKExNQZW5zaW9uc215bmRpZ2hldGVuMQ0wCwYDVQQLEwRUZXN0MQ0wCwYDVQQDEwRUZXN0MB4XDTE1MDQxNjEyMTM0MloXDTI1MDQxMzEyMTM0MlowbzELMAkGA1UEBhMCU0UxEDAOBgNVBAgTB1Vua25vd24xEjAQBgNVBAcTCVN0b2NraG9sbTEcMBoGA1UEChMTUGVuc2lvbnNteW5kaWdoZXRlbjENMAsGA1UECxMEVGVzdDENMAsGA1UEAxMEVGVzdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJELTmvHn4Smv7I6dgI7KA5KBQs43nMvracYl0dVMC8X32rJYkjJfAwHSeW7UXnrCS2CKDPD+bLczYbi2+byhZF3OKQseZGHkcRB6hBUIYWgqWEyxMj1V4IT0w7+DHkow1+5LFzNSUOYz0NWA7V6ltRWcbTJ79uuzepd0535xk2kc1ZfFym0tx755wptNRhwWI21qfsQOrrB02OQWXrWoi6h9bZgWys/f06wWsIpHn36+psMqmnolyqKerYRlAvGo1hwR9CZw/uli17banjwdh6zSNSvs9amW7gDvfnzCqdvuhRCyA4Z2f/U/mZrQ7TucO13DUuJqwJd0ZjWMsfhfZ0CAwEAAaMhMB8wHQYDVR0OBBYEFBkzE4mCwjVUlt3pJ//zW6gZu8/EMA0GCSqGSIb3DQEBCwUAA4IBAQBnzsWShLVGfC9wxmaKyRIHJdZjVWc+txsCM2mxWm7LEfsHm6C58Zm1C2yp9IwT5UrXgnD1fHW8Reg6DBDcuBc7wZfuUna0FFPDZgdYwGU1leiZ4jqViaKU7Tw6Z1/MHK4LlXNl/vZbo9o5Mk46Kx+BywEO2qJNjUsYQJKJLSny3lvzQfQLclhhuT+IuPehtkloD30JXBKX36fEx3/j5A8a7PTPRREwo/3+fyawZU/1E2EhvWk7wN8kVtD8BFffyudsCSmD8qNJPvn3eIV2KTKga4OfY0vgYjv86ofZUf85HnpbpE/uMxzUBZu9Qk4KLFnz1h9Hgaactrrgb+QDCm19
+            </ds:X509Certificate>
+          </ds:X509Data>
+          <ds:KeyName>Test</ds:KeyName>
+        </ds:KeyInfo>
+      </md:KeyDescriptor>
+      <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+      <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+      <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://pml12572.ppm.nu:8443/Chimera/saml/SSO"
+        index="0" />
+      <md:AttributeConsumingService index="0">
+        <md:ServiceName xml:lang="en">pmd11289.eid2.pensionsmyndigheten.se</md:ServiceName>
+        <md:ServiceName xml:lang="sv">pmd11289.eid2.pensionsmyndigheten.se</md:ServiceName>
+        <md:RequestedAttribute FriendlyName="sn" Name="urn:oid:2.5.4.4" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+          isRequired="false" />
+      </md:AttributeConsumingService>
+    </md:SPSSODescriptor>
+    <md:Organization>
+      <md:OrganizationName xml:lang="sv">Pensionsmyndigheten</md:OrganizationName>
+      <md:OrganizationDisplayName xml:lang="sv">Pensionsmyndigheten</md:OrganizationDisplayName>
+      <md:OrganizationURL xml:lang="sv">http://www.pensionsmyndigheten.se</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="support" />
+    <md:ContactPerson contactType="technical" />
+  </md:EntityDescriptor>
+  <md:EntityDescriptor xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" entityID="skatteverket_sso"
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
+    <md:Extensions>
+      <mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">
+        <saml:Attribute Name="http://macedir.org/entity-category" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="xs:string">http://id.elegnamnden.se/ec/1.0/loa3-pnr</saml:AttributeValue>
+        </saml:Attribute>
+      </mdattr:EntityAttributes>
+    </md:Extensions>
+    <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+      <md:Extensions>
+        <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
+          <mdui:DisplayName xml:lang="sv">Skatteverket</mdui:DisplayName>
+          <mdui:DisplayName xml:lang="en">Skatteverket</mdui:DisplayName>
+          <mdui:Logo height="90" width="160">http://www.skatteverket.se/images/200.3aa8c78a1466c584587dfb5/1408962396786/SkatteverketLogo.png
+          </mdui:Logo>
+        </mdui:UIInfo>
+      </md:Extensions>
+      <md:KeyDescriptor>
+        <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+          <ds:X509Data>
+            <ds:X509SubjectName>CN=FedTest, O=E-legitimationsnamnden, C=SE</ds:X509SubjectName>
+            <ds:X509Certificate>MIIFHzCCAwegAwIBAgIECr6QnDANBgkqhkiG9w0BAQsFADBAMQswCQYDVQQGEwJTRTEfMB0GA1UEChMWRS1sZWdpdGltYXRpb25zbmFtbmRlbjEQMA4GA1UEAxMHRmVkVGVzdDAeFw0xNDA0MTYwODAzNDlaFw0yNDA0MTMwODAzNDlaMEAxCzAJBgNVBAYTAlNFMR8wHQYDVQQKExZFLWxlZ2l0aW1hdGlvbnNuYW1uZGVuMRAwDgYDVQQDEwdGZWRUZXN0MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAnX/nVmaqkR7BwIh5Cxez9mIHu05tciXJt7Xt9lYuvFgtl/ZpBuPGS1AU14ddeHztv6AJIQ+gUkaRhsDV9IemhmHgdLATgf//5yJiQvLygsEHbVMGqgdnupgKC7nQ6aSF7jPiLRkVbfSBn6v9nKBquhzutSHdrQpHDvzeeEGQXVyzXBEW8PS6ACmvdrECUvYZEnzjvKcY7NxqCwGvxqu88xHKOD/sfxL7HKP6q+2yffoPMP/A+Qp3Nrt4wRoOvirdrW4Nod7fOhA0XxFZ1F+UnCfJdLy79IfSKxkmByt0KFC3tr3U997caeqBhfngygYe/tDRuXib0zoIQ4xsCkhe2DAlyAtXHnapUbX/5w6TGPY0m4zLfd3j/Uo9rtCgc7q7+Lclouw5NiVNxbGWmxlyMefbVsSe60050Xqsjc6Y/R6N4BahBQ0vURZ5CKQzY+okwN9uOm4qQ/dPCiIa14Q43TbGZx+Lk0QxEEpRdN7kkMtt/LmVtxEXmA7PR2Z8HUhy0eXa0XR+GVO6A8Dxoccb6uDfhzmX+ja0jaAGNg+h1imYgWxEn80mYdSLH0brdzaCcjHvcMYwV6uG9DQEYW0lJ/jsCOXMWSZjpLtoZAsdSLw+D4Ko9hJf7HmY/Y87Uu5Rh5NlDNq3h2kp4SL/nzUtMk12/uMEAjXaQ7bLHJKhg1ECAwEAAaMhMB8wHQYDVR0OBBYEFGTJHTdToKb8W/Fh2z4VvedA6LoIMA0GCSqGSIb3DQEBCwUAA4ICAQBgzRPjdt17dIs10NnP0LIQfp6wnDDTRGJi5EpRTQRrgovge2luQQl/zv4cIRgz891Nq9kcbnQg9Uufer76TqHlyz70q0rw3Q+9OptGHDDfP93YYH1oe07SeeZQS8EtLLzzERzzMIUNYpfjVl25DhsQSx//Kjj/mmjRvK4HExOCNcUw9KVnFfktpYhaR0yOPVjcp76KV2vczc6G1WjUjDTmTSMpLyAJEVBhhmo9WrHVC/hqyNNlCfcF+4R+JaRhH27nCidROVeciuiQQytR8sM3n5e7Eq5XEBuWx/lI/a86Ko2mldRz3ZjadyXYVegDDzT14IgKIXs9JzanOBUe2mFj3vX+pYxgKfRGLdh4aX686wNKgYVY3uJUziWjiZdKPfbAg2IDur335poLE+khxIYbfJz+C+MlfupEJBKkLA0z9j1W4SQ50lmpM0WQ1Dc5vP5iptepOku69fCDIilUKLg3U8YdEYfxAepWnc2ac2rDkeRiTE/e//4vgDa0roGH+G+NKCyxR6uOLYkT52HMYUUa6XFg+0fcdGN5RdWKkf1K4C9IBIe7CVwsYGBgLiF8/mkMoZFB1t21k0CcB+za6Z3SWrcRc8V8cW1jxJ2Su/540I0EBoGpHnLICyLl9H52TMNL/hk3c8iOSwfLSKuWg7rl67aWrWtdK7JVdKS9wkMiRw==
+            </ds:X509Certificate>
+          </ds:X509Data>
+          <ds:KeyName>FedTest</ds:KeyName>
+        </ds:KeyInfo>
+      </md:KeyDescriptor>
+      <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+      <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+      <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://www.skatteverket.se"
+        index="0" />
+      <md:AttributeConsumingService index="0">
+        <md:ServiceName xml:lang="en">SKVTjanst</md:ServiceName>
+        <md:ServiceName xml:lang="sv">SKVTjanst</md:ServiceName>
+        <md:RequestedAttribute FriendlyName="sn" Name="urn:oid:2.5.4.4" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+          isRequired="false" />
+      </md:AttributeConsumingService>
+    </md:SPSSODescriptor>
+    <md:Organization>
+      <md:OrganizationName xml:lang="sv">Skatteverket</md:OrganizationName>
+      <md:OrganizationDisplayName xml:lang="sv">Skatteverket</md:OrganizationDisplayName>
+      <md:OrganizationURL xml:lang="sv">https://www.skatteverket.se</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="support" />
+    <md:ContactPerson contactType="technical" />
+  </md:EntityDescriptor>
+  <md:EntityDescriptor xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" entityID="https://sickelstatest.transportstyrelsen.se/extweb/"
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
+    <SPSSODescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" WantAssertionsSigned="true"
+      protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+      <Extensions>
+        <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
+          <mdui:DisplayName xml:lang="sv">Transportstyrelsen</mdui:DisplayName>
+          <mdui:DisplayName xml:lang="en">Swedish Transport Agency</mdui:DisplayName>
+          <mdui:Logo height="16" width="16" xml:lang="sv">https://transportstyrelsen.se/favicon.ico</mdui:Logo>
+          <mdui:Description xml:lang="sv">Transportstyrelsen arbetar för att uppnå god tillgänglighet, hög kvalitet, säkra och
+            miljöanpassade transporter inom järnväg, luftfart, sjöfart och väg.</mdui:Description>
+          <mdui:Description xml:lang="en">The Swedish Transport Agency is working to achieve good accessibility, high quality,
+            secure and environmentally aware rail, air, sea and road transport.</mdui:Description>
+        </mdui:UIInfo>
+      </Extensions>
+      <KeyDescriptor use="encryption">
+        <KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+          <X509Data>
+            <X509Certificate>MIIC+jCCAeKgAwIBAgIQYQaMr1VBB5hLvzO5yYCxbjANBgkqhkiG9w0BAQsFADA5MTcwNQYDVQQDEy5BREZTIEVuY3J5cHRpb24gLSBzdHMtcHQudHJhbnNwb3J0c3R5cmVsc2VuLnNlMB4XDTE0MDgyMDA5MDIzOFoXDTE1MDgyMDA5MDIzOFowOTE3MDUGA1UEAxMuQURGUyBFbmNyeXB0aW9uIC0gc3RzLXB0LnRyYW5zcG9ydHN0eXJlbHNlbi5zZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJVbjxQAdIzmTgOojp5difAUJV1SCo5XoytmzG1eZBAybBItnq3loUUBkL3Xw2nbPxuCdzZ17gB4fQG+lEDGPc9HfRAsnB5rR/f6Iz+fKicdUSDWpEY/JHiJ5Ikmg8L1gHwM2zLxPxEQRvZR6+g+y7Z4T6tAekku+3ZUkawJcf2PNg0gs8g5Chc98M7CeKYdJgTKsrppj/cGiGNZEVoFDUARKng3TwNbG7/704zwA1M4zTsoRIcgZQ3rTmPbSBjg1zvnv5JDgdKvIfQ8OASkHvwVQlbqechlyS4dECBABx/m1kdIdVTUVH8KPnBdscjDcIVCym3mwhRW/fxOcfjpUO8CAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAC1W9xSPmVN3MrP9a0fWbGLmolwpIs8xK34SrD7RkyJKQWKxIle0i+uRXTrae5YShgruFsuVdfDK8HKf2DF/+2vsfEan9Hkp+0wXUsZ3jPAyYhIeoQ/xeX3vBMTW/U8tN/8KBVUiWkUDW8Z7eb0qyLFb/ujmVEHaAHD1BA3OlQ3eIplAGKqGddchsN2peVQTP7tZlTqGUxbs1qaFyOeN+bc8tmip/q3FIgbxY0Qo2QYHR5lG/AYtJS5SYs2D1GM28gmRpIUUmQMxy6qRhnSe8doeB4nkFiBcnIF/qgxdFZkn3v5LCWz5j8i8vyT0k9Xy523g9z/6aeSrXGoTIL3g6bw==
+            </X509Certificate>
+          </X509Data>
+        </KeyInfo>
+      </KeyDescriptor>
+      <KeyDescriptor use="signing">
+        <KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+          <X509Data>
+            <X509Certificate>MIIC9DCCAdygAwIBAgIQUTVjgmO3u7JPQstj5lfCYDANBgkqhkiG9w0BAQsFADA2MTQwMgYDVQQDEytBREZTIFNpZ25pbmcgLSBzdHMtcHQudHJhbnNwb3J0c3R5cmVsc2VuLnNlMB4XDTE0MDgyMDA5MDIzN1oXDTE1MDgyMDA5MDIzN1owNjE0MDIGA1UEAxMrQURGUyBTaWduaW5nIC0gc3RzLXB0LnRyYW5zcG9ydHN0eXJlbHNlbi5zZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALY0XbSUAfYLnlSRlx8wyEqOHnd0rg4rMcT3ukObsABEKCVWzF5SxbXOlZNBxYsU7esCkHHRCVL9/FhsFPyiST+mF+QTwqNdbR3EDngp6kk+Omla7EDtI8jIFDopfEDVqnfaiv49u5quPFNP1MDytFExiWnEelaQUq2myaTv91l8bqXm0pYGz4U8u4tCm09y0FAsyAUYpys90m9NUvRYGQjhqM0SD6obHXSF9J1pXTzu27xxgLqG/fBXV1DteH5FAr3ZbQ4dOYWLVxoCzH68nwlovxblqGHMvzqC8Kz4l3K9gOcNWSezXkfYO2ypECf73aLG7ToKY7MZ/vdXHRlIfp0CAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAg5o3B6LJVWovJXZKjivaYphN/NhxQGNxvaC0zPCh+IfJhVasD3KAqmIcrtCrNWlCnqYfpWKvOSqIqTmKTliZY3wnUBbeeYbc+Ihi3io3g33/eyIFcFBZsfrVqCY2rh1HQqOr2PAUKRkVD2rn3xkEZJWTV57oFNa4puXjv+rW7yp4px2O/WGNuTDsKAnlZ7bS0GK3c3CFj46HG4UO+HtiI46UHjVil2rjpS52XrX6t3RtlFTctROWg+CVRBvrKEBS1tzlYmTvsRuPEZXlh3dlZw3FDb1ztoeH8F1iTg2teLl7LIInw/p//LXmSECVjcwhM3R0JYA+YnetH56JtfGdDQ==
+            </X509Certificate>
+          </X509Data>
+        </KeyInfo>
+      </KeyDescriptor>
+      <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://sts-pt.transportstyrelsen.se/adfs/ls/" />
+      <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sts-pt.transportstyrelsen.se/adfs/ls/" />
+      <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</NameIDFormat>
+      <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
+      <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+      <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sts-pt.transportstyrelsen.se/adfs/ls/"
+        index="0" isDefault="true" />
+      <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://sts-pt.transportstyrelsen.se/adfs/ls/"
+        index="1" />
+      <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://sts-pt.transportstyrelsen.se/adfs/ls/"
+        index="2" />
+    </SPSSODescriptor>
+    <md:Organization>
+      <md:OrganizationName xml:lang="sv">Transportstyrelsen</md:OrganizationName>
+      <md:OrganizationDisplayName xml:lang="sv">Transportstyrelsen</md:OrganizationDisplayName>
+      <md:OrganizationURL xml:lang="sv">http://www.transportstyrelsen.se</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="support">
+      <md:GivenName>Anders</md:GivenName>
+      <md:SurName>Sjöholm</md:SurName>
+      <md:EmailAddress>anders.sjoholm@transportstyrelsen.se</md:EmailAddress>
+    </md:ContactPerson>
+    <md:ContactPerson contactType="technical">
+      <md:GivenName>Ulf</md:GivenName>
+      <md:SurName>Söderqvist</md:SurName>
+      <md:EmailAddress>ulf.soderqvist@trafikverket.se</md:EmailAddress>
+    </md:ContactPerson>
+  </md:EntityDescriptor>
+  <md:EntityDescriptor xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" entityID="https://sts-pt.transportstyrelsen.se/adfs/ls/"
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
+    <SPSSODescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" WantAssertionsSigned="true"
+      protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+      <Extensions>
+        <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
+          <mdui:DisplayName xml:lang="sv">Transportstyrelsen</mdui:DisplayName>
+          <mdui:DisplayName xml:lang="en">Swedish Transport Agency</mdui:DisplayName>
+          <mdui:Logo height="16" width="16" xml:lang="sv">https://transportstyrelsen.se/favicon.ico</mdui:Logo>
+          <mdui:Description xml:lang="sv">Transportstyrelsen arbetar för att uppnå god tillgänglighet, hög kvalitet, säkra och
+            miljöanpassade transporter inom järnväg, luftfart, sjöfart och väg.</mdui:Description>
+          <mdui:Description xml:lang="en">The Swedish Transport Agency is working to achieve good accessibility, high quality,
+            secure and environmentally aware rail, air, sea and road transport.</mdui:Description>
+        </mdui:UIInfo>
+      </Extensions>
+      <KeyDescriptor use="encryption">
+        <KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+          <X509Data>
+            <X509Certificate>MIIC+jCCAeKgAwIBAgIQYQaMr1VBB5hLvzO5yYCxbjANBgkqhkiG9w0BAQsFADA5MTcwNQYDVQQDEy5BREZTIEVuY3J5cHRpb24gLSBzdHMtcHQudHJhbnNwb3J0c3R5cmVsc2VuLnNlMB4XDTE0MDgyMDA5MDIzOFoXDTE1MDgyMDA5MDIzOFowOTE3MDUGA1UEAxMuQURGUyBFbmNyeXB0aW9uIC0gc3RzLXB0LnRyYW5zcG9ydHN0eXJlbHNlbi5zZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJVbjxQAdIzmTgOojp5difAUJV1SCo5XoytmzG1eZBAybBItnq3loUUBkL3Xw2nbPxuCdzZ17gB4fQG+lEDGPc9HfRAsnB5rR/f6Iz+fKicdUSDWpEY/JHiJ5Ikmg8L1gHwM2zLxPxEQRvZR6+g+y7Z4T6tAekku+3ZUkawJcf2PNg0gs8g5Chc98M7CeKYdJgTKsrppj/cGiGNZEVoFDUARKng3TwNbG7/704zwA1M4zTsoRIcgZQ3rTmPbSBjg1zvnv5JDgdKvIfQ8OASkHvwVQlbqechlyS4dECBABx/m1kdIdVTUVH8KPnBdscjDcIVCym3mwhRW/fxOcfjpUO8CAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAC1W9xSPmVN3MrP9a0fWbGLmolwpIs8xK34SrD7RkyJKQWKxIle0i+uRXTrae5YShgruFsuVdfDK8HKf2DF/+2vsfEan9Hkp+0wXUsZ3jPAyYhIeoQ/xeX3vBMTW/U8tN/8KBVUiWkUDW8Z7eb0qyLFb/ujmVEHaAHD1BA3OlQ3eIplAGKqGddchsN2peVQTP7tZlTqGUxbs1qaFyOeN+bc8tmip/q3FIgbxY0Qo2QYHR5lG/AYtJS5SYs2D1GM28gmRpIUUmQMxy6qRhnSe8doeB4nkFiBcnIF/qgxdFZkn3v5LCWz5j8i8vyT0k9Xy523g9z/6aeSrXGoTIL3g6bw==
+            </X509Certificate>
+          </X509Data>
+        </KeyInfo>
+      </KeyDescriptor>
+      <KeyDescriptor use="signing">
+        <KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+          <X509Data>
+            <X509Certificate>MIIC9DCCAdygAwIBAgIQUTVjgmO3u7JPQstj5lfCYDANBgkqhkiG9w0BAQsFADA2MTQwMgYDVQQDEytBREZTIFNpZ25pbmcgLSBzdHMtcHQudHJhbnNwb3J0c3R5cmVsc2VuLnNlMB4XDTE0MDgyMDA5MDIzN1oXDTE1MDgyMDA5MDIzN1owNjE0MDIGA1UEAxMrQURGUyBTaWduaW5nIC0gc3RzLXB0LnRyYW5zcG9ydHN0eXJlbHNlbi5zZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALY0XbSUAfYLnlSRlx8wyEqOHnd0rg4rMcT3ukObsABEKCVWzF5SxbXOlZNBxYsU7esCkHHRCVL9/FhsFPyiST+mF+QTwqNdbR3EDngp6kk+Omla7EDtI8jIFDopfEDVqnfaiv49u5quPFNP1MDytFExiWnEelaQUq2myaTv91l8bqXm0pYGz4U8u4tCm09y0FAsyAUYpys90m9NUvRYGQjhqM0SD6obHXSF9J1pXTzu27xxgLqG/fBXV1DteH5FAr3ZbQ4dOYWLVxoCzH68nwlovxblqGHMvzqC8Kz4l3K9gOcNWSezXkfYO2ypECf73aLG7ToKY7MZ/vdXHRlIfp0CAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAg5o3B6LJVWovJXZKjivaYphN/NhxQGNxvaC0zPCh+IfJhVasD3KAqmIcrtCrNWlCnqYfpWKvOSqIqTmKTliZY3wnUBbeeYbc+Ihi3io3g33/eyIFcFBZsfrVqCY2rh1HQqOr2PAUKRkVD2rn3xkEZJWTV57oFNa4puXjv+rW7yp4px2O/WGNuTDsKAnlZ7bS0GK3c3CFj46HG4UO+HtiI46UHjVil2rjpS52XrX6t3RtlFTctROWg+CVRBvrKEBS1tzlYmTvsRuPEZXlh3dlZw3FDb1ztoeH8F1iTg2teLl7LIInw/p//LXmSECVjcwhM3R0JYA+YnetH56JtfGdDQ==
+            </X509Certificate>
+          </X509Data>
+        </KeyInfo>
+      </KeyDescriptor>
+      <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://sts-pt.transportstyrelsen.se/adfs/ls/" />
+      <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sts-pt.transportstyrelsen.se/adfs/ls/" />
+      <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</NameIDFormat>
+      <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
+      <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+      <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sts-pt.transportstyrelsen.se/adfs/ls/"
+        index="0" isDefault="true" />
+      <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://sts-pt.transportstyrelsen.se/adfs/ls/"
+        index="1" />
+      <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://sts-pt.transportstyrelsen.se/adfs/ls/"
+        index="2" />
+    </SPSSODescriptor>
+    <md:Organization>
+      <md:OrganizationName xml:lang="sv">Transportstyrelsen</md:OrganizationName>
+      <md:OrganizationDisplayName xml:lang="sv">Transportstyrelsen</md:OrganizationDisplayName>
+      <md:OrganizationURL xml:lang="sv">http://www.transportstyrelsen.se</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="support">
+      <md:GivenName>Anders</md:GivenName>
+      <md:SurName>Sjöholm</md:SurName>
+      <md:EmailAddress>anders.sjoholm@transportstyrelsen.se</md:EmailAddress>
+    </md:ContactPerson>
+    <md:ContactPerson contactType="technical">
+      <md:GivenName>Ulf</md:GivenName>
+      <md:SurName>Söderqvist</md:SurName>
+      <md:EmailAddress>ulf.soderqvist@trafikverket.se</md:EmailAddress>
+    </md:ContactPerson>
+  </md:EntityDescriptor>
+</md:EntitiesDescriptor>

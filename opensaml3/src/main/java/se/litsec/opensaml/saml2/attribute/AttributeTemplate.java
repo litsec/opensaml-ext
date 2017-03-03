@@ -25,6 +25,9 @@ import org.opensaml.saml.saml2.core.Attribute;
 /**
  * An attribute template is a template of a SAML attribute, i.e., it represents the name, friendly name and name format
  * but not the value of the attribute.
+ * <p>
+ * A template may be useful when defining attribute sets and/or attribute release policies.
+ * </p>
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  */

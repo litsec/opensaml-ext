@@ -42,9 +42,9 @@
 
     <!-- Versions on dependencies -->
     <opensaml.version>3.2.0</opensaml.version>
-
     <slf4j.version>1.7.5</slf4j.version>
-
+    <spring.version>4.3.7.RELEASE</spring.version>
+    
     <junit.version>4.12</junit.version>
 
   </properties>
@@ -85,7 +85,7 @@
       <version>${opensaml.version}</version>
       <type>jar</type>
       <scope>compile</scope>
-    </dependency>
+    </dependency>    
 
     <dependency>
       <groupId>net.shibboleth.utilities</groupId>
@@ -118,12 +118,88 @@
       <version>${slf4j.version}</version>
       <type>jar</type>
     </dependency>
+    
+    <!-- For downloading of metadata -->
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.1</version>
+      <scope>compile</scope>
+      <type>jar</type>
+    </dependency>
 
+    <!-- For configuring of Apache HTTP client in SSL mode. -->
+    <dependency>
+      <groupId>org.jsslutils</groupId>
+      <artifactId>jsslutils-extra-apachehttpclient3</artifactId>
+      <version>1.0.7</version>
+      <scope>compile</scope>
+      <type>jar</type>
+    </dependency>
+
+    <!-- Referenced by OpenSAML -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
+      <scope>provided</scope>
+    </dependency>    
+    
+    <!-- Optionally use Spring -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+      <version>${spring.version}</version>
+      <scope>compile</scope>
+      <type>jar</type>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>${spring.version}</version>
+      <scope>compile</scope>
+      <type>jar</type>
+      <optional>true</optional>
+    </dependency>
+    
     <!-- For testing -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
+      <scope>test</scope>
+      <type>jar</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>pl.pragmatists</groupId>
+      <artifactId>JUnitParams</artifactId>
+      <version>1.0.5</version>
+      <scope>test</scope>
+      <type>jar</type>      
+    </dependency>
+    
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
+      <scope>test</scope>
+      <type>jar</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+      <version>9.3.8.v20160314</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>1.3.2</version>
       <scope>test</scope>
       <type>jar</type>
     </dependency>
@@ -134,7 +210,7 @@
       <version>${slf4j.version}</version>
       <type>jar</type>
       <scope>test</scope>
-    </dependency>
+    </dependency>    
 
     <dependency>
       <groupId>log4j</groupId>
