@@ -96,13 +96,14 @@ public class LocalizedString {
    */
   public static LocalizedString parse(String source) {
     LocalizedString s = new LocalizedString();
-    int i = source.indexOf('-');
+    String _source = source.trim();
+    int i = _source.indexOf('-');
     if (i <= 0 || i > 3) {
-      s.setLocalizedString(source);
+      s.setLocalizedString(_source);
     }
     else {
-      s.setLanguage(source.substring(0, i));
-      s.setLocalizedString(source.substring(i + 1));
+      s.setLanguage(_source.substring(0, i));
+      s.setLocalizedString(_source.substring(i + 1));
     }
     return s;
   }
