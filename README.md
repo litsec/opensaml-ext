@@ -6,15 +6,10 @@
 
 Utility extensions for OpenSAML 2.X and 3.X.
 
-This open source package is an extension to OpenSAML 2.X and 3.X that offers utility classes and interfaces such as:
+This open source package is an extension to OpenSAML that offers easy to use support for handling object creation, attributes, metadata, request and response handling and much more.
 
-* Easier initialization of the OpenSAML libraries.
-* Utility methods for creating OpenSAML objects that does not require using the builder classes directly.
-* Utility methods for marshalling and unmarshalling.
-* Simplified support for signing XML objects.
-* An abstraction for metadata handling making it easier to download and use SAML metadata.
-* Spring Framework factory beans for easier integration in a Spring environment.
-* A builder pattern for some commonly used objects, such as creating SAML attribute objects, entity descriptors (metadata) or authentication requests.
+See the [opensaml-ext Wiki](https://github.com/litsec/opensaml-ext/wiki) for detailed descriptions of the features.
 
-<del>For more information about this package, see  [https://litsec.github.io/opensaml-ext](https://litsec.github.io/opensaml-ext/).</del>
+Copyright &copy; 2017, [Litsec AB](http://www.litsec.se). Licensed under the GNU General Public License 3, for details see [LICENSE](LICENSE).
+
 
