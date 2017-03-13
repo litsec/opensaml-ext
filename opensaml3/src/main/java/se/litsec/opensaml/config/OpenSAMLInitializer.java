@@ -26,6 +26,7 @@ import java.util.Map;
 import org.opensaml.core.config.ConfigurationService;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistry;
+import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,14 +47,14 @@ public class OpenSAMLInitializer {
   /** Whether this component has been initialized. */
   private boolean initialized;
 
-  /** Optional ParserPool to configure. */
+  /** The initializer may be assigned a configured parser pool. */
   private ParserPool parserPool;
 
   /** Builder features for the default parser pool. */
   private static final Map<String, Boolean> builderFeatures;
 
   static {
-    builderFeatures = new HashMap<String, Boolean>();
+    builderFeatures = new HashMap<>();
     builderFeatures.put("http://apache.org/xml/features/disallow-doctype-decl", Boolean.TRUE);
     builderFeatures.put("http://apache.org/xml/features/validation/schema/normalized-value", Boolean.FALSE);
     builderFeatures.put("http://javax.xml.XMLConstants/feature/secure-processing", Boolean.TRUE);
@@ -89,11 +90,11 @@ public class OpenSAMLInitializer {
   public final synchronized void initialize() throws Exception {
 
     if (this.initialized) {
-      logger.debug("OpenSAML 3.X library has already been initialized");
+      logger.info("OpenSAML 3.X library has already been initialized");
       return;
     }
 
-    logger.debug("Initializing OpenSAML 3.X library ...");
+    logger.debug("Initializing OpenSAML 3.X library...");
 
     InitializationService.initialize();
 
@@ -106,9 +107,16 @@ public class OpenSAMLInitializer {
         ConfigurationService.register(XMLObjectProviderRegistry.class, registry);
       }
     }
-    registry.setParserPool(this.getParserPool());
+    if (this.parserPool != null) {
+      logger.debug("Installing configured parser pool to XMLObjectProviderRegistry...");
+      registry.setParserPool(this.parserPool);
+    }
+    else if (registry.getParserPool() == null) {
+      logger.debug("Installing default parser pool to XMLObjectProviderRegistry...");
+      registry.setParserPool(createDefaultParserPool());
+    }
 
-    logger.debug("OpenSAML library 3.X successfully initialized");
+    logger.info("OpenSAML library 3.X successfully initialized");
 
     this.initialized = true;
   }
@@ -121,29 +129,29 @@ public class OpenSAMLInitializer {
    */
   public void setParserPool(ParserPool parserPool) {
     this.parserPool = parserPool;
+    if (this.isInitialized()) {
+      logger.info("OpenSAML 3.X library has already been initialized - setting supplied parser pool to registry");
+      XMLObjectProviderRegistrySupport.setParserPool(parserPool);
+    }
   }
 
   /**
-   * Returns the parser pool. If this bean has been configured with one that will be returned, otherwise a
-   * BasicParserPool with default configuration will be created.
+   * Creates a basic parser pool with default settings.
    * 
-   * @return the parser pool to use
+   * @return the default parser pool
    * @throws ComponentInitializationException
    *           for init errors
    */
-  private ParserPool getParserPool() throws ComponentInitializationException {
-    if (this.parserPool == null) {
-      BasicParserPool basicParserPool = new BasicParserPool();
-      basicParserPool.setMaxPoolSize(100);
-      basicParserPool.setCoalescing(true);
-      basicParserPool.setIgnoreComments(true);
-      basicParserPool.setIgnoreElementContentWhitespace(true);
-      basicParserPool.setNamespaceAware(true);
-      basicParserPool.setBuilderFeatures(builderFeatures);
-      basicParserPool.initialize();
-      this.parserPool = basicParserPool;
-    }
-    return this.parserPool;
+  public static ParserPool createDefaultParserPool() throws ComponentInitializationException {
+    BasicParserPool basicParserPool = new BasicParserPool();
+    basicParserPool.setMaxPoolSize(100);
+    basicParserPool.setCoalescing(true);
+    basicParserPool.setIgnoreComments(true);
+    basicParserPool.setIgnoreElementContentWhitespace(true);
+    basicParserPool.setNamespaceAware(true);
+    basicParserPool.setBuilderFeatures(builderFeatures);
+    basicParserPool.initialize();
+    return basicParserPool;
   }
 
   // Hidden constructor
