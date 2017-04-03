@@ -76,6 +76,30 @@ public class HTTPMetadataProvider extends AbstractMetadataProvider {
    * This constructor will initialize the underlying {@code MetadataResolver} with a default {@code HttpClient} instance
    * that is initialized according to {@link #createDefaultHttpClient()}.
    * </p>
+   * <p>
+   * Since to trust store for TLS connections is given, this will be read from the system properties
+   * {@code javax.net.ssl.trustStore} and {@code javax.net.ssl.trustStorePassword}.
+   * </p>
+   * 
+   * @param metadataUrl
+   *          the URL to use when downloading metadata
+   * @param backupFile
+   *          optional path to the file to where the provider should store downloaded metadata
+   * @throws ResolverException
+   *           if the supplied metadata URL is invalid
+   * @see #HTTPMetadataProvider(String, String, HttpClient)
+   */
+  public HTTPMetadataProvider(String metadataUrl, String backupFile) throws ResolverException {
+    this(metadataUrl, backupFile, createDefaultHttpClient(), null);
+  }
+
+  /**
+   * Creates a provider that peiodically downloads data from the URL given by {@code metadataUrl}. If the
+   * {@code backupFile} parameter is given the provider also stores the downloaded metadata on disk as backup.
+   * <p>
+   * This constructor will initialize the underlying {@code MetadataResolver} with a default {@code HttpClient} instance
+   * that is initialized according to {@link #createDefaultHttpClient()}.
+   * </p>
    * 
    * @param metadataUrl
    *          the URL to use when downloading metadata
@@ -116,7 +140,20 @@ public class HTTPMetadataProvider extends AbstractMetadataProvider {
     this.metadataResolver = backupFile != null
         ? new FileBackedHTTPMetadataResolver(httpClient, metadataUrl, backupFile)
         : new HTTPMetadataResolver(httpClient, metadataUrl);
-    this.tlsTrustStore = tlsTrustStore;
+        
+    if (tlsTrustStore == null) {
+      log.info("Loading TLS trust store from system properties ...");
+      try {
+        this.tlsTrustStore = KeyStoreUtils.loadSystemTrustStore();
+      }
+      catch (KeyStoreException e) {
+        log.error("Failed to load system trust store", e);
+        throw new ResolverException("Failed to load system trust store", e);
+      }
+    }
+    else {
+      this.tlsTrustStore = tlsTrustStore;
+    }
   }
 
   /**
@@ -130,7 +167,7 @@ public class HTTPMetadataProvider extends AbstractMetadataProvider {
    * @return a default {@code HttpClient} instance
    */
   public static HttpClient createDefaultHttpClient() {
-    
+
     return HttpClientBuilder
       .create()
       .useSystemProperties()
@@ -139,7 +176,7 @@ public class HTTPMetadataProvider extends AbstractMetadataProvider {
           HttpClientSupport.buildNoTrustSSLConnectionSocketFactory(), new StrictHostnameVerifier()))
       .build();
   }
-  
+
   /** {@inheritDoc} */
   @Override
   public String getID() {
@@ -185,11 +222,12 @@ public class HTTPMetadataProvider extends AbstractMetadataProvider {
    *           for errors reading the TLS trust key store
    */
   private TrustEngine<? super X509Credential> createTlsTrustEngine() throws KeyStoreException {
-    
+
     List<X509Certificate> trustedCertificates = KeyStoreUtils.getCertificateEntries(this.tlsTrustStore);
-    
+
     PKIXValidationInformation info = new BasicPKIXValidationInformation(trustedCertificates, null, null);
-    StaticPKIXValidationInformationResolver resolver = new StaticPKIXValidationInformationResolver(Collections.singletonList(info), Collections.emptySet());
+    StaticPKIXValidationInformationResolver resolver = new StaticPKIXValidationInformationResolver(Collections.singletonList(info),
+      Collections.emptySet());
     return new PKIXX509CredentialTrustEngine(resolver, new CertPathPKIXTrustEvaluator(), null);
   }
 
