@@ -21,6 +21,8 @@
 package se.litsec.opensaml.saml2.attribute;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.xml.namespace.QName;
 
@@ -185,16 +187,37 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
   }
 
   /**
-   * Assigns an attribute string value.
+   * Assigns one (or more) attribute string values.
+   * 
+   * <p>
+   * Note: if {@code null} is passed as a parameter, any previous attribute values are cleared.
+   * </p>
    * 
    * @param value
-   *          the string value to add
+   *          the string value(s) to add
    * @return the builder
    */
-  public AttributeBuilder value(String value) {
-    XSString sv = createValueObject(XSString.TYPE_NAME, XSString.class);
-    sv.setValue(value);
-    this.object().getAttributeValues().add(sv);
+  public AttributeBuilder value(String... values) {
+    return this.value(values != null ? Arrays.asList(values) : null);
+  }
+
+  /**
+   * @see #value(String...)
+   * 
+   * @param values
+   *          the string value(s) to add
+   * @return the builder
+   */
+  public AttributeBuilder value(List<String> values) {
+    if (values == null) {
+      this.object().getAttributeValues().clear();
+      return this;
+    }
+    for (String s : values) {
+      XSString sv = createValueObject(XSString.TYPE_NAME, XSString.class);
+      sv.setValue(s);
+      this.object().getAttributeValues().add(sv);
+    }
     return this;
   }
 

@@ -40,6 +40,47 @@ public class LogoBuilder extends AbstractSAMLObjectBuilder<Logo> {
     return new LogoBuilder();
   }
 
+  /**
+   * Utility method that builds a {@code mdui:Logo} object.
+   * 
+   * @param url
+   *          the Logo URL
+   * @param height
+   *          the height
+   * @param width
+   *          the width
+   * @return a {@code Logo} instance
+   */
+  public static Logo logo(String url, Integer height, Integer width) {
+    return builder()
+      .url(url)
+      .height(height)
+      .width(width)
+      .build();
+  }
+  
+  /**
+   * Utility method that builds a {@code mdui:Logo} object.
+   * 
+   * @param url
+   *          the Logo URL
+   * @param language
+   *          the language
+   * @param height
+   *          the height
+   * @param width
+   *          the width
+   * @return a {@code Logo} instance
+   */
+  public static Logo logo(String url, String language, Integer height, Integer width) {
+    return builder()
+      .url(url)
+      .language(language)
+      .height(height)
+      .width(width)
+      .build();
+  }
+
   /** {@inheritDoc} */
   @Override
   protected Class<Logo> getObjectType() {

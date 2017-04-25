@@ -29,8 +29,8 @@ import java.util.Locale;
  * @see Locale
  */
 public class LocalizedString {
-  
-  /** Default language tag if no tag is given. */
+
+  /** Default language tag. */
   public static final String DEFAULT_LANGUAGE_TAG = "en";
 
   /** Localized string. */
@@ -40,19 +40,25 @@ public class LocalizedString {
   private String language;
 
   /**
-   * Constructor creating an empty string with the default language tag.
-   */
-  public LocalizedString() {
-  }
-
-  /**
-   * Constructor creating a string with the default language tag.
+   * Creates an instance by parsing the source string that must be on the format <lang-tag>-<string according to
+   * language>. The string "en-Hello" will give a LocalizedString where:
    * 
-   * @param localString
-   *          the string
+   * <pre>
+   * ls.getLanguage() => "en"
+   * ls.getLocalString() => "Hello"
+   * </pre>
+   * 
+   * @param source
+   *          the sting to parse
    */
-  public LocalizedString(String localString) {
-    this.localizedString = localString;
+  public LocalizedString(String source) {
+    String _source = source.trim();
+    int i = _source.indexOf('-');
+    if (i <= 0 || i > 3) {
+      throw new IllegalArgumentException("Bad format on localized string, expected <language code>-String");
+    }
+    this.localizedString = _source.substring(i + 1);
+    this.language = _source.substring(0, i);
   }
 
   /**
@@ -79,33 +85,6 @@ public class LocalizedString {
   public LocalizedString(String localString, Locale locale) {
     this.localizedString = localString;
     this.language = locale.getLanguage();
-  }
-
-  /**
-   * Parses strings on the format <lang-tag>-<string according to language>. The string "en-Hello" will give a
-   * LocalizedString where:
-   * 
-   * <pre>
-   * ls.getLanguage() => "en"
-   * ls.getLocalString() => "Hello"
-   * </pre>
-   * 
-   * @param source
-   *          the sting to parse
-   * @return a {@code LocalizedString}
-   */
-  public static LocalizedString parse(String source) {
-    LocalizedString s = new LocalizedString();
-    String _source = source.trim();
-    int i = _source.indexOf('-');
-    if (i <= 0 || i > 3) {
-      s.setLocalizedString(_source);
-    }
-    else {
-      s.setLanguage(_source.substring(0, i));
-      s.setLocalizedString(_source.substring(i + 1));
-    }
-    return s;
   }
 
   /**
@@ -179,7 +158,7 @@ public class LocalizedString {
   /** {@inheritDoc} */
   @Override
   public String toString() {
-    return  String.format("[%s] %s", this.getLanguage(), this.localizedString);
+    return String.format("[%s] %s", this.getLanguage(), this.localizedString);
   }
 
 }

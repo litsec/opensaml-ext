@@ -46,8 +46,8 @@ public class StringToLocalizedStringConverter implements Converter<String, Local
    * </pre>
    */
   @Override
-  public LocalizedString convert(String source) {
-    return LocalizedString.parse(source);
+  public LocalizedString convert(String source) {    
+    return new LocalizedString(source);
   }
 
 }

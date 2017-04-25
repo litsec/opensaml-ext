@@ -23,6 +23,7 @@ package se.litsec.opensaml.utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -47,7 +48,7 @@ public class X509CertificateUtils {
   }
 
   /**
-   * Given a certificate holding a X.509 certificate the method returns a {@link X509Certificate} object.
+   * Given a file containing a X.509 certificate the method returns a {@link X509Certificate} object.
    * 
    * @param file
    *          the file
@@ -58,7 +59,20 @@ public class X509CertificateUtils {
    *           if the file cannot be found
    */
   public static X509Certificate decodeCertificate(File file) throws CertificateException, FileNotFoundException {
-    return (X509Certificate) factory.generateCertificate(new FileInputStream(file));
+    return decodeCertificate(new FileInputStream(file));
+  }
+
+  /**
+   * Decodes a {@link X509Certificate} from an input stream.
+   * 
+   * @param stream
+   *          the stream to read
+   * @return a {@link X509Certificate} object
+   * @throws CertificateException
+   *           for decoding errors
+   */
+  public static X509Certificate decodeCertificate(InputStream stream) throws CertificateException {
+    return (X509Certificate) factory.generateCertificate(stream);
   }
 
   // Hidden constructor
