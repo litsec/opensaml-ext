@@ -71,7 +71,7 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
    * @return an {@code AttributeBuilder} instance.
    * @see #AttributeBuilder()
    */
-  public static AttributeBuilder BUILDER(String name) {
+  public static AttributeBuilder builder(String name) {
     return new AttributeBuilder(name);
   }
 
@@ -101,7 +101,7 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
    * @throws MarshallingException
    *           for marshalling errors
    */
-  public static AttributeBuilder BUILDER(Attribute attribute) throws MarshallingException, UnmarshallingException {
+  public static AttributeBuilder builder(Attribute attribute) throws MarshallingException, UnmarshallingException {
     return new AttributeBuilder(attribute);
   }
 
@@ -131,7 +131,7 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
    * @throws XMLParserException
    *           for XML parsing errors
    */
-  public static AttributeBuilder BUILDER(InputStream resource) throws XMLParserException, UnmarshallingException {
+  public static AttributeBuilder builder(InputStream resource) throws XMLParserException, UnmarshallingException {
     return new AttributeBuilder(resource);
   }
 

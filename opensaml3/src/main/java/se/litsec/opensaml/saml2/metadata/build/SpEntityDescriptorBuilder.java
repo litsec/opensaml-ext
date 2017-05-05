@@ -33,6 +33,7 @@ import org.opensaml.core.xml.util.XMLObjectSupport;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.ext.idpdisco.DiscoveryResponse;
 import org.opensaml.saml.saml2.metadata.AssertionConsumerService;
+import org.opensaml.saml.saml2.metadata.AttributeConsumingService;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.Extensions;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
@@ -203,6 +204,41 @@ public class SpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<S
    */
   public SpEntityDescriptorBuilder assertionConsumerService(AssertionConsumerService... assertionConsumerServices) {
     return this.assertionConsumerService(assertionConsumerServices != null ? Arrays.asList(assertionConsumerServices) : null);
+  }
+
+  /**
+   * Adds {@code md:AttributeConsumingService} elements to the {@code SPSSODescriptor}.
+   * 
+   * @param attributeConsumingServices
+   *          attribute consumer service objects (cloned before assignment)
+   * @return the builder
+   */
+  public SpEntityDescriptorBuilder attributeConsumingService(List<AttributeConsumingService> attributeConsumingServices) {
+    SPSSODescriptor spDescriptor = (SPSSODescriptor) this.ssoDescriptor();
+    spDescriptor.getAttributeConsumingServices().clear();
+    if (attributeConsumingServices == null) {
+      return null;
+    }
+    for (AttributeConsumingService a : attributeConsumingServices) {
+      try {
+        spDescriptor.getAttributeConsumingServices().add(XMLObjectSupport.cloneXMLObject(a));
+      }
+      catch (MarshallingException | UnmarshallingException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return this;
+  }
+
+  /**
+   * @see #assertionConsumerService(List)
+   * 
+   * @param attributeConsumingServices
+   *          attribute consumer service objects (cloned before assignment)
+   * @return the builder
+   */  
+  public SpEntityDescriptorBuilder attributeConsumingService(AttributeConsumingService... attributeConsumingServices) {
+    return this.attributeConsumingService(attributeConsumingServices != null ? Arrays.asList(attributeConsumingServices) : null);
   }
 
   /** {@inheritDoc} */

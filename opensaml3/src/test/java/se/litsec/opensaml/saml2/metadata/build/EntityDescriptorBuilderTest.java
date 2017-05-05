@@ -20,19 +20,15 @@
  */
 package se.litsec.opensaml.saml2.metadata.build;
 
-import java.io.IOException;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
 
 import org.junit.Test;
-import org.opensaml.core.xml.io.MarshallingException;
-import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.ext.saml2mdui.Logo;
 import org.opensaml.saml.saml2.core.NameID;
 import org.opensaml.saml.saml2.metadata.AssertionConsumerService;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
-import org.opensaml.saml.saml2.metadata.NameIDFormat;
+import org.opensaml.saml.saml2.metadata.RequestedAttribute;
 import org.opensaml.security.credential.UsageType;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -95,6 +91,16 @@ public class EntityDescriptorBuilderTest extends OpenSAMLTestBase {
     final AssertionConsumerService[] assertionConsumerServices = {
         AssertionConsumerServiceBuilder.builder().postBinding().isDefault(true).index(0).location("https://eid.litsec.se/svelegtest-sp/saml2/post/11").build(),
         AssertionConsumerServiceBuilder.builder().postBinding().index(1).location("https://localhost:8443/svelegtest-sp/saml2/post/11").build()
+    };
+    
+    final RequestedAttribute[] requestedAttributes = {
+      RequestedAttributeBuilder.builder("urn:oid:1.2.752.29.4.13").isRequired(false).build(),
+      RequestedAttributeBuilder.builder("urn:oid:1.2.752.201.3.7").isRequired(false).build(),
+      RequestedAttributeBuilder.builder("urn:oid:1.2.752.201.3.4").isRequired(false).build()
+    };
+    
+    final LocalizedString[] serviceNames = {
+        new LocalizedString("E-legitimationsnämndens Test-SP för eIDAS", "sv")
     };
 
     SpEntityDescriptorBuilder builder = new SpEntityDescriptorBuilder();
