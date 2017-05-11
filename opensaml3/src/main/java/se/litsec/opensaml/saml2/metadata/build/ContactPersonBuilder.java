@@ -23,6 +23,8 @@ package se.litsec.opensaml.saml2.metadata.build;
 import java.util.Arrays;
 import java.util.List;
 
+import org.opensaml.core.xml.io.MarshallingException;
+import org.opensaml.core.xml.io.UnmarshallingException;
 import org.opensaml.saml.saml2.metadata.Company;
 import org.opensaml.saml.saml2.metadata.ContactPerson;
 import org.opensaml.saml.saml2.metadata.ContactPersonTypeEnumeration;
@@ -42,20 +44,60 @@ import se.litsec.opensaml.utils.ObjectUtils;
 public class ContactPersonBuilder extends AbstractSAMLObjectBuilder<ContactPerson> {
 
   /**
-   * Constructor assigning the type of contact person.
+   * Default constructor.
+   */
+  public ContactPersonBuilder() {
+    super();
+  }
+
+  /**
+   * Creates a builder from an object template.
+   * 
+   * @param template
+   *          the object template
+   * @throws MarshallingException
+   *           for marshalling errors
+   * @throws UnmarshallingException
+   *           for unmarshalling errors
+   */
+  public ContactPersonBuilder(ContactPerson template) throws MarshallingException, UnmarshallingException {
+    super(template);
+  }
+
+  /**
+   * Creates a builder instance.
+   * 
+   * @return a builder instance
+   */
+  public static ContactPersonBuilder builder() {
+    return new ContactPersonBuilder();
+  }
+
+  /**
+   * Creates a builder instance.
+   * 
+   * @param template
+   *          the object template
+   * @return a builder instance
+   * @throws MarshallingException
+   *           for marshalling errors
+   * @throws UnmarshallingException
+   *           for unmarshalling errors
+   */
+  public static ContactPersonBuilder builder(ContactPerson template) throws MarshallingException, UnmarshallingException {
+    return new ContactPersonBuilder(template);
+  }
+
+  /**
+   * Assigns the type of contact person.
    * 
    * @param type
    *          the type
+   * @return the builder
    */
-  public ContactPersonBuilder(ContactPersonTypeEnumeration type) {
-    super();
+  public ContactPersonBuilder type(ContactPersonTypeEnumeration type) {
     this.object().setType(type);
-  }
-  
-  /** {@inheritDoc} */
-  @Override
-  protected Class<ContactPerson> getObjectType() {
-    return ContactPerson.class;
+    return this;
   }
 
   /**
@@ -123,14 +165,14 @@ public class ContactPersonBuilder extends AbstractSAMLObjectBuilder<ContactPerso
     }
     return this;
   }
-  
+
   /**
    * @see #emailAddresses(List)
    * 
    * @param emailAddresses
    *          the email addesses
    * @return the builder
-   */  
+   */
   public ContactPersonBuilder emailAddresses(String... emailAddresses) {
     return this.emailAddresses(emailAddresses != null ? Arrays.asList(emailAddresses) : null);
   }
@@ -159,9 +201,15 @@ public class ContactPersonBuilder extends AbstractSAMLObjectBuilder<ContactPerso
    * @param telephoneNumbers
    *          the numbers to assign
    * @return the builder
-   */  
+   */
   public ContactPersonBuilder telephoneNumbers(String... telephoneNumbers) {
     return this.telephoneNumbers(telephoneNumbers != null ? Arrays.asList(telephoneNumbers) : null);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  protected Class<ContactPerson> getObjectType() {
+    return ContactPerson.class;
   }
 
 }

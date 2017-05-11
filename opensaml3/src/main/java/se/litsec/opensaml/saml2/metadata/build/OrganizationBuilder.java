@@ -39,6 +39,15 @@ import se.litsec.opensaml.utils.ObjectUtils;
  */
 public class OrganizationBuilder extends AbstractSAMLObjectBuilder<Organization> {
 
+  /**
+   * Utility method that creates a builder.
+   * 
+   * @return a builder
+   */  
+  public static OrganizationBuilder builder() {
+    return new OrganizationBuilder();
+  }
+  
   /** {@inheritDoc} */
   @Override
   protected Class<Organization> getObjectType() {

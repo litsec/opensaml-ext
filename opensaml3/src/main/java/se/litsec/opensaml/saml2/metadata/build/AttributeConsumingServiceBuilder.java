@@ -146,7 +146,7 @@ public class AttributeConsumingServiceBuilder extends AbstractSAMLObjectBuilder<
    *          the requested attributes
    * @return the builder
    */
-  public AttributeConsumingServiceBuilder requestedAttribute(List<RequestedAttribute> attributes) {
+  public AttributeConsumingServiceBuilder requestedAttributes(List<RequestedAttribute> attributes) {
     this.object().getRequestAttributes().clear();
     if (attributes == null) {
       return null;
@@ -163,14 +163,14 @@ public class AttributeConsumingServiceBuilder extends AbstractSAMLObjectBuilder<
   }
 
   /**
-   * @see #requestedAttribute(List)
+   * @see #requestedAttributes(List)
    * 
    * @param attributes
    *          the requested attributes
    * @return the builder
    */  
-  public AttributeConsumingServiceBuilder requestedAttribute(RequestedAttribute... attributes) {
-    return this.requestedAttribute(attributes != null ? Arrays.asList(attributes) : null);
+  public AttributeConsumingServiceBuilder requestedAttributes(RequestedAttribute... attributes) {
+    return this.requestedAttributes(attributes != null ? Arrays.asList(attributes) : null);
   }
 
   /** {@inheritDoc} */
