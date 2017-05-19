@@ -43,6 +43,7 @@ import org.opensaml.saml.saml2.metadata.KeyDescriptor;
 import org.opensaml.saml.saml2.metadata.NameIDFormat;
 import org.opensaml.saml.saml2.metadata.Organization;
 import org.opensaml.saml.saml2.metadata.SSODescriptor;
+import org.opensaml.saml.saml2.metadata.SingleLogoutService;
 import org.springframework.core.io.Resource;
 
 import net.shibboleth.utilities.java.support.xml.XMLParserException;
@@ -139,7 +140,7 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
   }
 
   /**
-   * In order for us to be able to make chaining calls we need to return the concrete type of the bulder.
+   * In order for us to be able to make chaining calls we need to return the concrete type of the builder.
    * 
    * @return the concrete type of the builder
    */
@@ -420,6 +421,42 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
   public T nameIDFormats(String... nameIDFormats) {
     return this.nameIDFormats(nameIDFormats != null ? Arrays.asList(nameIDFormats) : null);
   }
+    
+  /**
+   * Adds {@code md:SingleLogoutService} elements to the {@code SSODescriptor}.
+   * 
+   * @param singleLogoutServices
+   *          single logout service objects (cloned before assignment)
+   * @return the builder
+   */
+  public T singleLogoutServices(List<SingleLogoutService> singleLogoutServices) {
+    SSODescriptor ssoDescriptor = this.ssoDescriptor(); 
+    ssoDescriptor.getSingleLogoutServices().clear();
+    if (singleLogoutServices == null) {
+      return this.getThis();
+    }
+    for (SingleLogoutService slo : singleLogoutServices) {
+      try {
+        ssoDescriptor.getSingleLogoutServices().add(XMLObjectSupport.cloneXMLObject(slo));
+      }
+      catch (MarshallingException | UnmarshallingException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return this.getThis();
+  }
+
+  /**
+   * @see #singleLogoutServices(List)
+   * 
+   * @param singleLogoutServices
+   *          single logout service objects (cloned before assignment)
+   * @return the builder
+   */  
+  public T singleLogoutServices(SingleLogoutService... singleLogoutServices) {
+    return this.singleLogoutServices(singleLogoutServices != null ? Arrays.asList(singleLogoutServices) : null);
+  }
+
 
   /**
    * Assigns the {@code Organization} element to the entity descriptor.
