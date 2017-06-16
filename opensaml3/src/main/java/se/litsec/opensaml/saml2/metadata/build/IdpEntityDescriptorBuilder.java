@@ -30,12 +30,14 @@ import java.util.Optional;
 
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.core.xml.io.UnmarshallingException;
+import org.opensaml.core.xml.util.XMLObjectSupport;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.ext.saml2mdattr.EntityAttributes;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.saml2.metadata.SSODescriptor;
+import org.opensaml.saml.saml2.metadata.SingleSignOnService;
 
 import net.shibboleth.utilities.java.support.xml.XMLParserException;
 import se.litsec.opensaml.saml2.attribute.AttributeTemplate;
@@ -128,6 +130,18 @@ public class IdpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<
     }
     return this.object().getIDPSSODescriptor(SAMLConstants.SAML20P_NS) != null;
   }
+  
+  /**
+   * Assigns the {@code WantAuthnRequestsSigned} attribute of the {@code md:IDPSSODescriptor} element.
+   * 
+   * @param b
+   *          boolean (if {@code null}, the attribute is not set)
+   * @return the builder
+   */
+  public IdpEntityDescriptorBuilder wantAuthnRequestsSigned(Boolean b) {
+    ((IDPSSODescriptor) this.ssoDescriptor()).setWantAuthnRequestsSigned(b);
+    return this;
+  }
 
   /**
    * Adds a set of URIs to the assurance certification attribute
@@ -142,7 +156,7 @@ public class IdpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<
    * @return the builder
    * @see #entityAttributesExtension(List)
    */
-  public IdpEntityDescriptorBuilder assuranceCertification(List<String> uris) {
+  public IdpEntityDescriptorBuilder assuranceCertificationUris(List<String> uris) {
     Optional<EntityAttributes> entityAttributes = MetadataUtils.getEntityAttributes(this.object());
     if (!entityAttributes.isPresent()) {
       if (uris == null || uris.isEmpty()) {
@@ -152,9 +166,7 @@ public class IdpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<
         Collections.singletonList(ASSURANCE_CERTIFICATION_ATTRIBUTE_TEMPLATE.createBuilder().value(uris).build()));
     }
     List<Attribute> attributeList = new ArrayList<>();
-    entityAttributes.get()
-      .getAttributes()
-      .stream()
+    entityAttributes.get().getAttributes().stream()
       .filter(a -> !ASSURANCE_CERTIFICATION_ATTRIBUTE_NAME.equals(a.getName()))
       .forEach(attributeList::add);
     if (uris != null) {
@@ -164,15 +176,50 @@ public class IdpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<
   }
   
   /**
-   * @see #assuranceCertification(List)
+   * @see #assuranceCertificationUris(List)
    * 
    * @param uris
    *          the assurance URI values that should be added
    * @return the builder
    * @see #entityAttributesExtension(List)
    */  
-  public IdpEntityDescriptorBuilder assuranceCertification(String... uris) {
-    return this.assuranceCertification(uris != null ? Arrays.asList(uris) : null);
+  public IdpEntityDescriptorBuilder assuranceCertificationUris(String... uris) {
+    return this.assuranceCertificationUris(uris != null ? Arrays.asList(uris) : null);
+  }
+  
+  /**
+   * Adds {@code md:SingleSignOnService} elements to the {@code IDPSSODescriptor}.
+   * 
+   * @param singleSignOnServices
+   *          single sign on service objects (cloned before assignment)
+   * @return the builder
+   */
+  public IdpEntityDescriptorBuilder singleSignOnServices(List<SingleSignOnService> singleSignOnServices) {
+    IDPSSODescriptor idpDescriptor = (IDPSSODescriptor) this.ssoDescriptor();
+    idpDescriptor.getSingleSignOnServices().clear();
+    if (singleSignOnServices == null) {
+      return this;
+    }
+    for (SingleSignOnService sso : singleSignOnServices) {
+      try {
+        idpDescriptor.getSingleSignOnServices().add(XMLObjectSupport.cloneXMLObject(sso));
+      }
+      catch (MarshallingException | UnmarshallingException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return this;
+  }
+
+  /**
+   * @see #singleLogoutServices(List)
+   * 
+   * @param singleSignOnServices
+   *          single sign on service objects (cloned before assignment)
+   * @return the builder
+   */  
+  public IdpEntityDescriptorBuilder singleSignOnServices(SingleSignOnService... singleSignOnServices) {
+    return this.singleSignOnServices(singleSignOnServices != null ? Arrays.asList(singleSignOnServices) : null);
   }
 
 }

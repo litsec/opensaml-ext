@@ -127,7 +127,7 @@ public class SpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<S
    *          URLs for discovery responses
    * @return the builder
    */
-  public SpEntityDescriptorBuilder discoveryResponse(List<String> locations) {
+  public SpEntityDescriptorBuilder discoveryResponses(List<String> locations) {
     if (this.ssoDescriptor().getExtensions() == null) {
       if (locations == null) {
         return this;
@@ -137,10 +137,7 @@ public class SpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<S
     else {
       if (!MetadataUtils.getMetadataExtensions(this.ssoDescriptor().getExtensions(), DiscoveryResponse.class).isEmpty()) {
         // Clear out all previous disco response elements.>
-        List<XMLObject> save = this.ssoDescriptor()
-          .getExtensions()
-          .getOrderedChildren()
-          .stream()
+        List<XMLObject> save = this.ssoDescriptor().getExtensions().getOrderedChildren().stream()
           .filter(e -> !DiscoveryResponse.class.isAssignableFrom(e.getClass()))
           .collect(Collectors.toList());
         this.ssoDescriptor().getExtensions().getOrderedChildren().clear();
@@ -161,14 +158,14 @@ public class SpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<S
   }
 
   /**
-   * @see #discoveryResponse(List)
+   * @see #discoveryResponses(List)
    * 
    * @param locations
    *          URLs for discovery responses
    * @return the builder
    */
-  public SpEntityDescriptorBuilder discoveryResponse(String... locations) {
-    return this.discoveryResponse(locations != null ? Arrays.asList(locations) : null);
+  public SpEntityDescriptorBuilder discoveryResponses(String... locations) {
+    return this.discoveryResponses(locations != null ? Arrays.asList(locations) : null);
   }
 
   /**
@@ -178,7 +175,7 @@ public class SpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<S
    *          assertion consumer service objects (cloned before assignment)
    * @return the builder
    */
-  public SpEntityDescriptorBuilder assertionConsumerService(List<AssertionConsumerService> assertionConsumerServices) {
+  public SpEntityDescriptorBuilder assertionConsumerServices(List<AssertionConsumerService> assertionConsumerServices) {
     SPSSODescriptor spDescriptor = (SPSSODescriptor) this.ssoDescriptor();
     spDescriptor.getAssertionConsumerServices().clear();
     if (assertionConsumerServices == null) {
@@ -196,14 +193,14 @@ public class SpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<S
   }
 
   /**
-   * @see #assertionConsumerService(List)
+   * @see #assertionConsumerServices(List)
    * 
    * @param assertionConsumerServices
    *          assertion consumer service objects (cloned before assignment)
    * @return the builder
    */
-  public SpEntityDescriptorBuilder assertionConsumerService(AssertionConsumerService... assertionConsumerServices) {
-    return this.assertionConsumerService(assertionConsumerServices != null ? Arrays.asList(assertionConsumerServices) : null);
+  public SpEntityDescriptorBuilder assertionConsumerServices(AssertionConsumerService... assertionConsumerServices) {
+    return this.assertionConsumerServices(assertionConsumerServices != null ? Arrays.asList(assertionConsumerServices) : null);
   }
 
   /**
@@ -213,7 +210,7 @@ public class SpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<S
    *          attribute consumer service objects (cloned before assignment)
    * @return the builder
    */
-  public SpEntityDescriptorBuilder attributeConsumingService(List<AttributeConsumingService> attributeConsumingServices) {
+  public SpEntityDescriptorBuilder attributeConsumingServices(List<AttributeConsumingService> attributeConsumingServices) {
     SPSSODescriptor spDescriptor = (SPSSODescriptor) this.ssoDescriptor();
     spDescriptor.getAttributeConsumingServices().clear();
     if (attributeConsumingServices == null) {
@@ -231,14 +228,14 @@ public class SpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<S
   }
 
   /**
-   * @see #assertionConsumerService(List)
+   * @see #assertionConsumerServices(List)
    * 
    * @param attributeConsumingServices
    *          attribute consumer service objects (cloned before assignment)
    * @return the builder
    */  
-  public SpEntityDescriptorBuilder attributeConsumingService(AttributeConsumingService... attributeConsumingServices) {
-    return this.attributeConsumingService(attributeConsumingServices != null ? Arrays.asList(attributeConsumingServices) : null);
+  public SpEntityDescriptorBuilder attributeConsumingServices(AttributeConsumingService... attributeConsumingServices) {
+    return this.attributeConsumingServices(attributeConsumingServices != null ? Arrays.asList(attributeConsumingServices) : null);
   }
 
   /** {@inheritDoc} */
