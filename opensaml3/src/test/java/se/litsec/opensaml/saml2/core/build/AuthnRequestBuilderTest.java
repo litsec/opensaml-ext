@@ -52,6 +52,7 @@ public class AuthnRequestBuilderTest extends OpenSAMLTestBase {
     final String issuer = "https://eid.litsec.se/sp/eidas";
     final String authnContext = "http://id.elegnamnden.se/loa/1.0/loa3";
     final LocalDateTime now = LocalDateTime.now();
+    final String requesterID = "http://www.example.com/sp";
 
     AuthnRequest request = AuthnRequestBuilder.builder()
       .assertionConsumerServiceURL(assertionConsumerServiceURL)
@@ -64,6 +65,8 @@ public class AuthnRequestBuilderTest extends OpenSAMLTestBase {
       .issuer(issuer)
       .nameIDPolicy(
         NameIDPolicyBuilder.builder().allowCreate(true).format(NameID.PERSISTENT).build())
+      .scoping(
+        ScopingBuilder.builder().requesterIDs(requesterID).build())
       .requestedAuthnContext(RequestedAuthnContextBuilder.builder()
         .comparison(AuthnContextComparisonTypeEnumeration.EXACT)
         .authnContextClassRefs(authnContext)
@@ -83,6 +86,7 @@ public class AuthnRequestBuilderTest extends OpenSAMLTestBase {
     Assert.assertEquals(now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(), request.getIssueInstant().getMillis());
     Assert.assertEquals(SAMLConstants.SAML2_POST_BINDING_URI, request.getProtocolBinding());
     Assert.assertEquals(NameID.PERSISTENT, request.getNameIDPolicy().getFormat());
+    Assert.assertEquals(requesterID, request.getScoping().getRequesterIDs().get(0).getRequesterID());
     Assert.assertEquals(Boolean.TRUE, request.getNameIDPolicy().getAllowCreate());
     Assert.assertEquals(AuthnContextComparisonTypeEnumeration.EXACT, request.getRequestedAuthnContext().getComparison());
     Assert.assertEquals(Arrays.asList(authnContext),

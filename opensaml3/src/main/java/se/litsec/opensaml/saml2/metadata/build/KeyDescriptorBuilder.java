@@ -28,6 +28,7 @@ import java.util.Base64;
 
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
 import org.opensaml.security.credential.UsageType;
+import org.opensaml.security.x509.X509Credential;
 import org.opensaml.xmlsec.signature.KeyInfo;
 import org.opensaml.xmlsec.signature.KeyName;
 import org.opensaml.xmlsec.signature.X509Data;
@@ -69,7 +70,7 @@ public class KeyDescriptorBuilder extends AbstractSAMLObjectBuilder<KeyDescripto
    *          the usage type
    * @return the builder
    */
-  KeyDescriptorBuilder use(UsageType usageType) {
+  public KeyDescriptorBuilder use(UsageType usageType) {
     if (UsageType.UNSPECIFIED.equals(usageType)) {
       this.object().setUse(null);
     }
@@ -86,7 +87,7 @@ public class KeyDescriptorBuilder extends AbstractSAMLObjectBuilder<KeyDescripto
    *          the key name
    * @return the builder
    */
-  KeyDescriptorBuilder keyName(String name) {
+  public KeyDescriptorBuilder keyName(String name) {
     if (name == null) {
       if (this.object().getKeyInfo() != null && !this.object().getKeyInfo().getKeyNames().isEmpty()) {
         this.object().getKeyInfo().getKeyNames().clear();
@@ -109,7 +110,7 @@ public class KeyDescriptorBuilder extends AbstractSAMLObjectBuilder<KeyDescripto
    *          the certificate
    * @return the builder
    */
-  KeyDescriptorBuilder certificate(X509Certificate certificate) {
+  public KeyDescriptorBuilder certificate(X509Certificate certificate) {
     try {
       return this.certificate(
         certificate != null ? Base64.getEncoder().encodeToString(certificate.getEncoded()) : null);
@@ -127,14 +128,11 @@ public class KeyDescriptorBuilder extends AbstractSAMLObjectBuilder<KeyDescripto
    *          the certificate resource
    * @return the builder
    */
-  KeyDescriptorBuilder certificate(InputStream certificate) {
-    if (certificate == null) {
-      return this;
-    }
+  public KeyDescriptorBuilder certificate(InputStream certificate) {
 
     try {
       return this.certificate(
-        Base64.getEncoder().encodeToString(X509CertificateUtils.decodeCertificate(certificate).getEncoded()));
+        certificate != null ? Base64.getEncoder().encodeToString(X509CertificateUtils.decodeCertificate(certificate).getEncoded()) : null);
     }
     catch (CertificateException e) {
       throw new SecurityException(e);
@@ -149,7 +147,7 @@ public class KeyDescriptorBuilder extends AbstractSAMLObjectBuilder<KeyDescripto
    *          the base64 encoding (note: not PEM-format)
    * @return the builder
    */
-  KeyDescriptorBuilder certificate(String base64Encoding) {
+  public KeyDescriptorBuilder certificate(String base64Encoding) {
     if (base64Encoding == null) {
       if (this.object().getKeyInfo() != null && !this.object().getKeyInfo().getX509Datas().isEmpty()) {
         this.object().getKeyInfo().getX509Datas().clear();
@@ -166,6 +164,18 @@ public class KeyDescriptorBuilder extends AbstractSAMLObjectBuilder<KeyDescripto
     x509Data.getX509Certificates().add(cert);
     this.object().getKeyInfo().getX509Datas().add(x509Data);
     return this;
+  }
+
+  /**
+   * Assigns a certificate in OpenSAML credential format to be used as a X.509 data element of the {@code KeyInfo}
+   * element within the key descriptor.
+   * 
+   * @param credential
+   *          the credential
+   * @return the builder
+   */
+  public KeyDescriptorBuilder certificate(X509Credential credential) {
+    return this.certificate(credential != null ? credential.getEntityCertificate() : null);
   }
 
 }

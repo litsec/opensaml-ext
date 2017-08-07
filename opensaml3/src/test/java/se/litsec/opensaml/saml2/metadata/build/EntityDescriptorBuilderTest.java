@@ -60,7 +60,7 @@ import se.litsec.opensaml.utils.X509CertificateUtils;
 
 /**
  * Test cases for {@link AbstractEntityDescriptorBuilder}, {@link SpEntityDescriptorBuilder} and
- * {@link IdpEntityDescriptorBuilder}.
+ * {@link IdpEntityDescriptorBuilder}. The tests also include testing the corresponding factory beans.
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  */

@@ -18,29 +18,48 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package se.litsec.opensaml.saml2.core.build;
+package se.litsec.opensaml.core;
 
 /**
- * Builder for {@code AuthnRequest} messages.
+ * Runtime exception class for errors when using builders.
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
- * @see AbstractAuthnRequestBuilder
  */
-public class AuthnRequestBuilder extends AbstractAuthnRequestBuilder<AuthnRequestBuilder> {
+public class SAMLObjectBuilderRuntimeException extends RuntimeException {
+
+  /** For serializing. */
+  private static final long serialVersionUID = -2665398281671943709L;
 
   /**
-   * Utility method that creates a builder.
+   * Constructor assigning the error message.
    * 
-   * @return a builder
+   * @param message
+   *          the error message
    */
-  public static AuthnRequestBuilder builder() {
-    return new AuthnRequestBuilder();
+  public SAMLObjectBuilderRuntimeException(String message) {
+    super(message);
   }
 
-  /** {@inheritDoc} */
-  @Override
-  protected AuthnRequestBuilder getThis() {
-    return this;
+  /**
+   * Constructor assigning the cause of the error
+   * 
+   * @param cause
+   *          the cause of the error
+   */
+  public SAMLObjectBuilderRuntimeException(Throwable cause) {
+    super(cause);
+  }
+
+  /**
+   * Constructor assinging the error message and the cause of the error.
+   * 
+   * @param message
+   *          the error message
+   * @param cause
+   *          the cause of the error
+   */
+  public SAMLObjectBuilderRuntimeException(String message, Throwable cause) {
+    super(message, cause);
   }
 
 }
