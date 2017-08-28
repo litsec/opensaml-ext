@@ -186,6 +186,7 @@ public abstract class BaseMetadataProviderTest extends OpenSAMLTestBase {
     AbstractMetadataProvider provider = this.createMetadataProvider(new ClassPathResource("/metadata/sveleg-fedtest.xml"));
     
     try {
+      provider.setFailFastInitialization(true);
       provider.setPerformSchemaValidation(true);
       provider.initialize();
       Optional<Element> dom = provider.getMetadataDOM();
@@ -199,6 +200,7 @@ public abstract class BaseMetadataProviderTest extends OpenSAMLTestBase {
 
     provider = this.createMetadataProvider(new ClassPathResource("/metadata/sveleg-fedtest-badschema.xml"));     
     try {
+      provider.setFailFastInitialization(true);
       provider.setPerformSchemaValidation(true);
       provider.initialize();
       Assert.fail("Expected schema validation error");

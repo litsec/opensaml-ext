@@ -88,9 +88,9 @@ public abstract class AbstractMetadataProvider extends AbstractInitializableComp
 
   /**
    * Whether problems during initialization should cause the provider to fail or go on without metadata. The assumption
-   * being that in most cases a provider will recover at some point in the future. Default: true.
+   * being that in most cases a provider will recover at some point in the future. Default: false.
    */
-  private boolean failFastInitialization = true;
+  private boolean failFastInitialization = false;
 
   /**
    * The certificate that was used to sign metadata that is downloaded. If this attribute is assigned the provider is
