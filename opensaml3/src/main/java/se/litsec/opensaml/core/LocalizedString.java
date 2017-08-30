@@ -49,7 +49,7 @@ public class LocalizedString {
    * </pre>
    * 
    * @param source
-   *          the sting to parse
+   *          the string to parse
    */
   public LocalizedString(String source) {
     String _source = source.trim();

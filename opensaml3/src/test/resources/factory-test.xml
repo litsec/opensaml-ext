@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:util="http://www.springframework.org/schema/util" xmlns:c="http://www.springframework.org/schema/c" xmlns:p="http://www.springframework.org/schema/p"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+  http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+  
+  <import resource="opensaml-init.xml" />
+  
+  <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+    <property name="converters">
+      <util:set>
+        <bean class="se.litsec.opensaml.utils.spring.StringToLocalizedStringConverter" />
+      </util:set>
+    </property>
+  </bean>
+  
+  <util:properties id="testProperties" location="classpath:factory-test.properties" />
+
+  <bean id="config" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" scope="singleton"
+    p:properties-ref="testProperties"
+    p:ignoreUnresolvablePlaceholders="true" />
+
+  <bean id="organization" class="se.litsec.opensaml.saml2.metadata.build.spring.OrganizationFactoryBean"
+    p:organizationNames="${metadata.organization.names}"
+    p:organizationDisplayNames="${metadata.organization.display-names}"
+    p:organizationURL="${metadata.organization.url}" /> 
+    
+  <bean id="uiInfo" class="se.litsec.opensaml.saml2.metadata.build.spring.UIInfoFactoryBean"
+    p:displayNames="${metadata.uiinfo.display-names}"
+    p:descriptions="${metadata.uiinfo.descriptions}">
+    
+    <property name="keywords">
+      <util:constant static-field="se.litsec.opensaml.saml2.metadata.build.UIInfoBuilderTest.KEYWORDS" />
+    </property>
+    
+    <property name="logos">
+      <util:constant static-field="se.litsec.opensaml.saml2.metadata.build.spring.UIInfoFactoryBeanTest.LOGOS_LIST" />
+    </property>
+    
+    <property name="informationURLs">
+      <util:constant static-field="se.litsec.opensaml.saml2.metadata.build.spring.UIInfoFactoryBeanTest.INFORMATION_URLS_LIST" />
+    </property>
+    
+    <property name="privacyStatementURLs">
+      <util:constant static-field="se.litsec.opensaml.saml2.metadata.build.spring.UIInfoFactoryBeanTest.PRIVACY_STATEMENT_URLS_LIST" />
+    </property>
+
+  </bean>
+  
+</beans>
