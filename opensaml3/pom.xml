@@ -96,6 +96,14 @@
     </dependency>
     
     <dependency>
+      <groupId>org.opensaml</groupId>
+      <artifactId>opensaml-security-api</artifactId>
+      <version>${opensaml.version}</version>
+      <type>jar</type>
+      <scope>compile</scope>      
+    </dependency>
+    
+    <dependency>
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
       <version>3.2.2</version>

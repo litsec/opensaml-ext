@@ -35,6 +35,7 @@ import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.metadata.resolver.filter.MetadataFilter;
 import org.opensaml.saml.metadata.resolver.impl.FileBackedHTTPMetadataResolver;
 import org.opensaml.saml.metadata.resolver.impl.HTTPMetadataResolver;
+import org.opensaml.security.httpclient.HttpClientSecurityParameters;
 import org.opensaml.security.httpclient.impl.SecurityEnhancedTLSSocketFactory;
 import org.opensaml.security.trust.TrustEngine;
 import org.opensaml.security.x509.PKIXValidationInformation;
@@ -66,18 +67,18 @@ public class HTTPMetadataProvider extends AbstractMetadataProvider {
   /** The metadata resolver. */
   private HTTPMetadataResolver metadataResolver;
 
-  /** The keystore holding the certificates that we trust for TLS connections. */
-  private KeyStore tlsTrustStore;
+  /** TLS security parameters for the TLS connections, including the TLS truststore. */
+  private HttpClientSecurityParameters tlsSecurityParameters;
 
   /**
-   * Creates a provider that peiodically downloads data from the URL given by {@code metadataUrl}. If the
+   * Creates a provider that periodically downloads data from the URL given by {@code metadataUrl}. If the
    * {@code backupFile} parameter is given the provider also stores the downloaded metadata on disk as backup.
    * <p>
    * This constructor will initialize the underlying {@code MetadataResolver} with a default {@code HttpClient} instance
    * that is initialized according to {@link #createDefaultHttpClient()}.
    * </p>
    * <p>
-   * Since to trust store for TLS connections is given, this will be read from the system properties
+   * Since no security parameters for TLS connections are given, this will be read from the system properties
    * {@code javax.net.ssl.trustStore} and {@code javax.net.ssl.trustStorePassword}.
    * </p>
    * 
@@ -98,22 +99,23 @@ public class HTTPMetadataProvider extends AbstractMetadataProvider {
    * {@code backupFile} parameter is given the provider also stores the downloaded metadata on disk as backup.
    * <p>
    * This constructor will initialize the underlying {@code MetadataResolver} with a default {@code HttpClient} instance
-   * that is initialized according to {@link #createDefaultHttpClient()}.
+   * that is initialized according to {@link #createDefaultHttpClient()} and the supplied security parameters.
    * </p>
    * 
    * @param metadataUrl
    *          the URL to use when downloading metadata
    * @param backupFile
    *          optional path to the file to where the provider should store downloaded metadata
-   * @param tlsTrustStore
-   *          a keystore holding the certificates to trust for TLS connections (if not set, only HTTP connections will
-   *          be possible)
+   * @param tlsSecurityParameters
+   *          security parameters to use for TLS connections (including TLS truststore). If not set, default system
+   *          settings will be applied
    * @throws ResolverException
    *           if the supplied metadata URL is invalid
    * @see #HTTPMetadataProvider(String, String, HttpClient)
    */
-  public HTTPMetadataProvider(String metadataUrl, String backupFile, KeyStore tlsTrustStore) throws ResolverException {
-    this(metadataUrl, backupFile, createDefaultHttpClient(), tlsTrustStore);
+  public HTTPMetadataProvider(String metadataUrl, String backupFile, HttpClientSecurityParameters tlsSecurityParameters)
+      throws ResolverException {
+    this(metadataUrl, backupFile, createDefaultHttpClient(), tlsSecurityParameters);
   }
 
   /**
@@ -126,13 +128,14 @@ public class HTTPMetadataProvider extends AbstractMetadataProvider {
    *          optional path to the file to where the provider should store downloaded metadata
    * @param httpClient
    *          the {@code HttpClient} that should be used to download the metadata
-   * @param tlsTrustStore
-   *          a keystore holding the certificates to trust for TLS connections (if not set, only HTTP connections will
-   *          be possible)
+   * @param tlsSecurityParameters
+   *          security parameters to use for TLS connections (including TLS truststore). If not set, default system
+   *          settings will be applied
    * @throws ResolverException
    *           if the supplied metadata URL is invalid
    */
-  public HTTPMetadataProvider(String metadataUrl, String backupFile, HttpClient httpClient, KeyStore tlsTrustStore)
+  public HTTPMetadataProvider(String metadataUrl, String backupFile, HttpClient httpClient,
+      HttpClientSecurityParameters tlsSecurityParameters)
       throws ResolverException {
     Validate.notEmpty(metadataUrl, "metadataUrl must be set");
     Validate.notNull(httpClient, "httpClient must not be null");
@@ -140,11 +143,14 @@ public class HTTPMetadataProvider extends AbstractMetadataProvider {
     this.metadataResolver = backupFile != null
         ? new FileBackedHTTPMetadataResolver(httpClient, metadataUrl, backupFile)
         : new HTTPMetadataResolver(httpClient, metadataUrl);
-        
-    if (tlsTrustStore == null) {
+
+    if (tlsSecurityParameters == null) {
       log.info("Loading TLS trust store from system properties ...");
       try {
-        this.tlsTrustStore = KeyStoreUtils.loadSystemTrustStore();
+        KeyStore trustStore = KeyStoreUtils.loadSystemTrustStore();
+        this.tlsSecurityParameters = new HttpClientSecurityParameters();
+        this.tlsSecurityParameters.setTLSTrustEngine(createTlsTrustEngine(trustStore));
+        this.tlsSecurityParameters.setHostnameVerifier(new StrictHostnameVerifier());
       }
       catch (KeyStoreException e) {
         log.error("Failed to load system trust store", e);
@@ -152,28 +158,26 @@ public class HTTPMetadataProvider extends AbstractMetadataProvider {
       }
     }
     else {
-      this.tlsTrustStore = tlsTrustStore;
+      this.tlsSecurityParameters = tlsSecurityParameters;
     }
   }
 
   /**
-   * Creates a {@link HttpClient} instance that uses system properties and sets a SSLSocketFactory according to:
-   * 
-   * <pre>
-   * new TrustEngineTLSSocketFactory(
-   *   HttpClientSupport.buildNoTrustSSLConnectionSocketFactory(), new StrictHostnameVerifier());
-   * </pre>
+   * Creates a default {@link HttpClient} instance that uses system properties and sets a SSLSocketFactory that is
+   * configured in a "no trust" mode, meaning that all peer certificates are accepted and no hostname check is made.
+   * <p>
+   * TLS security parameters, such as a trust engine, may later be added by assigning a configured
+   * {@link HttpClientSecurityParameters} instance in the constructor.
+   * </p>
    * 
    * @return a default {@code HttpClient} instance
    */
   public static HttpClient createDefaultHttpClient() {
-
     return HttpClientBuilder
       .create()
       .useSystemProperties()
       .setSSLSocketFactory(
-        new SecurityEnhancedTLSSocketFactory(
-          HttpClientSupport.buildNoTrustSSLConnectionSocketFactory(), new StrictHostnameVerifier()))
+        new SecurityEnhancedTLSSocketFactory(HttpClientSupport.buildNoTrustTLSSocketFactory()))
       .build();
   }
 
@@ -193,37 +197,28 @@ public class HTTPMetadataProvider extends AbstractMetadataProvider {
   @Override
   protected void createMetadataResolver(boolean requireValidMetadata, boolean failFastInitialization, MetadataFilter filter)
       throws ResolverException {
-    try {
-      this.metadataResolver.setId(this.getID());
-      this.metadataResolver.setFailFastInitialization(failFastInitialization);
-      this.metadataResolver.setRequireValidMetadata(requireValidMetadata);
-      this.metadataResolver.setParserPool(XMLObjectProviderRegistrySupport.getParserPool());
-      this.metadataResolver.setMetadataFilter(filter);
 
-      // Setup TLS trust engine.
-      if (this.tlsTrustStore != null) {
-        this.metadataResolver.setTLSTrustEngine(this.createTlsTrustEngine());
-      }
-      else {
-        log.info("No TLS trust store supplied. The HTTP metadata resolver will not be able to handle HTTPS connections.");
-      }
-    }
-    catch (KeyStoreException e) {
-      log.error("Error while setting up TLS trust engine", e);
-      throw new ResolverException(e);
-    }
+    this.metadataResolver.setId(this.getID());
+    this.metadataResolver.setFailFastInitialization(failFastInitialization);
+    this.metadataResolver.setRequireValidMetadata(requireValidMetadata);
+    this.metadataResolver.setParserPool(XMLObjectProviderRegistrySupport.getParserPool());
+    this.metadataResolver.setMetadataFilter(filter);
+
+    this.metadataResolver.setHttpClientSecurityParameters(this.tlsSecurityParameters);
   }
 
   /**
-   * Creates a {@code TrustEngine} instance based on the trust key store that this provider was initialized with.
+   * Creates a {@code TrustEngine} instance based on the supplied trust key store.
    * 
+   * @param trustStore
+   *          the keystore holding the trusted certificates
    * @return a {@code TrustEngine} instance
    * @throws KeyStoreException
    *           for errors reading the TLS trust key store
    */
-  private TrustEngine<? super X509Credential> createTlsTrustEngine() throws KeyStoreException {
+  public static TrustEngine<? super X509Credential> createTlsTrustEngine(KeyStore trustStore) throws KeyStoreException {
 
-    List<X509Certificate> trustedCertificates = KeyStoreUtils.getCertificateEntries(this.tlsTrustStore);
+    List<X509Certificate> trustedCertificates = KeyStoreUtils.getCertificateEntries(trustStore);
 
     PKIXValidationInformation info = new BasicPKIXValidationInformation(trustedCertificates, null, null);
     StaticPKIXValidationInformationResolver resolver = new StaticPKIXValidationInformationResolver(Collections.singletonList(info),

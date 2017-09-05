@@ -24,6 +24,7 @@ import java.security.KeyStore;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.opensaml.security.httpclient.HttpClientSecurityParameters;
 import org.springframework.core.io.Resource;
 
 import se.litsec.opensaml.TestWebServer;
@@ -80,7 +81,9 @@ public class HTTPMetadataProviderTest extends BaseMetadataProviderTest {
   @Override
   protected AbstractMetadataProvider createMetadataProvider(Resource resource) throws Exception {
     resourceProvider.setResource(resource);
-    return new HTTPMetadataProvider(server.getUrl(), null, trustStore);
+    HttpClientSecurityParameters pars = new HttpClientSecurityParameters();
+    pars.setTLSTrustEngine(HTTPMetadataProvider.createTlsTrustEngine(trustStore));
+    return new HTTPMetadataProvider(server.getUrl(), null, pars);
   }
 
   /**
