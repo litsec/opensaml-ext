@@ -66,7 +66,7 @@ public class AttributeConsumingServiceBuilder extends AbstractSAMLObjectBuilder<
   /**
    * Sets the {@code isDefault} attribute of the service.
    * 
-   * @param def
+   * @param flag
    *          the Boolean
    * @return the builder
    */

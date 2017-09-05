@@ -69,7 +69,7 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
    * @param name
    *          the attribute name
    * @return an {@code AttributeBuilder} instance.
-   * @see #AttributeBuilder()
+   * @see #AttributeBuilder(String)
    */
   public static AttributeBuilder builder(String name) {
     return new AttributeBuilder(name);
@@ -193,7 +193,7 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
    * Note: if {@code null} is passed as a parameter, any previous attribute values are cleared.
    * </p>
    * 
-   * @param value
+   * @param values
    *          the string value(s) to add
    * @return the builder
    */
@@ -226,6 +226,8 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
    * 
    * @param value
    *          the value to add
+   * @param <T>
+   *          the value type
    * @return the builder
    */
   public <T extends XMLObject> AttributeBuilder value(T value) {
@@ -242,7 +244,7 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
    * </p>
    * <p>
    * Note: For attribute having string values, there is no need to explictly create an attribute value. Instead the
-   * {@link #value(String)} method may be used directly.
+   * {@link #value(String...)} method may be used directly.
    * </p>
    *
    * @param <T>
@@ -270,7 +272,7 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
    * </p>
    * <p>
    * Note: For attribute having string values, there is no need to explictly create an attribute value. Instead the
-   * {@link #value(String)} method may be used directly.
+   * {@link #value(String...)} method may be used directly.
    * </p>
    * 
    * @param <T>

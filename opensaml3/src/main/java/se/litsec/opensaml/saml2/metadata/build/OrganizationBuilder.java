@@ -85,7 +85,7 @@ public class OrganizationBuilder extends AbstractSAMLObjectBuilder<Organization>
   }
 
   /**
-   * Assigns the {@code OrganizationDisplayName} elements
+   * Assigns the {@code OrganizationDisplayName} elements.
    * 
    * @param organizationDisplayNames
    *          the names
@@ -115,7 +115,7 @@ public class OrganizationBuilder extends AbstractSAMLObjectBuilder<Organization>
   }
 
   /**
-   * Assigns the {@code OrganizationURL} elements
+   * Assigns the {@code OrganizationURL} elements.
    * 
    * @param organizationURLs
    *          the URLs

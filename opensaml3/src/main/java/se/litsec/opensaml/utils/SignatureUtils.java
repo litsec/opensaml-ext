@@ -50,9 +50,10 @@ public class SignatureUtils {
    *          object to sign
    * @param signingCredentials
    *          signature credentials
+   * @param <T>
+   *          the object type
    * @throws SignatureException
    *           for signature creation errors
-   * @see #sign(SignableSAMLObject, java.security.KeyStore.PrivateKeyEntry)
    */
   public static <T extends SignableSAMLObject> void sign(T object, Credential signingCredentials) throws SignatureException {
     try {

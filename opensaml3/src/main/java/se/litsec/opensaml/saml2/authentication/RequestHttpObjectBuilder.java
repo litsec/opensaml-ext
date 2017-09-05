@@ -38,11 +38,11 @@ import se.litsec.opensaml.core.SAMLObjectBuilder;
  * By default the request builder creates a Request object based on the SP and IdP settings in metadata and the
  * configuration of the builder factory, but it is also possible to control the request by using chaining calls as
  * illustrated below:
- * 
- * <pre>
- * RequestHttpObject request = builder.relayState("hello").binding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST").build();
- * </pre>
  * </p>
+ * 
+ * <pre>{@code
+ * RequestHttpObject request = builder.relayState("hello").binding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST").build();}
+ * </pre>
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  *
@@ -57,7 +57,7 @@ public interface RequestHttpObjectBuilder<T extends RequestAbstractType> extends
    * Provider.
    * 
    * @return a RequestHttpObject object
-   * @throws SecurityException
+   * @throws SignatureException
    *           for signature creation errors
    * @throws ResolverException
    *           for metadata errors
@@ -169,7 +169,6 @@ public interface RequestHttpObjectBuilder<T extends RequestAbstractType> extends
    * @param signatureCredentials
    *          the "new" signature credentials
    * @return an updated builder object
-   * @see RequestBuilderFactory#getSignatureCredentials()
    */
   RequestHttpObjectBuilder<T> signatureCredentials(X509Credential signatureCredentials);
 

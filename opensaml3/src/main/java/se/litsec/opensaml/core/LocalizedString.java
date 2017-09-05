@@ -40,12 +40,12 @@ public class LocalizedString {
   private String language;
 
   /**
-   * Creates an instance by parsing the source string that must be on the format <lang-tag>-<string according to
-   * language>. The string "en-Hello" will give a LocalizedString where:
+   * Creates an instance by parsing the source string that must be on the format {@code <lang-tag>-<string according to
+   * language>}. The string "en-Hello" will give a LocalizedString where:
    * 
-   * <pre>
+   * <pre>{@code
    * ls.getLanguage() => "en"
-   * ls.getLocalString() => "Hello"
+   * ls.getLocalString() => "Hello"}
    * </pre>
    * 
    * @param source

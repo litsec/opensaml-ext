@@ -27,7 +27,7 @@ import org.springframework.core.io.Resource;
 import se.litsec.opensaml.utils.ObjectUtils;
 
 /**
- * Factory bean for creating an {@link org.opensaml.saml2.metadata.EntityDescriptor} object from a resource.
+ * Factory bean for creating an {@link EntityDescriptor} object from a resource.
  * 
 @author Martin Lindström (martin.lindstrom@litsec.se)
  */

@@ -32,8 +32,13 @@ import org.opensaml.security.x509.X509Credential;
 public class EntitiesDescriptorContainer extends AbstractMetadataContainer<EntitiesDescriptor> {
 
   /**
-   * @see AbstractMetadataContainer#AbstractMetadataContainer(org.opensaml.saml.saml2.common.TimeBoundSAMLObject,
-   *      X509Credential)
+   * Constructor assigning the encapsulated descriptor element.
+   * 
+   * @param descriptor
+   *          the descriptor object
+   * @param signatureCredentials
+   *          the signature credentials for signing the descriptor. May be {@code null}, but then no signing will be
+   *          possible
    */
   public EntitiesDescriptorContainer(EntitiesDescriptor descriptor, X509Credential signatureCredentials) {
     super(descriptor, signatureCredentials);

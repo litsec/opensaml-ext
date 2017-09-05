@@ -152,7 +152,7 @@ public class ContactPersonBuilder extends AbstractSAMLObjectBuilder<ContactPerso
    * Assigns the {@code EmailAddress} elements.
    * 
    * @param emailAddresses
-   *          the email addesses
+   *          the email addresses
    * @return the builder
    */
   public ContactPersonBuilder emailAddresses(List<String> emailAddresses) {
@@ -170,7 +170,7 @@ public class ContactPersonBuilder extends AbstractSAMLObjectBuilder<ContactPerso
    * @see #emailAddresses(List)
    * 
    * @param emailAddresses
-   *          the email addesses
+   *          the email addresses
    * @return the builder
    */
   public ContactPersonBuilder emailAddresses(String... emailAddresses) {

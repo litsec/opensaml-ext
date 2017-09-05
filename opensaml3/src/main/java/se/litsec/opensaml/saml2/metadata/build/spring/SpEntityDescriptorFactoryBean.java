@@ -32,6 +32,7 @@ import org.springframework.core.io.Resource;
 
 import net.shibboleth.utilities.java.support.xml.XMLParserException;
 import se.litsec.opensaml.core.AbstractSAMLObjectBuilder;
+import se.litsec.opensaml.saml2.metadata.build.AbstractEntityDescriptorBuilder;
 import se.litsec.opensaml.saml2.metadata.build.SpEntityDescriptorBuilder;
 
 /**
@@ -39,9 +40,9 @@ import se.litsec.opensaml.saml2.metadata.build.SpEntityDescriptorBuilder;
  * methods, and optionally a template object.
  * <p>
  * When a template object is used, the factory is initialized using the
- * {@link #AbstractEntityDescriptorBuilder(Resource)} or {@link #AbstractEntityDescriptorBuilder(EntityDescriptor)}
- * constructors. The user may later change, or add, any of the elements and attributes of the template object using the
- * assignment methods.
+ * {@link AbstractEntityDescriptorBuilder#AbstractEntityDescriptorBuilder(java.io.InputStream)} or
+ * {@link AbstractEntityDescriptorBuilder#AbstractEntityDescriptorBuilder(EntityDescriptor)} constructors. The user may
+ * later change, or add, any of the elements and attributes of the template object using the assignment methods.
  * </p>
  * <p>
  * Note that no Signature will be included.
@@ -82,7 +83,7 @@ public class SpEntityDescriptorFactoryBean extends AbstractEntityDescriptorFacto
   public SpEntityDescriptorFactoryBean(Resource resource) throws XMLParserException, UnmarshallingException, IOException {
     this.builder = new SpEntityDescriptorBuilder(resource.getInputStream());
   }
-  
+
   /**
    * Constructor setting up the factory with a template {@code EntityDescriptor}. Users of the bean may now change, add
    * or delete (by using {@code null} values), the elements and attributes of the template object using the setter
@@ -98,8 +99,12 @@ public class SpEntityDescriptorFactoryBean extends AbstractEntityDescriptorFacto
   public SpEntityDescriptorFactoryBean(EntityDescriptor template) throws UnmarshallingException, MarshallingException {
     this.builder = new SpEntityDescriptorBuilder(template);
   }
-  
+
   /**
+   * Assigns the {@code AuthnRequestsSigned} attribute of the {@code md:SPSSODescriptor} element.
+   * 
+   * @param b
+   *          boolean (if {@code null}, the attribute is not set)
    * @see SpEntityDescriptorBuilder#authnRequestsSigned(Boolean)
    */
   public void setAuthnRequestsSigned(Boolean b) {
@@ -107,6 +112,10 @@ public class SpEntityDescriptorFactoryBean extends AbstractEntityDescriptorFacto
   }
 
   /**
+   * Assigns the {@code WantAssertionsSigned} attribute of the {@code md:SPSSODescriptor} element.
+   * 
+   * @param b
+   *          whether assertions should be signed
    * @see SpEntityDescriptorBuilder#wantAssertionsSigned(Boolean)
    */
   public void setWantAssertionsSigned(Boolean b) {
@@ -114,6 +123,10 @@ public class SpEntityDescriptorFactoryBean extends AbstractEntityDescriptorFacto
   }
 
   /**
+   * Adds one discovery response location.
+   * 
+   * @param location
+   *          URL for discovery responses
    * @see SpEntityDescriptorBuilder#discoveryResponses(String...)
    */
   public void setDiscoveryResponse(String location) {
@@ -121,27 +134,43 @@ public class SpEntityDescriptorFactoryBean extends AbstractEntityDescriptorFacto
   }
 
   /**
+   * Adds discovery response locations in the given order (first string will be assigned index 1 and so on).
+   * 
+   * @param locations
+   *          URLs for discovery responses
    * @see SpEntityDescriptorBuilder#discoveryResponses(List)
    */
   public void setDiscoveryResponses(List<String> locations) {
     this.builder.discoveryResponses(locations != null ? locations.toArray(new String[] {}) : null);
   }
-  
+
   /**
+   * Adds {@code md:AssertionConsumerService} elements to the {@code SPSSODescriptor}.
+   * 
+   * @param assertionConsumerServices
+   *          assertion consumer service objects (cloned before assignment)
    * @see SpEntityDescriptorBuilder#assertionConsumerServices(List)
    */
   public void setAssertionConsumerServices(List<AssertionConsumerService> assertionConsumerServices) {
     this.builder.assertionConsumerServices(assertionConsumerServices);
   }
-  
+
   /**
+   * Adds one {@code md:AssertionConsumerService} element to the {@code SPSSODescriptor}.
+   * 
+   * @param assertionConsumerService
+   *          assertion consumer service object (cloned before assignment)
    * @see SpEntityDescriptorBuilder#assertionConsumerServices(AssertionConsumerService...)
    */
   public void setAssertionConsumerService(AssertionConsumerService assertionConsumerService) {
     this.builder.assertionConsumerServices(assertionConsumerService);
-  }  
-    
+  }
+
   /**
+   * Adds {@code md:AttributeConsumingService} elements to the {@code SPSSODescriptor}.
+   * 
+   * @param attributeConsumingServices
+   *          attribute consumer service objects (cloned before assignment)
    * @see SpEntityDescriptorBuilder#attributeConsumingServices(List)
    */
   public void setAttributeConsumingServices(List<AttributeConsumingService> attributeConsumingServices) {
@@ -149,6 +178,10 @@ public class SpEntityDescriptorFactoryBean extends AbstractEntityDescriptorFacto
   }
 
   /**
+   * Adds one {@code md:AttributeConsumingService} element to the {@code SPSSODescriptor}.
+   * 
+   * @param attributeConsumingService
+   *          attribute consumer service object (cloned before assignment)
    * @see SpEntityDescriptorBuilder#attributeConsumingServices(AttributeConsumingService...)
    */
   public void setAttributeConsumingService(AttributeConsumingService attributeConsumingService) {
@@ -166,5 +199,5 @@ public class SpEntityDescriptorFactoryBean extends AbstractEntityDescriptorFacto
   protected AbstractSAMLObjectBuilder<EntityDescriptor> builder() {
     return this.builder;
   }
-    
+
 }

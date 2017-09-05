@@ -113,6 +113,7 @@ public class SpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<S
    * Assigns the {@code WantAssertionsSigned} attribute of the {@code md:SPSSODescriptor} element.
    * 
    * @param b
+   *          whether assertions should be signed
    * @return the builder
    */
   public SpEntityDescriptorBuilder wantAssertionsSigned(Boolean b) {
@@ -137,7 +138,10 @@ public class SpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<S
     else {
       if (!MetadataUtils.getMetadataExtensions(this.ssoDescriptor().getExtensions(), DiscoveryResponse.class).isEmpty()) {
         // Clear out all previous disco response elements.>
-        List<XMLObject> save = this.ssoDescriptor().getExtensions().getOrderedChildren().stream()
+        List<XMLObject> save = this.ssoDescriptor()
+          .getExtensions()
+          .getOrderedChildren()
+          .stream()
           .filter(e -> !DiscoveryResponse.class.isAssignableFrom(e.getClass()))
           .collect(Collectors.toList());
         this.ssoDescriptor().getExtensions().getOrderedChildren().clear();
@@ -233,7 +237,7 @@ public class SpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<S
    * @param attributeConsumingServices
    *          attribute consumer service objects (cloned before assignment)
    * @return the builder
-   */  
+   */
   public SpEntityDescriptorBuilder attributeConsumingServices(AttributeConsumingService... attributeConsumingServices) {
     return this.attributeConsumingServices(attributeConsumingServices != null ? Arrays.asList(attributeConsumingServices) : null);
   }

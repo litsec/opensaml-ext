@@ -69,6 +69,8 @@ public class AttributeUtils {
    *          the attribute
    * @param type
    *          the type to match
+   * @param <T>
+   *          the value type
    * @return a (possibly empty) list of values.
    */
   public static <T extends XMLObject> List<T> getAttributeValues(Attribute attribute, Class<T> type) {
@@ -86,6 +88,8 @@ public class AttributeUtils {
    *          the attribute
    * @param type
    *          the type to match
+   * @param <T>
+   *          the value type
    * @return the value, or {@code null}
    */
   public static <T extends XMLObject> T getAttributeValue(Attribute attribute, Class<T> type) {
@@ -105,7 +109,6 @@ public class AttributeUtils {
    * @param attributes
    *          the list of attributes
    * @return the attribute or {@link Optional#empty()}
-   * @see #getAttributes(String, List)
    */
   public static Optional<Attribute> getAttribute(String name, List<Attribute> attributes) {
     if (attributes == null) {

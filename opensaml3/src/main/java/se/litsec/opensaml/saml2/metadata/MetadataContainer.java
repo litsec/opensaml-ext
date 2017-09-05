@@ -119,13 +119,13 @@ public interface MetadataContainer<T extends TimeBoundSAMLObject & SignableSAMLO
    * descriptor. The higher the factor, the more often the metadata is updated. The "is update required"
    * computation is calculated as follows:
    * 
-   * <pre>
+   * <pre>{@code
    * if (expireInstant > now) {
    *   return <update-required>
    * }
    * else {
    *   return (updateFactor * getValidity()) > (expireInstant - now) ? <update-required> : <no-update-required>
-   * }
+   * }}
    * </pre>
    * 
    * The easiest way to get the meaning of the update factor is perhaps using words. Suppose the update factor is 0,5,

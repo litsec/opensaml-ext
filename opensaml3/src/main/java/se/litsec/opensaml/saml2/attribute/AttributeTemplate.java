@@ -67,8 +67,6 @@ public class AttributeTemplate {
    *          the attribute friendly name
    * @param nameFormat
    *          the name format
-   * @param multiValued
-   *          indicates whether this attribute may have more than one value
    */
   public AttributeTemplate(String name, String friendlyName, String nameFormat) {
     if (name == null) {

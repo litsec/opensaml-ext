@@ -37,12 +37,12 @@ import se.litsec.opensaml.core.LocalizedString;
 public class StringToLocalizedStringConverter implements Converter<String, LocalizedString> {
 
   /**
-   * Converts strings on the format <lang-tag>-<string according to language>. The string "en-Hello" will give a
+   * Converts strings on the format {@code <lang-tag>-<string according to language>}. The string "en-Hello" will give a
    * LocalizedString where:
    * 
-   * <pre>
+   * <pre>{@code
    * ls.getLanguage() => "en"
-   * ls.getLocalString() => "Hello"
+   * ls.getLocalString() => "Hello"}
    * </pre>
    */
   @Override

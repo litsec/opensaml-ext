@@ -35,11 +35,7 @@ public interface RequestHttpObject<T extends RequestAbstractType> {
   /**
    * Returns the complete URL that the SP application should use when the user agent is sent to the Identity Provider.
    * <p>
-   * For a redirect, this URL could look something like:
-   * 
-   * <pre>
-   * https://www.theidp.com/auth?SAMLRequest=<encoded request>&RelayState=abcd
-   * </pre>
+   * For a redirect, this URL could look something like: {@code https://www.theidp.com/auth?SAMLRequest=<encoded request>&RelayState=abcd}.
    * 
    * </p>
    * <b>Note:</b> Additional query parameters may be added to the URL by the using system.

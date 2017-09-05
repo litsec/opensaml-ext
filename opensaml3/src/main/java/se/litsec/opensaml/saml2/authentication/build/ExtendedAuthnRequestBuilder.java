@@ -119,7 +119,6 @@ public class ExtendedAuthnRequestBuilder extends AbstractAuthnRequestBuilder<Ext
   /**
    * Calculates values based on the SP and IdP metadata and assigns them to the {@code AuthnRequest}.
    * 
-   * <p>
    * The following rules are automatically applied by the {@link #assignDefaults()} method:
    * <ul>
    * <li>The version is set to 2.0.</li>
@@ -133,7 +132,6 @@ public class ExtendedAuthnRequestBuilder extends AbstractAuthnRequestBuilder<Ext
    * {@code true}.
    * <li>
    * </ul>
-   * </p>
    * 
    * @return the builder
    */
@@ -300,7 +298,7 @@ public class ExtendedAuthnRequestBuilder extends AbstractAuthnRequestBuilder<Ext
    * 
    * @param binding
    *          the binding URI
-   * @return
+   * @return the builder
    * @throws SAMLObjectBuilderRuntimeException
    *           is thrown if the IdP metadata does not define a {@code SingleSignOnService} element having the given
    *           binding, which means that it does not support it, and it it thus meaningless to send this request using

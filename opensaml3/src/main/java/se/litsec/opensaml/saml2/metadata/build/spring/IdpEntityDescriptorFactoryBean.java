@@ -31,6 +31,7 @@ import org.springframework.core.io.Resource;
 
 import net.shibboleth.utilities.java.support.xml.XMLParserException;
 import se.litsec.opensaml.core.AbstractSAMLObjectBuilder;
+import se.litsec.opensaml.saml2.metadata.build.AbstractEntityDescriptorBuilder;
 import se.litsec.opensaml.saml2.metadata.build.IdpEntityDescriptorBuilder;
 
 /**
@@ -38,9 +39,9 @@ import se.litsec.opensaml.saml2.metadata.build.IdpEntityDescriptorBuilder;
  * methods, and optionally a template object.
  * <p>
  * When a template object is used, the factory is initialized using the
- * {@link #AbstractEntityDescriptorBuilder(Resource)} or {@link #AbstractEntityDescriptorBuilder(EntityDescriptor)}
- * constructors. The user may later change, or add, any of the elements and attributes of the template object using the
- * assignment methods.
+ * {@link AbstractEntityDescriptorBuilder#AbstractEntityDescriptorBuilder(java.io.InputStream)} or
+ * {@link AbstractEntityDescriptorBuilder#AbstractEntityDescriptorBuilder(EntityDescriptor)} constructors. The user may
+ * later change, or add, any of the elements and attributes of the template object using the assignment methods.
  * </p>
  * <p>
  * Note that no Signature will be included.
@@ -97,7 +98,7 @@ public class IdpEntityDescriptorFactoryBean extends AbstractEntityDescriptorFact
   public IdpEntityDescriptorFactoryBean(EntityDescriptor template) throws UnmarshallingException, MarshallingException {
     this.builder = new IdpEntityDescriptorBuilder(template);
   }
-  
+
   /**
    * Assigns the {@code WantAuthnRequestsSigned} attribute of the {@code md:IDPSSODescriptor} element.
    * 
@@ -107,10 +108,10 @@ public class IdpEntityDescriptorFactoryBean extends AbstractEntityDescriptorFact
   public void setWantAuthnRequestsSigned(Boolean b) {
     this.builder.wantAuthnRequestsSigned(b);
   }
-  
+
   /**
-   * Adds a set of URIs to the assurance certification attribute
-   * ({@code urn:oasis:names:tc:SAML:attribute:assurance-certification}) that is part of the
+   * Adds a set of URIs to the assurance certification attribute (
+   * {@code urn:oasis:names:tc:SAML:attribute:assurance-certification}) that is part of the
    * {@code mdattr:EntityAttributes} element that is part of the metadata extension element.
    * 
    * @param uris
@@ -120,7 +121,7 @@ public class IdpEntityDescriptorFactoryBean extends AbstractEntityDescriptorFact
   public void setAssuranceCertificationUris(List<String> uris) {
     this.builder.assuranceCertificationUris(uris);
   }
-  
+
   /**
    * Adds {@code md:SingleSignOnService} elements to the {@code IDPSSODescriptor}.
    * 

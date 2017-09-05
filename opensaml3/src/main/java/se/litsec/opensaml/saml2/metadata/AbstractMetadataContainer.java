@@ -177,7 +177,7 @@ public abstract class AbstractMetadataContainer<T extends TimeBoundSAMLObject & 
   /**
    * Assigns the duration of the validity that the encapsulated {@code EntityDescriptor} should have.
    * <p>
-   * The default value is {@value #DEFAULT_VALIDITY}.
+   * The default value is {@link #DEFAULT_VALIDITY}.
    * </p>
    * 
    * @param validity

@@ -32,23 +32,23 @@ import se.litsec.opensaml.saml2.metadata.build.AssertionConsumerServiceBuilder;
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  */
 public class AssertionConsumerServiceFactoryBean extends AbstractSAMLObjectBuilderFactoryBean<AssertionConsumerService> {
-  
+
   /** The builder. */
   private AssertionConsumerServiceBuilder builder;
-  
+
   /**
    * Constructor.
    */
   public AssertionConsumerServiceFactoryBean() {
     this.builder = new AssertionConsumerServiceBuilder();
   }
-  
+
   /** {@inheritDoc} */
   @Override
   public Class<?> getObjectType() {
     return AssertionConsumerService.class;
   }
-  
+
   /** {@inheritDoc} */
   @Override
   protected AbstractSAMLObjectBuilder<AssertionConsumerService> builder() {
@@ -56,13 +56,21 @@ public class AssertionConsumerServiceFactoryBean extends AbstractSAMLObjectBuild
   }
 
   /**
+   * Assigns the location URI.
+   * 
+   * @param location
+   *          the URI
    * @see AssertionConsumerServiceBuilder#location(String)
    */
   public void setLocation(String location) {
     this.builder.location(location);
   }
-  
+
   /**
+   * Assigns the binding of the service
+   * 
+   * @param binding
+   *          the binding URI
    * @see AssertionConsumerServiceBuilder#binding(String)
    */
   public void setBinding(String binding) {
@@ -70,6 +78,10 @@ public class AssertionConsumerServiceFactoryBean extends AbstractSAMLObjectBuild
   }
 
   /**
+   * Assigns the index for the service.
+   * 
+   * @param index
+   *          the index
    * @see AssertionConsumerServiceBuilder#index(Integer)
    */
   public void setIndex(Integer index) {
@@ -77,6 +89,10 @@ public class AssertionConsumerServiceFactoryBean extends AbstractSAMLObjectBuild
   }
 
   /**
+   * Sets the {@code isDefault} attribute of the service.
+   * 
+   * @param isDefault
+   *          the Boolean
    * @see AssertionConsumerServiceBuilder#isDefault(Boolean)
    */
   public void setIsDefault(Boolean isDefault) {

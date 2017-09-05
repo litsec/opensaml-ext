@@ -62,6 +62,8 @@ public interface MetadataProvider extends InitializableComponent, DestructableCo
    * {@link EntityDescriptor} or an {@link EntitiesDescriptor}.
    * 
    * @return an XML element
+   * @throws ResolverException
+   *           for metadata resolving errors
    */
   Optional<XMLObject> getMetadata() throws ResolverException;
 
@@ -106,12 +108,12 @@ public interface MetadataProvider extends InitializableComponent, DestructableCo
    * Returns an iterator for all entity descriptors having the given role.
    * <p>
    * To list all IdP:s and SP:s do:
-   * 
-   * <pre>
-   * idps = provider.iterator(IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
-   * sps = provider.iterator(SPSSODescriptor.DEFAULT_ELEMENT_NAME);
-   * </pre>
    * </p>
+   * 
+   * <pre>{@code 
+   * idps = provider.iterator(IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
+   * sps = provider.iterator(SPSSODescriptor.DEFAULT_ELEMENT_NAME);}
+   * </pre>
    * 
    * @param role
    *          role descriptor

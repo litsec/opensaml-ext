@@ -51,8 +51,12 @@ public class ContactPersonFactoryBean extends AbstractSAMLObjectBuilderFactoryBe
   protected AbstractSAMLObjectBuilder<ContactPerson> builder() {
     return this.builder;
   }
-  
+
   /**
+   * Assigns the type of contact person.
+   * 
+   * @param type
+   *          the type
    * @see ContactPersonBuilder#type(ContactPersonTypeEnumeration)
    */
   public void setType(ContactPersonTypeEnumeration type) {
@@ -60,6 +64,10 @@ public class ContactPersonFactoryBean extends AbstractSAMLObjectBuilderFactoryBe
   }
 
   /**
+   * Assigns the {@code Company} element.
+   * 
+   * @param company
+   *          the company
    * @see ContactPersonBuilder#company(String)
    */
   public void setCompany(String company) {
@@ -67,6 +75,10 @@ public class ContactPersonFactoryBean extends AbstractSAMLObjectBuilderFactoryBe
   }
 
   /**
+   * Assigns the {@code GivenName} element.
+   * 
+   * @param givenName
+   *          the name
    * @see ContactPersonBuilder#givenName(String)
    */
   public void setGivenName(String givenName) {
@@ -74,6 +86,10 @@ public class ContactPersonFactoryBean extends AbstractSAMLObjectBuilderFactoryBe
   }
 
   /**
+   * Assigns the {@code SurName} element.
+   * 
+   * @param surname
+   *          the name
    * @see ContactPersonBuilder#surname(String)
    */
   public void setSurname(String surname) {
@@ -81,6 +97,10 @@ public class ContactPersonFactoryBean extends AbstractSAMLObjectBuilderFactoryBe
   }
 
   /**
+   * Assigns the {@code EmailAddress} elements.
+   * 
+   * @param emailAddresses
+   *          the email addresses
    * @see ContactPersonBuilder#emailAddresses(String...)
    */
   public void setEmailAddresses(List<String> emailAddresses) {
@@ -88,6 +108,10 @@ public class ContactPersonFactoryBean extends AbstractSAMLObjectBuilderFactoryBe
   }
 
   /**
+   * Assigns one {@code EmailAddress} element.
+   * 
+   * @param emailAddress
+   *          the email address
    * @see ContactPersonBuilder#emailAddresses(String...)
    */
   public void setEmailAddresses(String emailAddress) {
@@ -95,6 +119,10 @@ public class ContactPersonFactoryBean extends AbstractSAMLObjectBuilderFactoryBe
   }
 
   /**
+   * Assigns the {@code TelephoneNumber} elements.
+   * 
+   * @param telephoneNumbers
+   *          the numbers to assign
    * @see ContactPersonBuilder#telephoneNumbers(String...)
    */
   public void setTelephoneNumbers(List<String> telephoneNumbers) {
@@ -102,6 +130,10 @@ public class ContactPersonFactoryBean extends AbstractSAMLObjectBuilderFactoryBe
   }
 
   /**
+   * Assigns one {@code TelephoneNumber} element.
+   * 
+   * @param telephoneNumber
+   *          the number to assign
    * @see ContactPersonBuilder#telephoneNumbers(String...)
    */
   public void setTelephoneNumber(String telephoneNumber) {

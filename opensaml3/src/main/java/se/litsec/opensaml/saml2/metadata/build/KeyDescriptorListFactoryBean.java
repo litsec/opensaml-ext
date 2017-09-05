@@ -100,7 +100,7 @@ public class KeyDescriptorListFactoryBean extends AbstractFactoryBean<List<KeyDe
    * containing the new IdP signature key. In other cases, only one signature certificate is specified (see
    * {@link #setSigningCredential(X509Credential)} or {@link #setSigningCertificate(X509Certificate)}).
    * 
-   * @param signingCredentials
+   * @param signingCertificates
    *          a list of signature certificates
    * @see #setSigningCredentials(List)
    */
@@ -167,7 +167,7 @@ public class KeyDescriptorListFactoryBean extends AbstractFactoryBean<List<KeyDe
   /**
    * Should be used to add any "unspecified" certificates.
    * 
-   * @param credentials
+   * @param certificates
    *          a list of certificates to add
    */
   public void setUnspecifiedCertificates(List<X509Certificate> certificates) {

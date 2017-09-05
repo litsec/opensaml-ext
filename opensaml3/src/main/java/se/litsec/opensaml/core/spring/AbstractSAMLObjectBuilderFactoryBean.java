@@ -41,7 +41,7 @@ import se.litsec.opensaml.core.SAMLObjectBuilder;
  *          the type
  */
 public abstract class AbstractSAMLObjectBuilderFactoryBean<T extends SAMLObject> extends AbstractFactoryBean<T> {
- 
+
   /**
    * The default implementation assumes that the object has been set up when elements and attributes were assigned, and
    * simply returns the build object (if this is not a singleton bean, the object is cloned).
@@ -52,7 +52,7 @@ public abstract class AbstractSAMLObjectBuilderFactoryBean<T extends SAMLObject>
   }
 
   /**
-   * Returns the builder. 
+   * Returns the builder.
    * 
    * @return the builder
    */
@@ -65,6 +65,8 @@ public abstract class AbstractSAMLObjectBuilderFactoryBean<T extends SAMLObject>
    *          the list to transform
    * @param cls
    *          the type of elements in the list
+   * @param <V>
+   *          the type of objects stored in the array
    * @return an array
    */
   @SuppressWarnings("unchecked")
@@ -83,7 +85,7 @@ public abstract class AbstractSAMLObjectBuilderFactoryBean<T extends SAMLObject>
   protected static LocalizedString[] localizedStringListToVarArgs(List<LocalizedString> list) {
     if (list == null) {
       return null;
-    }    
+    }
     return list.isEmpty() ? null : list.toArray(new LocalizedString[list.size()]);
   }
 
@@ -98,7 +100,7 @@ public abstract class AbstractSAMLObjectBuilderFactoryBean<T extends SAMLObject>
   protected static String[] stringListToVarArgs(List<String> list) {
     if (list == null) {
       return null;
-    }    
+    }
     return list.isEmpty() ? null : list.toArray(new String[list.size()]);
   }
 

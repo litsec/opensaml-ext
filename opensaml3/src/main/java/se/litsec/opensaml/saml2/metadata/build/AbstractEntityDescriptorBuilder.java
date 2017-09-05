@@ -44,7 +44,6 @@ import org.opensaml.saml.saml2.metadata.NameIDFormat;
 import org.opensaml.saml.saml2.metadata.Organization;
 import org.opensaml.saml.saml2.metadata.SSODescriptor;
 import org.opensaml.saml.saml2.metadata.SingleLogoutService;
-import org.springframework.core.io.Resource;
 
 import net.shibboleth.utilities.java.support.xml.XMLParserException;
 import se.litsec.opensaml.core.AbstractSAMLObjectBuilder;
@@ -56,7 +55,7 @@ import se.litsec.opensaml.utils.ObjectUtils;
  * Abstract base builder for creating {@code EntityDescriptor} objects using the builder pattern, and optionally a
  * template object.
  * <p>
- * When a template object is used, the builder is created using the {@link #AbstractEntityDescriptorBuilder(Resource)}
+ * When a template object is used, the builder is created using the {@link #AbstractEntityDescriptorBuilder(InputStream)} 
  * or {@link #AbstractEntityDescriptorBuilder(EntityDescriptor)} constructors. The user may later change, or add, any of
  * the elements and attributes of the template object using the assignment methods.
  * </p>

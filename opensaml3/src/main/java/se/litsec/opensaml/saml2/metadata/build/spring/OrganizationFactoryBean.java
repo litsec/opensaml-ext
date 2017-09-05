@@ -36,10 +36,10 @@ import se.litsec.opensaml.saml2.metadata.build.OrganizationBuilder;
  * @see OrganizationBuilder
  */
 public class OrganizationFactoryBean extends AbstractSAMLObjectBuilderFactoryBean<Organization> {
-  
+
   /** The builder. */
   private OrganizationBuilder builder;
-  
+
   /**
    * Constructor.
    */
@@ -52,7 +52,7 @@ public class OrganizationFactoryBean extends AbstractSAMLObjectBuilderFactoryBea
   public Class<?> getObjectType() {
     return Organization.class;
   }
-    
+
   /** {@inheritDoc} */
   @Override
   protected AbstractSAMLObjectBuilder<Organization> builder() {
@@ -60,6 +60,10 @@ public class OrganizationFactoryBean extends AbstractSAMLObjectBuilderFactoryBea
   }
 
   /**
+   * Assigns the {@code OrganizationName} elements.
+   * 
+   * @param organizationNames
+   *          the names
    * @see OrganizationBuilder#organizationNames(LocalizedString...)
    */
   public void setOrganizationNames(List<LocalizedString> organizationNames) {
@@ -67,6 +71,10 @@ public class OrganizationFactoryBean extends AbstractSAMLObjectBuilderFactoryBea
   }
 
   /**
+   * Assigns one {@code OrganizationName} element.
+   * 
+   * @param organizationName
+   *          the name
    * @see OrganizationBuilder#organizationNames(LocalizedString...)
    */
   public void setOrganizationName(LocalizedString organizationName) {
@@ -74,6 +82,10 @@ public class OrganizationFactoryBean extends AbstractSAMLObjectBuilderFactoryBea
   }
 
   /**
+   * Assigns the {@code OrganizationDisplayName} elements.
+   * 
+   * @param organizationDisplayNames
+   *          the names
    * @see OrganizationBuilder#organizationDisplayNames(LocalizedString...)
    */
   public void setOrganizationDisplayNames(List<LocalizedString> organizationDisplayNames) {
@@ -81,6 +93,10 @@ public class OrganizationFactoryBean extends AbstractSAMLObjectBuilderFactoryBea
   }
 
   /**
+   * Assigns one {@code OrganizationDisplayName} element.
+   * 
+   * @param organizationDisplayName
+   *          the name
    * @see OrganizationBuilder#organizationDisplayNames(LocalizedString...)
    */
   public void setOrganizationDisplayName(LocalizedString organizationDisplayName) {
@@ -88,6 +104,10 @@ public class OrganizationFactoryBean extends AbstractSAMLObjectBuilderFactoryBea
   }
 
   /**
+   * Assigns the {@code OrganizationURL} elements.
+   * 
+   * @param organizationURLs
+   *          the URLs
    * @see OrganizationBuilder#organizationURLs(LocalizedString...)
    */
   public void setOrganizationURLs(List<LocalizedString> organizationURLs) {
@@ -95,6 +115,10 @@ public class OrganizationFactoryBean extends AbstractSAMLObjectBuilderFactoryBea
   }
 
   /**
+   * Assigns one {@code OrganizationURL} element.
+   * 
+   * @param organizationURL
+   *          the URL
    * @see OrganizationBuilder#organizationURLs(LocalizedString...)
    */
   public void setOrganizationURL(LocalizedString organizationURL) {

@@ -54,7 +54,6 @@ public class UIInfoFactoryBean extends AbstractSAMLObjectBuilderFactoryBean<UIIn
    * 
    * @param displayNames
    *          the names
-   * @return the builder
    */
   public void setDisplayNames(List<LocalizedString> displayNames) {
     this.builder.displayNames(displayNames);

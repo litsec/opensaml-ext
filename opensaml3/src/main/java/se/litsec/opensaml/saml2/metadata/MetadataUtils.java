@@ -48,6 +48,8 @@ public class MetadataUtils {
    *          the {@link Extensions} to search
    * @param clazz
    *          the extension type
+   * @param <T>
+   *          the type of the extension
    * @return the matching extension
    */
   public static <T> Optional<T> getMetadataExtension(Extensions extensions, Class<T> clazz) {
@@ -68,6 +70,8 @@ public class MetadataUtils {
    *          the {@link Extensions} to search
    * @param clazz
    *          the extension type
+   * @param <T>
+   *          the type of the extension
    * @return a (possibly empty) list of extensions elements of the given type
    */
   public static <T> List<T> getMetadataExtensions(Extensions extensions, Class<T> clazz) {
