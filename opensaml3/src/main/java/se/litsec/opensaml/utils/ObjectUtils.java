@@ -54,6 +54,8 @@ public class ObjectUtils {
    * 
    * @param clazz
    *          the class to create
+   * @param <T>
+   *          the type of the class to create
    * @return the SAML object
    * @see #createSamlObject(Class, QName)
    */

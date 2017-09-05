@@ -88,7 +88,6 @@ public class HTTPMetadataProvider extends AbstractMetadataProvider {
    *          optional path to the file to where the provider should store downloaded metadata
    * @throws ResolverException
    *           if the supplied metadata URL is invalid
-   * @see #HTTPMetadataProvider(String, String, HttpClient)
    */
   public HTTPMetadataProvider(String metadataUrl, String backupFile) throws ResolverException {
     this(metadataUrl, backupFile, createDefaultHttpClient(), null);
@@ -111,7 +110,6 @@ public class HTTPMetadataProvider extends AbstractMetadataProvider {
    *          settings will be applied
    * @throws ResolverException
    *           if the supplied metadata URL is invalid
-   * @see #HTTPMetadataProvider(String, String, HttpClient)
    */
   public HTTPMetadataProvider(String metadataUrl, String backupFile, HttpClientSecurityParameters tlsSecurityParameters)
       throws ResolverException {
