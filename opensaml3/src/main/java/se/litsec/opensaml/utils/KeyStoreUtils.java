@@ -79,9 +79,14 @@ public class KeyStoreUtils {
     if (locationProperty == null) {
       throw new KeyStoreException("System property 'javax.net.ssl.trustStore' was not set - can not load system trust store");
     }
-    return loadKeyStore(locationProperty,
-      System.getProperty("javax.net.ssl.trustStorePassword"),
-      System.getProperty("javax.net.ssl.trustStoreType"));
+    try {
+      return loadKeyStore(locationProperty,
+        System.getProperty("javax.net.ssl.trustStorePassword"),
+        System.getProperty("javax.net.ssl.trustStoreType"));
+    }
+    catch (IOException e) {
+      throw new KeyStoreException(e);
+    }
   }
 
   /**
@@ -96,19 +101,24 @@ public class KeyStoreUtils {
    * @return a {@code KeyStore} instance
    * @throws KeyStoreException
    *           for errors loading the keystore
+   * @throws IOException for IO errors
    */
-  public static KeyStore loadKeyStore(String keyStorePath, String keyStorePassword, String keyStoreType) throws KeyStoreException {
+  public static KeyStore loadKeyStore(String keyStorePath, String keyStorePassword, String keyStoreType) throws KeyStoreException, IOException {
+    return loadKeyStore(new FileInputStream(keyStorePath), keyStorePassword, keyStoreType);
+  }
+
+  public static KeyStore loadKeyStore(InputStream keyStoreStream, String keyStorePassword, String keyStoreType) throws KeyStoreException, IOException {
     try {
       KeyStore keyStore = keyStoreType != null ? KeyStore.getInstance(keyStoreType) : KeyStore.getInstance(KeyStore.getDefaultType());
-      InputStream is = new FileInputStream(keyStorePath);
-      keyStore.load(is, keyStorePassword.toCharArray());
+      keyStore.load(keyStoreStream, keyStorePassword.toCharArray());
       return keyStore;
     }
-    catch (IOException | NoSuchAlgorithmException | CertificateException e) {
+    catch (NoSuchAlgorithmException | CertificateException e) {
       throw new KeyStoreException(e);
     }
   }
 
+  
   // Hidden
   private KeyStoreUtils() {
   }
