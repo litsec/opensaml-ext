@@ -30,7 +30,6 @@ import org.opensaml.saml.common.binding.SAMLBindingSupport;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.binding.encoding.impl.HTTPPostEncoder;
 import org.opensaml.saml.saml2.core.RequestAbstractType;
-import org.opensaml.saml.saml2.metadata.Endpoint;
 import org.opensaml.security.x509.X509Credential;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.slf4j.Logger;
@@ -86,7 +85,7 @@ public class PostRequestHttpObject<T extends RequestAbstractType> extends HTTPPo
    * @throws SignatureException
    *           for signature errors
    */
-  public PostRequestHttpObject(T request, String relayState, X509Credential signatureCredentials, Endpoint endpoint)
+  public PostRequestHttpObject(T request, String relayState, X509Credential signatureCredentials, String endpoint)
       throws MessageEncodingException, SignatureException {
 
     this.request = request;
@@ -96,9 +95,7 @@ public class PostRequestHttpObject<T extends RequestAbstractType> extends HTTPPo
 
     // Assign endpoint (sendUrl)
     //
-    String encodedEndpointURL = HTMLEncoder.encodeForHTMLAttribute(endpoint.getLocation());
-    logger.trace("Encoding POST of '{}' with encoded value '{}'", endpoint, encodedEndpointURL);
-    this.sendUrl = encodedEndpointURL;
+    this.sendUrl = HTMLEncoder.encodeForHTMLAttribute(endpoint);
 
     // Assign SAMLRequest
     //

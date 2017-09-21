@@ -108,7 +108,7 @@ public abstract class AbstractSAMLObjectBuilder<T extends SAMLObject> implements
    * 
    * @return the object
    */
-  protected final T object() {
+  public final T object() {
     return this.object;
   }
 
