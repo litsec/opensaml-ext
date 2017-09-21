@@ -8,6 +8,11 @@
 *.war
 *.ear
 
+# Intelij
+*.iml
+.idea
+out
+
 .metadata
 .classpath
 .project
