@@ -36,6 +36,7 @@ import org.opensaml.core.xml.util.XMLObjectSupport;
 import org.opensaml.saml.common.SAMLObject;
 import org.w3c.dom.Element;
 
+import net.shibboleth.utilities.java.support.xml.SerializeSupport;
 import net.shibboleth.utilities.java.support.xml.XMLParserException;
 
 /**
@@ -230,6 +231,37 @@ public class ObjectUtils {
   public static <T extends XMLObject> T unmarshall(InputStream inputStream, Class<T> targetClass) throws XMLParserException,
       UnmarshallingException {
     return unmarshall(XMLObjectProviderRegistrySupport.getParserPool().parse(inputStream).getDocumentElement(), targetClass);
+  }
+
+  /**
+   * Returns the given SAML object in its "pretty print" XML string form.
+   * 
+   * @param object
+   *          the object to display as a string
+   * @return the XML as a string
+   * @throws MarshallingException
+   *           for marshalling errors
+   */
+  public static <T extends SAMLObject> String toString(T object) throws MarshallingException {
+    Element elm = ObjectUtils.marshall(object);
+    return SerializeSupport.prettyPrintXML(elm);
+  }
+
+  /**
+   * The same as {@link #toString()} but the method never throws (returns the empty string instead). Useful for logging
+   * statements.
+   * 
+   * @param object
+   *          the object to display as a string
+   * @return the XML as a string
+   */
+  public static <T extends SAMLObject> String toStringSafe(T object) {
+    try {
+      return toString(object);
+    }
+    catch (Exception e) {
+      return "";
+    }
   }
 
   // Hidden constructor.
