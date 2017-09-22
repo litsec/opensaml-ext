@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package se.litsec.opensaml.saml2.metadata.build;
+package se.litsec.opensaml.saml2.metadata.build.spring;
 
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;

@@ -22,6 +22,7 @@ package se.litsec.opensaml.saml2.metadata.build.spring;
 
 import java.io.IOException;
 import java.security.cert.X509Certificate;
+import java.util.List;
 
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
 import org.opensaml.security.credential.UsageType;
@@ -42,7 +43,7 @@ public class KeyDescriptorFactoryBean extends AbstractSAMLObjectBuilderFactoryBe
 
   /** The builder. */
   private KeyDescriptorBuilder builder;
-  
+
   /**
    * Constructor.
    */
@@ -79,7 +80,7 @@ public class KeyDescriptorFactoryBean extends AbstractSAMLObjectBuilderFactoryBe
   public void setCertificate(X509Certificate certificate) {
     this.builder.certificate(certificate);
   }
-  
+
   /**
    * Assigns a certificate in OpenSAML credential format to be used as a X.509 data element of the {@code KeyInfo}
    * element within the key descriptor.
@@ -90,7 +91,7 @@ public class KeyDescriptorFactoryBean extends AbstractSAMLObjectBuilderFactoryBe
   public void setCertificate(X509Credential credential) {
     this.builder.certificate(credential);
   }
-  
+
   /**
    * Assigns a resource to a certificate resource that is to be used as a X.509 data element of the {@code KeyInfo}
    * element within the key descriptor.
@@ -103,7 +104,21 @@ public class KeyDescriptorFactoryBean extends AbstractSAMLObjectBuilderFactoryBe
   public void setCertificateResource(Resource certificateResource) throws IOException {
     this.builder.certificate(certificateResource.getInputStream());
   }
-  
+
+  /**
+   * Assigns a list of encryption methods.
+   * <p>
+   * Note: the method only accepts algorithm URI:s. If you need to assign other parts of an {@code EncryptionMethod}
+   * object you must install the method manually and not via the builder.
+   * </p>
+   * 
+   * @param encryptionMethods
+   *          list of algorithms
+   */
+  public void setEncryptionMethods(List<String> encryptionMethods) {
+    this.builder.encryptionMethods(encryptionMethods);
+  }
+
   /** {@inheritDoc} */
   @Override
   protected AbstractSAMLObjectBuilder<KeyDescriptor> builder() {

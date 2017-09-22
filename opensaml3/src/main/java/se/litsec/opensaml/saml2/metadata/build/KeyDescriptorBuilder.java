@@ -24,8 +24,11 @@ import java.io.InputStream;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 
+import org.opensaml.saml.saml2.metadata.EncryptionMethod;
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
 import org.opensaml.security.credential.UsageType;
 import org.opensaml.security.x509.X509Credential;
@@ -176,6 +179,39 @@ public class KeyDescriptorBuilder extends AbstractSAMLObjectBuilder<KeyDescripto
    */
   public KeyDescriptorBuilder certificate(X509Credential credential) {
     return this.certificate(credential != null ? credential.getEntityCertificate() : null);
+  }
+
+  /**
+   * Assigns a list of encryption methods.
+   * <p>
+   * Note: the method only accepts algorithm URI:s. If you need to assign other parts of an {@code EncryptionMethod}
+   * object you must install the method manually and not via the builder.
+   * </p>
+   * 
+   * @param algorithms
+   *          list of algorithms
+   * @return the builder
+   */
+  public KeyDescriptorBuilder encryptionMethods(List<String> algorithms) {
+    if (algorithms != null) {
+      for (String algo : algorithms) {
+        EncryptionMethod method = ObjectUtils.createSamlObject(EncryptionMethod.class);
+        method.setAlgorithm(algo);
+        this.object().getEncryptionMethods().add(method);
+      }
+    }
+    return this;
+  }
+
+  /**
+   * See {@link #encryptionMethods(List)}.
+   * 
+   * @param algorithms
+   *          list of algorithms
+   * @return the builder
+   */
+  public KeyDescriptorBuilder encryptionMethods(String... algorithms) {
+    return this.encryptionMethods(algorithms != null ? Arrays.asList(algorithms) : null);
   }
 
 }
