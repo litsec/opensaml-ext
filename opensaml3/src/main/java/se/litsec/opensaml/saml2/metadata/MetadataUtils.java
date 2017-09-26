@@ -20,6 +20,9 @@
  */
 package se.litsec.opensaml.saml2.metadata;
 
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +35,14 @@ import org.opensaml.saml.ext.saml2mdui.DisplayName;
 import org.opensaml.saml.ext.saml2mdui.UIInfo;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.Extensions;
+import org.opensaml.saml.saml2.metadata.KeyDescriptor;
 import org.opensaml.saml.saml2.metadata.SSODescriptor;
+import org.opensaml.security.credential.UsageType;
+import org.opensaml.security.x509.BasicX509Credential;
+import org.opensaml.security.x509.X509Credential;
+import org.opensaml.xmlsec.signature.X509Data;
+
+import se.litsec.opensaml.utils.X509CertificateUtils;
 
 /**
  * Utility methods for accessing metadata elements.
@@ -162,6 +172,45 @@ public class MetadataUtils {
       .filter(dn -> language.equals(dn.getXMLLang()))
       .map(dn -> dn.getValue())
       .findFirst();
+  }
+
+  /**
+   * Utility that extracs certificates found under the KeyDescriptor elements of a metadata record.
+   * <p>
+   * If {@link UsageType#SIGNING} is supplied, the method will return all certificates with usage type signing, but also
+   * those that does not have a usage. And the same goes for encryption.
+   * </p>
+   * 
+   * @param ed
+   *          the metadata record
+   * @param usageType
+   *          the requested usage type
+   * @return a list of credentials
+   */
+  public static List<X509Credential> getMetadataCertificates(EntityDescriptor ed, UsageType usageType) {
+    SSODescriptor descriptor = getSSODescriptor(ed);
+    if (descriptor == null) {
+      return Collections.emptyList();
+    }
+    List<X509Credential> creds = new ArrayList<>();
+    for (KeyDescriptor kd : descriptor.getKeyDescriptors()) {
+      if (usageType.equals(kd.getUse()) || kd.getUse() == null || UsageType.UNSPECIFIED.equals(kd.getUse())) {
+        if (kd.getKeyInfo() == null) {
+          continue;
+        }
+        for (X509Data xd : kd.getKeyInfo().getX509Datas()) {
+          for (org.opensaml.xmlsec.signature.X509Certificate cert : xd.getX509Certificates()) {
+            try {
+              creds.add(new BasicX509Credential(
+                X509CertificateUtils.decodeCertificate(new ByteArrayInputStream(Base64.getDecoder().decode(cert.getValue())))));
+            }
+            catch (Exception e) {
+            }
+          }
+        }
+      }
+    }
+    return creds;
   }
 
   /**
