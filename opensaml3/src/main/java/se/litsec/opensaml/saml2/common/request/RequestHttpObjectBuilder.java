@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package se.litsec.opensaml.saml2.authentication;
+package se.litsec.opensaml.saml2.common.request;
 
 import org.opensaml.messaging.encoder.MessageEncodingException;
 import org.opensaml.saml.saml2.core.RequestAbstractType;
