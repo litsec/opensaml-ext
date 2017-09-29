@@ -194,14 +194,13 @@
       <scope>provided</scope>
     </dependency>    
     
-    <!-- Optionally use Spring -->
+    <!-- Spring -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
       <version>${spring.version}</version>
       <scope>compile</scope>
       <type>jar</type>
-      <optional>true</optional>
     </dependency>
     
     <dependency>
@@ -210,7 +209,6 @@
       <version>${spring.version}</version>
       <scope>compile</scope>
       <type>jar</type>
-      <optional>true</optional>
     </dependency>
 
     <dependency>
@@ -219,7 +217,6 @@
       <version>${spring.version}</version>
       <scope>compile</scope>
       <type>jar</type>
-      <optional>true</optional>
     </dependency>
     
     <!-- For testing -->

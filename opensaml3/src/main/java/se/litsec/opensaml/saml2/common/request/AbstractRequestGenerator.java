@@ -32,6 +32,8 @@ import org.opensaml.security.x509.X509Credential;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
 
 import se.litsec.opensaml.saml2.metadata.PeerMetadataResolver;
 
@@ -46,7 +48,7 @@ import se.litsec.opensaml.saml2.metadata.PeerMetadataResolver;
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  */
 public abstract class AbstractRequestGenerator<T extends RequestAbstractType, I extends RequestGeneratorInput> implements
-    RequestGenerator<T, I> {
+    RequestGenerator<T, I>, InitializingBean {
 
   /** Logging instance. */
   private final Logger log = LoggerFactory.getLogger(AbstractRequestGenerator.class);
@@ -197,13 +199,22 @@ public abstract class AbstractRequestGenerator<T extends RequestAbstractType, I 
   }
 
   /**
-   * Assigns the signature credentials for the SP
+   * Assigns the signature credentials for the SP. If not assigned, signing will not be possible.
    * 
    * @param signingCredentials
    *          signature credentials
    */
   public void setSigningCredentials(X509Credential signingCredentials) {
     this.signingCredentials = signingCredentials;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    Assert.hasText(this.name, "Property 'name' must be assigned");
+    if (this.signingCredentials == null) {
+      log.warn("No signature credentials assigned - signing will not be possible");
+    }
   }
 
 }
