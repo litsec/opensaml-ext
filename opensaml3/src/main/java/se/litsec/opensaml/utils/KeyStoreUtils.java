@@ -49,7 +49,7 @@ public class KeyStoreUtils {
    *           for keystore access errors
    */
   public static List<X509Certificate> getCertificateEntries(KeyStore keyStore) throws KeyStoreException {
-    List<X509Certificate> certificates = new ArrayList<X509Certificate>();
+    List<X509Certificate> certificates = new ArrayList<>();
     Enumeration<String> e = keyStore.aliases();
     while (e.hasMoreElements()) {
       String alias = e.nextElement();

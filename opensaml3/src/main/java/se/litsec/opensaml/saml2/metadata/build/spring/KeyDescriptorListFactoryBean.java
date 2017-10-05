@@ -22,7 +22,7 @@ package se.litsec.opensaml.saml2.metadata.build.spring;
 
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,7 +63,8 @@ public class KeyDescriptorListFactoryBean extends AbstractFactoryBean<List<KeyDe
    * @see #setSigningCertificate(X509Certificate)
    */
   public void setSigningCredential(X509Credential signingCredential) {
-    this.signatureCertificates = signingCredential != null ? Arrays.asList(signingCredential.getEntityCertificate()) : null;
+    this.signatureCertificates = signingCredential != null ? Collections.singletonList(
+        signingCredential.getEntityCertificate()) : null;
   }
 
   /**
@@ -76,7 +77,7 @@ public class KeyDescriptorListFactoryBean extends AbstractFactoryBean<List<KeyDe
    *          the signing certificate
    */
   public void setSigningCertificate(X509Certificate signingCertificate) {
-    this.signatureCertificates = signingCertificate != null ? Arrays.asList(signingCertificate) : null;
+    this.signatureCertificates = signingCertificate != null ? Collections.singletonList(signingCertificate) : null;
   }
 
   /**
@@ -91,7 +92,7 @@ public class KeyDescriptorListFactoryBean extends AbstractFactoryBean<List<KeyDe
    */
   public void setSigningCredentials(List<X509Credential> signingCredentials) {
     this.signatureCertificates = signingCredentials != null ? 
-        signingCredentials.stream().map(c -> c.getEntityCertificate()).collect(Collectors.toList()) : null;
+        signingCredentials.stream().map(X509Credential::getEntityCertificate).collect(Collectors.toList()) : null;
   }
 
   /**
@@ -105,7 +106,7 @@ public class KeyDescriptorListFactoryBean extends AbstractFactoryBean<List<KeyDe
    * @see #setSigningCredentials(List)
    */
   public void setSigningCertificates(List<X509Certificate> signingCertificates) {
-    this.signatureCertificates = signingCertificates != null ? signingCertificates : null;
+    this.signatureCertificates = signingCertificates;
   }
 
   /**
@@ -116,7 +117,8 @@ public class KeyDescriptorListFactoryBean extends AbstractFactoryBean<List<KeyDe
    * @see #setEncryptionCertificate(X509Certificate)
    */
   public void setEncryptionCredential(X509Credential encryptionCredential) {
-    this.encryptionCertificates = encryptionCredential != null ? Arrays.asList(encryptionCredential.getEntityCertificate()) : null;
+    this.encryptionCertificates = encryptionCredential != null ? Collections.singletonList(
+        encryptionCredential.getEntityCertificate()) : null;
   }
 
   /**
@@ -127,7 +129,7 @@ public class KeyDescriptorListFactoryBean extends AbstractFactoryBean<List<KeyDe
    * @see #setEncryptionCredential(X509Credential)
    */
   public void setEncryptionCertificate(X509Certificate encryptionCertificate) {
-    this.encryptionCertificates = encryptionCertificate != null ? Arrays.asList(encryptionCertificate) : null;
+    this.encryptionCertificates = encryptionCertificate != null ? Collections.singletonList(encryptionCertificate) : null;
   }
 
   /**
@@ -139,7 +141,7 @@ public class KeyDescriptorListFactoryBean extends AbstractFactoryBean<List<KeyDe
    */
   public void setEncryptionCredentials(List<X509Credential> encryptionCredentials) {
     this.encryptionCertificates = encryptionCredentials != null ? 
-        encryptionCredentials.stream().map(c -> c.getEntityCertificate()).collect(Collectors.toList()) : null;
+        encryptionCredentials.stream().map(X509Credential::getEntityCertificate).collect(Collectors.toList()) : null;
   }
 
   /**
@@ -150,7 +152,7 @@ public class KeyDescriptorListFactoryBean extends AbstractFactoryBean<List<KeyDe
    *          the encryption certificates
    */
   public void setEncryptionCertificates(List<X509Certificate> encryptionCertificates) {
-    this.encryptionCertificates = encryptionCertificates != null ? encryptionCertificates : null;
+    this.encryptionCertificates = encryptionCertificates;
   }
 
   /**
@@ -161,7 +163,7 @@ public class KeyDescriptorListFactoryBean extends AbstractFactoryBean<List<KeyDe
    */
   public void setUnspecifiedCredentials(List<X509Credential> credentials) {
     this.unspecifiedCertificates = credentials != null ? 
-        credentials.stream().map(c -> c.getEntityCertificate()).collect(Collectors.toList()) : null;
+        credentials.stream().map(X509Credential::getEntityCertificate).collect(Collectors.toList()) : null;
   }
 
   /**
@@ -171,7 +173,7 @@ public class KeyDescriptorListFactoryBean extends AbstractFactoryBean<List<KeyDe
    *          a list of certificates to add
    */
   public void setUnspecifiedCertificates(List<X509Certificate> certificates) {
-    this.unspecifiedCertificates = certificates != null ? certificates : null;
+    this.unspecifiedCertificates = certificates;
   }
 
   /** {@inheritDoc} */

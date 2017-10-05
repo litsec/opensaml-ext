@@ -20,8 +20,8 @@
  */
 package se.litsec.opensaml.xmlsec;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.opensaml.core.xml.XMLObject;
@@ -69,7 +69,7 @@ public class SAMLObjectDecrypter {
    *          decryption credential
    */
   public SAMLObjectDecrypter(Credential decryptionCredential) {
-    this(Arrays.asList(decryptionCredential));
+    this(Collections.singletonList(decryptionCredential));
   }
 
   /**

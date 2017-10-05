@@ -34,7 +34,7 @@ public class StringToXSBooleanValueConverter implements Converter<String, XSBool
   @Override
   public XSBooleanValue convert(String source) {
     XSBooleanValue b = new XSBooleanValue();
-    Boolean _b = new Boolean(source);
+    Boolean _b = Boolean.valueOf(source);
     b.setValue(_b);
     return b;
   }

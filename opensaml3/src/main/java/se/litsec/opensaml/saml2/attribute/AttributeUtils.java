@@ -46,7 +46,7 @@ public class AttributeUtils {
   public static List<String> getAttributeStringValues(Attribute attribute) {
     return getAttributeValues(attribute, XSString.class)
       .stream()
-      .map(v -> v.getValue())
+      .map(XSString::getValue)
       .collect(Collectors.toList());
   }
 
@@ -76,7 +76,7 @@ public class AttributeUtils {
   public static <T extends XMLObject> List<T> getAttributeValues(Attribute attribute, Class<T> type) {
     return attribute.getAttributeValues()
       .stream()
-      .filter(a -> type.isInstance(a))
+      .filter(type::isInstance)
       .map(type::cast)
       .collect(Collectors.toList());
   }
@@ -95,7 +95,7 @@ public class AttributeUtils {
   public static <T extends XMLObject> T getAttributeValue(Attribute attribute, Class<T> type) {
     return attribute.getAttributeValues()
       .stream()
-      .filter(a -> type.isInstance(a))
+      .filter(type::isInstance)
       .map(type::cast)
       .findFirst()
       .orElse(null);

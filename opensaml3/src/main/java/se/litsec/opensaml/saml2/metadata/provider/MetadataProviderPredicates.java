@@ -39,7 +39,7 @@ public class MetadataProviderPredicates {
    * @return predicate for filtering IdPs
    */
   public static Predicate<EntityDescriptor> includeOnlyIDPs() {
-    return e -> isIDP(e);
+    return MetadataProviderPredicates::isIDP;
   }
 
   /**

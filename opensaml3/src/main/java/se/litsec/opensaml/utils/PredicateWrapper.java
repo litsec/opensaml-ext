@@ -63,7 +63,7 @@ public class PredicateWrapper<T> implements com.google.common.base.Predicate<T> 
    * @return a {@code com.google.common.base.Predicate} instance
    */
   public static <T> com.google.common.base.Predicate<T> wrap(Predicate<T> predicate) {
-    return new PredicateWrapper<T>(predicate);
+    return new PredicateWrapper<>(predicate);
   }
 
 }

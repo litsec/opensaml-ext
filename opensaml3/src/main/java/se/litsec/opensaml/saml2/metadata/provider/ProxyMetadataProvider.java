@@ -82,7 +82,7 @@ public class ProxyMetadataProvider extends AbstractMetadataProvider {
       this.metadataResolver.setMetadataFilter(filter);
     }
     else { 
-      List<MetadataFilter> chain = new ArrayList<MetadataFilter>();
+      List<MetadataFilter> chain = new ArrayList<>();
       if (filter instanceof MetadataFilterChain) {
         chain.addAll(((MetadataFilterChain) installedFilter).getFilters());
       }

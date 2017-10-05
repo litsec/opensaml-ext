@@ -21,14 +21,10 @@
 package se.litsec.opensaml.saml2.metadata.provider;
 
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
+import javax.annotation.Nonnull;
 import javax.xml.namespace.QName;
 
 import org.joda.time.DateTime;
@@ -195,7 +191,7 @@ public abstract class AbstractMetadataProvider extends AbstractInitializableComp
   /** {@inheritDoc} */
   @Override
   public List<EntityDescriptor> getIdentityProviders() throws ResolverException {
-    List<EntityDescriptor> list = new ArrayList<EntityDescriptor>();
+    List<EntityDescriptor> list = new ArrayList<>();
     Iterable<EntityDescriptor> it = this.iterator(IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
     it.forEach(list::add);
     return list;
@@ -204,7 +200,7 @@ public abstract class AbstractMetadataProvider extends AbstractInitializableComp
   /** {@inheritDoc} */
   @Override
   public List<EntityDescriptor> getServiceProviders() throws ResolverException {
-    List<EntityDescriptor> list = new ArrayList<EntityDescriptor>();
+    List<EntityDescriptor> list = new ArrayList<>();
     Iterable<EntityDescriptor> it = this.iterator(SPSSODescriptor.DEFAULT_ELEMENT_NAME);
     it.forEach(list::add);
     return list;
@@ -216,7 +212,7 @@ public abstract class AbstractMetadataProvider extends AbstractInitializableComp
    * @param metadata
    *          metadata object
    */
-  private synchronized final void setMetadata(XMLObject metadata) {
+  private synchronized void setMetadata(XMLObject metadata) {
     this.metadata = metadata;
     this.downloadTime = new DateTime();
   }
@@ -242,7 +238,7 @@ public abstract class AbstractMetadataProvider extends AbstractInitializableComp
    */
   protected MetadataFilter createFilter() {
 
-    List<MetadataFilter> filters = new ArrayList<MetadataFilter>();
+    List<MetadataFilter> filters = new ArrayList<>();
 
     // Verify signature?
     if (this.signatureVerificationCertificate != null) {
@@ -273,12 +269,9 @@ public abstract class AbstractMetadataProvider extends AbstractInitializableComp
     }
 
     // Install the mandatory filter that saves downloaded metadata.
-    filters.add(new MetadataFilter() {
-      @Override
-      public XMLObject filter(XMLObject metadata) {
-        setMetadata(metadata);
-        return metadata;
-      }
+    filters.add(metadata -> {
+      setMetadata(metadata);
+      return metadata;
     });
 
     if (filters.size() == 1) {
@@ -418,7 +411,7 @@ public abstract class AbstractMetadataProvider extends AbstractInitializableComp
         return;
       }
       if (metadata.get() instanceof EntityDescriptor) {
-        this.iterator = Arrays.asList((EntityDescriptor) metadata.get()).iterator();
+        this.iterator = Collections.singletonList((EntityDescriptor) metadata.get()).iterator();
       }
       else if (metadata.get() instanceof EntitiesDescriptor) {
         List<EntityDescriptor> edList = setup((EntitiesDescriptor) metadata.get(), role);
@@ -430,7 +423,7 @@ public abstract class AbstractMetadataProvider extends AbstractInitializableComp
     }
 
     private static List<EntityDescriptor> setup(EntitiesDescriptor entitiesDescriptor, QName role) {
-      List<EntityDescriptor> edList = new ArrayList<EntityDescriptor>();
+      List<EntityDescriptor> edList = new ArrayList<>();
       entitiesDescriptor.getEntityDescriptors().stream().filter(filterRole(role)).forEach(edList::add);
       for (EntitiesDescriptor ed : entitiesDescriptor.getEntitiesDescriptors()) {
         edList.addAll(setup(ed, role));
@@ -439,12 +432,12 @@ public abstract class AbstractMetadataProvider extends AbstractInitializableComp
     }
 
     public static Predicate<EntityDescriptor> filterRole(QName role) {
-      return e -> role != null ? !e.getRoleDescriptors(role).isEmpty() : true;
+      return e -> role == null || !e.getRoleDescriptors(role).isEmpty();
     }
 
     @Override
     public boolean hasNext() {
-      return this.iterator != null ? this.iterator.hasNext() : false;
+      return this.iterator != null && this.iterator.hasNext();
     }
 
     @Override
@@ -455,6 +448,7 @@ public abstract class AbstractMetadataProvider extends AbstractInitializableComp
       throw new NoSuchElementException();
     }
 
+    @Nonnull
     @Override
     public Iterator<EntityDescriptor> iterator() {
       return this;

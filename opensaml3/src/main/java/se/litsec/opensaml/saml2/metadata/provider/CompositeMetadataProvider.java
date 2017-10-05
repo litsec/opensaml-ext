@@ -48,6 +48,8 @@ import net.shibboleth.utilities.java.support.resolver.ResolverException;
 import net.shibboleth.utilities.java.support.security.RandomIdentifierGenerationStrategy;
 import se.litsec.opensaml.utils.ObjectUtils;
 
+import javax.annotation.Nonnull;
+
 /**
  * A metadata provider that collects its metadata from multiple sources (providers).
  * <p>
@@ -149,7 +151,7 @@ public class CompositeMetadataProvider extends AbstractMetadataProvider {
 
     log.debug("Collecting composite metadata for {} ...", this.getID());
 
-    List<String> entityIds = new ArrayList<String>();
+    List<String> entityIds = new ArrayList<>();
 
     EntitiesDescriptor metadata = ObjectUtils.createSamlObject(EntitiesDescriptor.class);
     metadata.setName(this.getID());
@@ -219,7 +221,7 @@ public class CompositeMetadataProvider extends AbstractMetadataProvider {
    * A list of provider ID:s for underlying providers that should be destroyed (by {@link #destroyMetadataResolver()}).
    * Only the providers that are initialized by this instance will be destroyed.
    */
-  private List<String> destroyList = new ArrayList<String>();
+  private List<String> destroyList = new ArrayList<>();
 
   /** {@inheritDoc} */
   @Override
@@ -245,7 +247,11 @@ public class CompositeMetadataProvider extends AbstractMetadataProvider {
     // At this point we know that all the underlying providers/resolvers have been initialized
     // and we can install them.
     //
-    List<MetadataResolver> resolvers = this.metadataProviders.stream().map(p -> p.getMetadataResolver()).collect(Collectors.toList());
+    List<MetadataResolver> resolvers = this.metadataProviders
+        .stream()
+        .map(MetadataProvider::getMetadataResolver)
+        .collect(Collectors.toList());
+
     if (resolvers.isEmpty()) {
       log.warn("No metadata sources installed for CompositeMetadataProvider '{}'", this.getID());
     }
@@ -343,7 +349,7 @@ public class CompositeMetadataProvider extends AbstractMetadataProvider {
      * Fixing what the OpenSAML developers missed. How did it pass the unit tests?
      */
     @Override
-    public void setId(String componentId) {
+    public void setId(@Nonnull String componentId) {
       super.setId(componentId);
     }
 

@@ -20,7 +20,7 @@
  */
 package se.litsec.opensaml.saml2.common.request;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,7 +70,7 @@ public class RedirectRequestHttpObject<T extends RequestAbstractType> extends HT
   private String sendUrl;
 
   /** HTTP headers. */
-  private Map<String, String> httpHeaders = new HashMap<String, String>();
+  private Map<String, String> httpHeaders = new HashMap<>();
 
   /**
    * Constructor that puts together to resulting object.
@@ -95,7 +95,7 @@ public class RedirectRequestHttpObject<T extends RequestAbstractType> extends HT
 
     // Set up the message context.
     //
-    MessageContext<SAMLObject> messageContext = new MessageContext<SAMLObject>();
+    MessageContext<SAMLObject> messageContext = new MessageContext<>();
     messageContext.setMessage(request);
     messageContext.getSubcontext(SAMLBindingContext.class, true).setRelayState(relayState);
     Endpoint endpointObject = ObjectUtils.createSamlObject(Endpoint.class);
@@ -104,7 +104,7 @@ public class RedirectRequestHttpObject<T extends RequestAbstractType> extends HT
 
     if (signatureCredentials != null) {
       BasicSignatureSigningConfiguration signatureCreds = new BasicSignatureSigningConfiguration();
-      signatureCreds.setSigningCredentials(Arrays.asList(signatureCredentials));
+      signatureCreds.setSigningCredentials(Collections.singletonList(signatureCredentials));
 
       BasicSignatureSigningParametersResolver signatureParametersResolver = new BasicSignatureSigningParametersResolver();
       CriteriaSet criteriaSet = new CriteriaSet(new SignatureSigningConfigurationCriterion(SecurityConfigurationSupport

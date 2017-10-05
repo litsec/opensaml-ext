@@ -40,12 +40,6 @@ public class RequestedAttributeBuilder extends AbstractSAMLObjectBuilder<Request
    * @param name
    *          the attribute name
    */
-  /**
-   * Constructor setting the attribute name.
-   * 
-   * @param name
-   *          the attribute name
-   */
   public RequestedAttributeBuilder(String name) {
     super();
     if (name == null) {

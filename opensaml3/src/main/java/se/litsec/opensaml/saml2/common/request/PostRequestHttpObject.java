@@ -64,10 +64,10 @@ public class PostRequestHttpObject<T extends RequestAbstractType> extends HTTPPo
   private String sendUrl;
 
   /** HTTP headers. */
-  private Map<String, String> httpHeaders = new HashMap<String, String>();
+  private Map<String, String> httpHeaders = new HashMap<>();
 
   /** The POST parameters. */
-  private Map<String, String> postParameters = new HashMap<String, String>();
+  private Map<String, String> postParameters = new HashMap<>();
 
   /**
    * Constructor that puts together to resulting object.
@@ -90,7 +90,7 @@ public class PostRequestHttpObject<T extends RequestAbstractType> extends HTTPPo
 
     this.request = request;
 
-    MessageContext<T> context = new MessageContext<T>();
+    MessageContext<T> context = new MessageContext<>();
     context.setMessage(request);
 
     // Assign endpoint (sendUrl)

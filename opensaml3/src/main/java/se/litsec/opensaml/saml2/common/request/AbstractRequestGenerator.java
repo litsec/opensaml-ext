@@ -124,11 +124,11 @@ public abstract class AbstractRequestGenerator<T extends RequestAbstractType, I 
     try {
       if (SAMLConstants.SAML2_REDIRECT_BINDING_URI.equals(binding)) {
         // Redirect binding
-        return new RedirectRequestHttpObject<T>(request, input.getRelayState(), signCred, destination);
+        return new RedirectRequestHttpObject<>(request, input.getRelayState(), signCred, destination);
       }
       else if (SAMLConstants.SAML2_POST_BINDING_URI.equals(binding)) {
         // POST binding
-        return new PostRequestHttpObject<T>(request, input.getRelayState(), signCred, destination);
+        return new PostRequestHttpObject<>(request, input.getRelayState(), signCred, destination);
       }
       else {
         throw new RequestGenerationException("Unsupported binding: " + binding);

@@ -122,7 +122,7 @@ public class UIInfoBuilder extends AbstractSAMLObjectBuilder<UIInfo> {
    */
   public UIInfoBuilder keywords(List<String> keywords) {
     if (keywords != null) {
-      Map<String, List<String>> m = new HashMap<String, List<String>>();
+      Map<String, List<String>> m = new HashMap<>();
       m.put("", keywords);
       return this.keywords(m);
     }

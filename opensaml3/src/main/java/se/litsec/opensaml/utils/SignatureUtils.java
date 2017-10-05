@@ -20,7 +20,7 @@
  */
 package se.litsec.opensaml.utils;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.common.SignableSAMLObject;
@@ -60,7 +60,7 @@ public class SignatureUtils {
       object.setSignature(null);
 
       BasicSignatureSigningConfiguration signatureCreds = new BasicSignatureSigningConfiguration();
-      signatureCreds.setSigningCredentials(Arrays.asList(signingCredentials));
+      signatureCreds.setSigningCredentials(Collections.singletonList(signingCredentials));
 
       BasicSignatureSigningParametersResolver signatureParametersResolver = new BasicSignatureSigningParametersResolver();
       CriteriaSet criteriaSet = new CriteriaSet(new SignatureSigningConfigurationCriterion(SecurityConfigurationSupport

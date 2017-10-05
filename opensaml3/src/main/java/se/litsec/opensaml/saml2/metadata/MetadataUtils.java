@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.opensaml.core.xml.schema.XSString;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.ext.saml2mdattr.EntityAttributes;
 import org.opensaml.saml.ext.saml2mdui.Description;
@@ -69,7 +70,7 @@ public class MetadataUtils {
     return extensions.getOrderedChildren()
       .stream()
       .filter(e -> clazz.isAssignableFrom(e.getClass()))
-      .map(e -> clazz.cast(e))
+      .map(clazz::cast)
       .findFirst();
   }
 
@@ -91,7 +92,7 @@ public class MetadataUtils {
     return extensions.getOrderedChildren()
       .stream()
       .filter(e -> clazz.isAssignableFrom(e.getClass()))
-      .map(e -> clazz.cast(e))
+      .map(clazz::cast)
       .collect(Collectors.toList());
   }
 
@@ -120,7 +121,7 @@ public class MetadataUtils {
       return Collections.emptyList();
     }
     Optional<UIInfo> uiInfo = getMetadataExtension(ssoDescriptor.getExtensions(), UIInfo.class);
-    return uiInfo.isPresent() ? uiInfo.get().getDisplayNames() : Collections.emptyList();
+    return uiInfo.map(UIInfo::getDisplayNames).orElseGet(Collections::emptyList);
   }
 
   /**
@@ -136,7 +137,7 @@ public class MetadataUtils {
   public static Optional<String> getUiDisplayName(EntityDescriptor ed, String language) {
     return getUiDisplayNames(ed).stream()
       .filter(dn -> language.equals(dn.getXMLLang()))
-      .map(dn -> dn.getValue())
+      .map(XSString::getValue)
       .findFirst();
   }
 
@@ -154,7 +155,7 @@ public class MetadataUtils {
       return Collections.emptyList();
     }
     Optional<UIInfo> uiInfo = getMetadataExtension(ssoDescriptor.getExtensions(), UIInfo.class);
-    return uiInfo.isPresent() ? uiInfo.get().getDescriptions() : Collections.emptyList();
+    return uiInfo.map(UIInfo::getDescriptions).orElseGet(Collections::emptyList);
   }
 
   /**
@@ -170,7 +171,7 @@ public class MetadataUtils {
   public static Optional<String> getUiDescription(EntityDescriptor ed, String language) {
     return getUiDescriptions(ed).stream()
       .filter(dn -> language.equals(dn.getXMLLang()))
-      .map(dn -> dn.getValue())
+      .map(XSString::getValue)
       .findFirst();
   }
 

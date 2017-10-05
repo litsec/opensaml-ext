@@ -98,7 +98,7 @@ public class OpenSAMLInitializer {
 
     InitializationService.initialize();
 
-    XMLObjectProviderRegistry registry = null;
+    XMLObjectProviderRegistry registry;
     synchronized (ConfigurationService.class) {
       registry = ConfigurationService.get(XMLObjectProviderRegistry.class);
       if (registry == null) {
