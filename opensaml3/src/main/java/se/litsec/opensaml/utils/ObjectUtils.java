@@ -236,6 +236,8 @@ public class ObjectUtils {
   /**
    * Returns the given SAML object in its "pretty print" XML string form.
    * 
+   * @param <T>
+   *          the type of object to "print"
    * @param object
    *          the object to display as a string
    * @return the XML as a string
@@ -251,6 +253,8 @@ public class ObjectUtils {
    * The same as {@link #toString()} but the method never throws (returns the empty string instead). Useful for logging
    * statements.
    * 
+   * @param <T>
+   *          the type of object to "print"
    * @param object
    *          the object to display as a string
    * @return the XML as a string

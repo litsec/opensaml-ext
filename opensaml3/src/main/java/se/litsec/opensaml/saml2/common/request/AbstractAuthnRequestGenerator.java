@@ -67,6 +67,8 @@ public abstract class AbstractAuthnRequestGenerator<I extends RequestGeneratorIn
    * 
    * @param idp
    *          the IdP metadata
+   * @param input
+   *          input for generating
    * @return a {@code SingleSignOnService} object
    * @throws RequestGenerationException
    *           if not valid endpoint can be found

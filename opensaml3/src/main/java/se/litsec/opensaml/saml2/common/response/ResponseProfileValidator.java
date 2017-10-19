@@ -204,7 +204,7 @@ public class ResponseProfileValidator extends AbstractObjectValidator<Response> 
    * Validates the {@code Assertion} and/or {@code EncryptedAssertion} element. The default implementation 
    * checks:
    * <ul>
-   * <li>If status is success</li> - At least of assertion (or encrypted assertion) is present.</li>
+   * <li>If status is success - At least of assertion (or encrypted assertion) is present.</li>
    * <li>Else - No assertions are present.</li>
    * </ul>
    * 

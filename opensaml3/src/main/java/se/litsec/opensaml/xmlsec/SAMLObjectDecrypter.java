@@ -43,6 +43,7 @@ import org.opensaml.xmlsec.keyinfo.impl.StaticKeyInfoCredentialResolver;
  * the {@link DecryptionConfiguration}. This bean supports being initialized by either of these two, but also, and
  * perhaps easier to use; it supports initialization with just the encryption credentials and assigns the following
  * defaults:
+ * </p>
  * <ul>
  * <li>For the encrypted key resolver an {@link InlineEncryptedKeyResolver} instance is used which which finds
  * {@link EncryptedKey} elements within the {@link org.opensaml.xmlsec.signature.KeyInfo} of the {@link EncryptedData}
@@ -50,7 +51,6 @@ import org.opensaml.xmlsec.keyinfo.impl.StaticKeyInfoCredentialResolver;
  * <li>For the key encryption key resolver a {@link StaticKeyInfoCredentialResolver} instance holding the supplied
  * encryption credential(s) is used.</li>
  * </ul>
- * </p>
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  */
