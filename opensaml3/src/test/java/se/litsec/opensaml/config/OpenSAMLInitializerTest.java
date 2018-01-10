@@ -21,6 +21,7 @@
 package se.litsec.opensaml.config;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.saml.common.SAMLObjectBuilder;
@@ -31,6 +32,7 @@ import org.opensaml.saml.saml2.metadata.EntityDescriptor;
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  */
+@Ignore
 public class OpenSAMLInitializerTest {
 
   @Test
