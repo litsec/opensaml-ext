@@ -126,7 +126,7 @@ public abstract class AbstractMetadataContainer<T extends TimeBoundSAMLObject & 
 
   /** {@inheritDoc} */
   @Override
-  public T update(boolean sign) throws SignatureException, MarshallingException {
+  public synchronized T update(boolean sign) throws SignatureException, MarshallingException {
 
     // Reset the signature
     this.descriptor.setSignature(null);
@@ -148,7 +148,7 @@ public abstract class AbstractMetadataContainer<T extends TimeBoundSAMLObject & 
 
   /** {@inheritDoc} */
   @Override
-  public T sign() throws SignatureException, MarshallingException {
+  public synchronized T sign() throws SignatureException, MarshallingException {
 
     logger.trace("Signing descriptor '{}' ...", this.getLogString(this.descriptor));
 
@@ -164,7 +164,7 @@ public abstract class AbstractMetadataContainer<T extends TimeBoundSAMLObject & 
 
   /** {@inheritDoc} */
   @Override
-  public Element marshall() throws MarshallingException {
+  public synchronized Element marshall() throws MarshallingException {
     return ObjectUtils.marshall(this.descriptor);
   }
 
