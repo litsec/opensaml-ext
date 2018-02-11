@@ -15,7 +15,7 @@
  */
 package se.litsec.opensaml.saml2.attribute;
 
-import org.opensaml.saml.saml2.core.Attribute;
+import org.opensaml.saml2.core.Attribute;
 
 /**
  * An attribute template is a template of a SAML attribute, i.e., it represents the name, friendly name and name format

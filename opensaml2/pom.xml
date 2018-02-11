@@ -6,7 +6,7 @@
   <groupId>se.litsec.opensaml</groupId>
   <artifactId>opensaml2-ext</artifactId>
   <packaging>jar</packaging>
-  <version>0.9.2</version>
+  <version>0.9.3-SNAPSHOT</version>
 
   <name>Litsec :: OpenSAML 2.X utility extensions</name>
   <description>OpenSAML 2.X utility extension library</description>
@@ -14,13 +14,12 @@
 
   <licenses>
     <license>
-      <name>GNU General Public License, Version 3</name>
-      <url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
       <distribution>repo</distribution>
-      <comments>A free, copyleft license for software and other kinds of works</comments>
     </license>
   </licenses>
-
+  
   <scm>
     <connection>scm:https://github.com/litsec/opensaml-ext.git</connection>
     <developerConnection>scm:https://github.com/litsec/opensaml-ext.git</developerConnection>
@@ -35,6 +34,11 @@
       <organizationUrl>http://www.litsec.se</organizationUrl>
     </developer>
   </developers>
+
+  <organization>
+    <name>Litsec AB</name>
+    <url>http://www.litsec.se</url>
+  </organization>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -180,6 +184,12 @@
           </filesets>
         </configuration>
       </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.9</version>      
+      </plugin>      
 
     </plugins>
 
