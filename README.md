@@ -4,6 +4,8 @@
 
 # opensaml-ext
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/se.litsec.opensaml/opensaml3-ext/badge.svg)](https://maven-badges.herokuapp.com/maven-central/se.litsec.opensaml/opensaml3-ext)
+
 Utility extensions for OpenSAML 3.X.
 
 This open source package is an extension to OpenSAML 3.X that offers utility classes and interfaces such as:
