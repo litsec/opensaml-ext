@@ -41,7 +41,7 @@ public class AttributeUtils {
   public static List<String> getAttributeStringValues(Attribute attribute) {
     return getAttributeValues(attribute, XSString.class)
       .stream()
-      .map(v -> v.getValue())
+      .map(XSString::getValue)
       .collect(Collectors.toList());
   }
 
@@ -64,12 +64,14 @@ public class AttributeUtils {
    *          the attribute
    * @param type
    *          the type to match
+   * @param <T>
+   *          the value type
    * @return a (possibly empty) list of values.
    */
   public static <T extends XMLObject> List<T> getAttributeValues(Attribute attribute, Class<T> type) {
     return attribute.getAttributeValues()
       .stream()
-      .filter(a -> type.isInstance(a))
+      .filter(type::isInstance)
       .map(type::cast)
       .collect(Collectors.toList());
   }
@@ -81,12 +83,14 @@ public class AttributeUtils {
    *          the attribute
    * @param type
    *          the type to match
+   * @param <T>
+   *          the value type
    * @return the value, or {@code null}
    */
   public static <T extends XMLObject> T getAttributeValue(Attribute attribute, Class<T> type) {
     return attribute.getAttributeValues()
       .stream()
-      .filter(a -> type.isInstance(a))
+      .filter(type::isInstance)
       .map(type::cast)
       .findFirst()
       .orElse(null);
@@ -100,7 +104,6 @@ public class AttributeUtils {
    * @param attributes
    *          the list of attributes
    * @return the attribute or {@link Optional#empty()}
-   * @see #getAttributes(String, List)
    */
   public static Optional<Attribute> getAttribute(String name, List<Attribute> attributes) {
     if (attributes == null) {

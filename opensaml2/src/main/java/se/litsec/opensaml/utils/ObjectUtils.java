@@ -44,10 +44,10 @@ public class ObjectUtils {
 
   /** The builder factory for XML objects. */
   private static XMLObjectBuilderFactory builderFactory = Configuration.getBuilderFactory();
-  
+
   /** Parser pool to use when unmarshalling. */
   private static BasicParserPool parserPool = new BasicParserPool();
-  
+
   static {
     parserPool.setNamespaceAware(true);
   }
@@ -60,6 +60,8 @@ public class ObjectUtils {
    * 
    * @param clazz
    *          the class to create
+   * @param <T>
+   *          the type of the class to create
    * @return the SAML object
    * @see #createSamlObject(Class, QName)
    */
@@ -74,6 +76,8 @@ public class ObjectUtils {
    *          the class to create
    * @param elementName
    *          the element name to assign the object that is created.
+   * @param <T>
+   *          the type
    * @return the SAML object
    */
   public static <T extends SAMLObject> T createSamlObject(Class<T> clazz, QName elementName) {
@@ -98,6 +102,8 @@ public class ObjectUtils {
    *          the class to create
    * @param elementName
    *          the element name for the XML object to create
+   * @param <T>
+   *          the type
    * @return the XML object
    */
   public static <T extends XMLObject> T createXMLObject(Class<T> clazz, QName elementName) {
@@ -121,13 +127,16 @@ public class ObjectUtils {
    *          the element name that the object is registered under
    * @param elementNameToAssign
    *          the element to assign to the object that is created
+   * @param <T>
+   *          the type
    * @return the XML object
    */
   public static <T extends XMLObject> T createXMLObject(Class<T> clazz, QName registeredElementName, QName elementNameToAssign) {
     XMLObjectBuilder<?> builder = builderFactory.getBuilder(registeredElementName);
     if (builder == null) {
       // No builder registered for the given element name.
-      throw new XMLRuntimeException("No builder registered for " + clazz.getName() + " using elementName " + registeredElementName.toString());
+      throw new XMLRuntimeException("No builder registered for " + clazz.getName() + " using elementName " + registeredElementName
+        .toString());
     }
     Object object = builder.buildObject(elementNameToAssign);
     return clazz.cast(object);
@@ -138,6 +147,8 @@ public class ObjectUtils {
    * 
    * @param clazz
    *          class to check
+   * @param <T>
+   *          the type
    * @return the default QName
    */
   public static <T extends SAMLObject> QName getDefaultElementName(Class<T> clazz) {
@@ -157,6 +168,8 @@ public class ObjectUtils {
    * 
    * @param clazz
    *          the class which we want a builder for
+   * @param <T>
+   *          the type
    * @return a builder object
    * @see #getBuilder(QName)
    */
@@ -169,6 +182,8 @@ public class ObjectUtils {
    * 
    * @param elementName
    *          the element name for the XML object that the builder should return
+   * @param <T>
+   *          the type
    * @return a builder object
    */
   @SuppressWarnings("unchecked")
@@ -181,6 +196,8 @@ public class ObjectUtils {
    * 
    * @param object
    *          the object to marshall
+   * @param <T>
+   *          the type
    * @return an XML element
    * @throws MarshallingException
    *           for marshalling errors
@@ -200,6 +217,8 @@ public class ObjectUtils {
    *          the DOM (XML) to unmarshall
    * @param targetClass
    *          the required class
+   * @param <T>
+   *          the type
    * @return an {@code XMLObject} of the given type
    * @throws UnmarshallingException
    *           for unmarshalling errors
@@ -220,6 +239,8 @@ public class ObjectUtils {
    *          the input stream of the XML resource
    * @param targetClass
    *          the required class
+   * @param <T>
+   *          the type
    * @return an {@code XMLObject} of the given type
    * @throws XMLParserException
    *           for XML parsing errors
@@ -228,7 +249,7 @@ public class ObjectUtils {
    */
   public static <T extends XMLObject> T unmarshall(InputStream inputStream, Class<T> targetClass) throws XMLParserException,
       UnmarshallingException {
-    
+
     XMLObject object = XMLObjectHelper.unmarshallFromInputStream(parserPool, inputStream);
     return targetClass.cast(object);
   }
