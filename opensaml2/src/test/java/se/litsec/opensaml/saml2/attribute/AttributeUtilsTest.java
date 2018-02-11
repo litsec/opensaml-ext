@@ -39,7 +39,7 @@ public class AttributeUtilsTest extends OpenSAMLTestBase {
   @Test
   public void testGetAttributeStringValues() {
     
-    Attribute attribute = AttributeBuilder.BUILDER(AttributeBuilderTest.ATTRIBUTE_NAME_MAIL)
+    Attribute attribute = AttributeBuilder.builder(AttributeBuilderTest.ATTRIBUTE_NAME_MAIL)
         .friendlyName(AttributeBuilderTest.ATTRIBUTE_FRIENDLY_NAME_MAIL)
         .nameFormat(Attribute.URI_REFERENCE)
         .value("martin@litsec.se")
@@ -56,7 +56,7 @@ public class AttributeUtilsTest extends OpenSAMLTestBase {
   @Test
   public void testGetAttributeStringValue() {
     
-    Attribute attribute = AttributeBuilder.BUILDER(AttributeBuilderTest.ATTRIBUTE_NAME_SN)
+    Attribute attribute = AttributeBuilder.builder(AttributeBuilderTest.ATTRIBUTE_NAME_SN)
         .friendlyName(AttributeBuilderTest.ATTRIBUTE_FRIENDLY_NAME_SN)
         .nameFormat(Attribute.URI_REFERENCE)
         .value("Eriksson")
@@ -72,7 +72,7 @@ public class AttributeUtilsTest extends OpenSAMLTestBase {
   @Test
   public void testGetAttributeValues() {
     
-    Attribute attribute = AttributeBuilder.BUILDER(AttributeBuilderTest.ATTRIBUTE_NAME_MAIL)
+    Attribute attribute = AttributeBuilder.builder(AttributeBuilderTest.ATTRIBUTE_NAME_MAIL)
         .friendlyName(AttributeBuilderTest.ATTRIBUTE_FRIENDLY_NAME_MAIL)
         .nameFormat(Attribute.URI_REFERENCE)
         .value("martin@litsec.se")
@@ -89,7 +89,7 @@ public class AttributeUtilsTest extends OpenSAMLTestBase {
     XSBoolean value2 = AttributeBuilder.createValueObject(XSBoolean.class);
     value2.setValue(XSBooleanValue.valueOf("false"));
     
-    attribute = AttributeBuilder.BUILDER("http://eid.litsec.se/types/boolean")
+    attribute = AttributeBuilder.builder("http://eid.litsec.se/types/boolean")
         .friendlyName("booleanAttribute")
         .nameFormat(Attribute.URI_REFERENCE)
         .value(value1)
@@ -106,7 +106,7 @@ public class AttributeUtilsTest extends OpenSAMLTestBase {
   @Test
   public void testGetAttributeValue() {
     
-    Attribute attribute = AttributeBuilder.BUILDER(AttributeBuilderTest.ATTRIBUTE_NAME_SN)
+    Attribute attribute = AttributeBuilder.builder(AttributeBuilderTest.ATTRIBUTE_NAME_SN)
         .friendlyName(AttributeBuilderTest.ATTRIBUTE_FRIENDLY_NAME_SN)
         .nameFormat(Attribute.URI_REFERENCE)
         .value("Eriksson")
@@ -118,7 +118,7 @@ public class AttributeUtilsTest extends OpenSAMLTestBase {
     XSBoolean bvalue = AttributeBuilder.createValueObject(XSBoolean.class);
     bvalue.setValue(XSBooleanValue.valueOf("true"));
     
-    attribute = AttributeBuilder.BUILDER("http://eid.litsec.se/types/boolean")
+    attribute = AttributeBuilder.builder("http://eid.litsec.se/types/boolean")
         .friendlyName("booleanAttribute")
         .nameFormat(Attribute.URI_REFERENCE)
         .value(bvalue)
@@ -132,8 +132,8 @@ public class AttributeUtilsTest extends OpenSAMLTestBase {
   public void testGetAttribute() {
     
     List<Attribute> attributes = Arrays.asList(
-      AttributeBuilder.BUILDER(AttributeBuilderTest.ATTRIBUTE_NAME_MAIL).value("martin@litsec.se").value("martin.lindstrom@litsec.se").build(),
-      AttributeBuilder.BUILDER(AttributeBuilderTest.ATTRIBUTE_NAME_SN).value("Eriksson").build());
+      AttributeBuilder.builder(AttributeBuilderTest.ATTRIBUTE_NAME_MAIL).value("martin@litsec.se").value("martin.lindstrom@litsec.se").build(),
+      AttributeBuilder.builder(AttributeBuilderTest.ATTRIBUTE_NAME_SN).value("Eriksson").build());
     
     Optional<Attribute> attr = AttributeUtils.getAttribute("http://eid.litsec.se/types/boolean", attributes);
     Assert.assertFalse(attr.isPresent());

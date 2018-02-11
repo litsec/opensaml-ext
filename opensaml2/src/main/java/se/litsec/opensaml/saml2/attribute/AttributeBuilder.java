@@ -16,6 +16,8 @@
 package se.litsec.opensaml.saml2.attribute;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.xml.namespace.QName;
 
@@ -62,9 +64,9 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
    * @param name
    *          the attribute name
    * @return an {@code AttributeBuilder} instance.
-   * @see #AttributeBuilder()
+   * @see #AttributeBuilder(String)
    */
-  public static AttributeBuilder BUILDER(String name) {
+  public static AttributeBuilder builder(String name) {
     return new AttributeBuilder(name);
   }
 
@@ -77,7 +79,6 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
    *           for unmarshalling errors
    * @throws MarshallingException
    *           for marshalling errors
-   * @see AbstractSAMLObjectBuilder#AbstractSAMLObjectBuilder(org.opensaml.saml.common.SAMLObject)
    */
   public AttributeBuilder(Attribute template) throws MarshallingException, UnmarshallingException {
     super(template);
@@ -94,7 +95,7 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
    * @throws MarshallingException
    *           for marshalling errors
    */
-  public static AttributeBuilder BUILDER(Attribute attribute) throws MarshallingException, UnmarshallingException {
+  public static AttributeBuilder builder(Attribute attribute) throws MarshallingException, UnmarshallingException {
     return new AttributeBuilder(attribute);
   }
 
@@ -124,7 +125,7 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
    * @throws XMLParserException
    *           for XML parsing errors
    */
-  public static AttributeBuilder BUILDER(InputStream resource) throws XMLParserException, UnmarshallingException {
+  public static AttributeBuilder builder(InputStream resource) throws XMLParserException, UnmarshallingException {
     return new AttributeBuilder(resource);
   }
 
@@ -180,16 +181,37 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
   }
 
   /**
-   * Assigns an attribute string value.
+   * Assigns one (or more) attribute string values.
    * 
-   * @param value
-   *          the string value to add
+   * <p>
+   * Note: if {@code null} is passed as a parameter, any previous attribute values are cleared.
+   * </p>
+   * 
+   * @param values
+   *          the string value(s) to add
    * @return the builder
    */
-  public AttributeBuilder value(String value) {
-    XSString sv = createValueObject(XSString.TYPE_NAME, XSString.class);
-    sv.setValue(value);
-    this.object().getAttributeValues().add(sv);
+  public AttributeBuilder value(String... values) {
+    return this.value(values != null ? Arrays.asList(values) : null);
+  }
+
+  /**
+   * @see #value(String...)
+   * 
+   * @param values
+   *          the string value(s) to add
+   * @return the builder
+   */
+  public AttributeBuilder value(List<String> values) {
+    if (values == null) {
+      this.object().getAttributeValues().clear();
+      return this;
+    }
+    for (String s : values) {
+      XSString sv = createValueObject(XSString.TYPE_NAME, XSString.class);
+      sv.setValue(s);
+      this.object().getAttributeValues().add(sv);
+    }
     return this;
   }
 
@@ -198,6 +220,8 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
    * 
    * @param value
    *          the value to add
+   * @param <T>
+   *          the value type
    * @return the builder
    */
   public <T extends XMLObject> AttributeBuilder value(T value) {
@@ -214,7 +238,7 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
    * </p>
    * <p>
    * Note: For attribute having string values, there is no need to explictly create an attribute value. Instead the
-   * {@link #value(String)} method may be used directly.
+   * {@link #value(String...)} method may be used directly.
    * </p>
    *
    * @param <T>
@@ -242,7 +266,7 @@ public class AttributeBuilder extends AbstractSAMLObjectBuilder<Attribute> {
    * </p>
    * <p>
    * Note: For attribute having string values, there is no need to explictly create an attribute value. Instead the
-   * {@link #value(String)} method may be used directly.
+   * {@link #value(String...)} method may be used directly.
    * </p>
    * 
    * @param <T>

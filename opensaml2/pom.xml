@@ -6,7 +6,7 @@
   <groupId>se.litsec.opensaml</groupId>
   <artifactId>opensaml2-ext</artifactId>
   <packaging>jar</packaging>
-  <version>0.9.3-SNAPSHOT</version>
+  <version>0.9.3</version>
 
   <name>Litsec :: OpenSAML 2.X utility extensions</name>
   <description>OpenSAML 2.X utility extension library</description>

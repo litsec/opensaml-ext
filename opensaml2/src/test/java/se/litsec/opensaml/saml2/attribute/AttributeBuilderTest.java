@@ -44,7 +44,7 @@ public class AttributeBuilderTest extends OpenSAMLTestBase {
 
   @Test
   public void testCreateStringValueAttribute() {
-    Attribute attribute = AttributeBuilder.BUILDER(ATTRIBUTE_NAME_SN)
+    Attribute attribute = AttributeBuilder.builder(ATTRIBUTE_NAME_SN)
         .friendlyName(ATTRIBUTE_FRIENDLY_NAME_SN)
         .nameFormat(Attribute.URI_REFERENCE)
         .value("Eriksson")
@@ -59,7 +59,7 @@ public class AttributeBuilderTest extends OpenSAMLTestBase {
   
   @Test
   public void testCreateMultipleStringValuesAttribute() {
-    Attribute attribute = AttributeBuilder.BUILDER(ATTRIBUTE_NAME_MAIL)
+    Attribute attribute = AttributeBuilder.builder(ATTRIBUTE_NAME_MAIL)
         .friendlyName(ATTRIBUTE_FRIENDLY_NAME_MAIL)
         .nameFormat(Attribute.URI_REFERENCE)
         .value("martin@litsec.se")
@@ -79,7 +79,7 @@ public class AttributeBuilderTest extends OpenSAMLTestBase {
     XSBoolean value = AttributeBuilder.createValueObject(XSBoolean.class);
     value.setValue(XSBooleanValue.valueOf("true"));
     
-    Attribute attribute = AttributeBuilder.BUILDER("http://eid.litsec.se/types/boolean")
+    Attribute attribute = AttributeBuilder.builder("http://eid.litsec.se/types/boolean")
         .friendlyName("booleanAttribute")
         .nameFormat(Attribute.URI_REFERENCE)
         .value(value)
@@ -94,7 +94,7 @@ public class AttributeBuilderTest extends OpenSAMLTestBase {
   
   @Test
   public void testDefaultNameFormat() {
-    Attribute attribute = AttributeBuilder.BUILDER(ATTRIBUTE_NAME_SN)
+    Attribute attribute = AttributeBuilder.builder(ATTRIBUTE_NAME_SN)
         .value("Eriksson")
         .build();
     
@@ -120,7 +120,7 @@ public class AttributeBuilderTest extends OpenSAMLTestBase {
     catch (IllegalArgumentException e) {      
     }
     
-    AttributeBuilder builder = AttributeBuilder.BUILDER(ATTRIBUTE_NAME_SN)
+    AttributeBuilder builder = AttributeBuilder.builder(ATTRIBUTE_NAME_SN)
         .friendlyName(ATTRIBUTE_FRIENDLY_NAME_SN)
         .nameFormat(Attribute.URI_REFERENCE)
         .value("Eriksson");
@@ -134,5 +134,5 @@ public class AttributeBuilderTest extends OpenSAMLTestBase {
     catch (RuntimeException e) {      
     }
   }
-  
+
 }
