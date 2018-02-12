@@ -6,7 +6,7 @@
   <groupId>se.litsec.opensaml</groupId>
   <artifactId>opensaml2-ext</artifactId>
   <packaging>jar</packaging>
-  <version>0.9.3</version>
+  <version>0.9.4-SNAPSHOT</version>
 
   <name>Litsec :: OpenSAML 2.X utility extensions</name>
   <description>OpenSAML 2.X utility extension library</description>
@@ -74,6 +74,46 @@
       <version>${opensaml.version}</version>
       <scope>compile</scope>
       <type>jar</type>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-codec</groupId>
+          <artifactId>commons-codec</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-httpclient</groupId>
+          <artifactId>commons-httpclient</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-lang</groupId>
+          <artifactId>commons-lang</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>joda-time</groupId>
+          <artifactId>joda-time</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    
+    <!-- Opensaml has several dependencies of different versions, we fix that -->
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.7</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-codec</groupId>
+          <artifactId>commons-codec</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     
     <dependency>
@@ -81,7 +121,17 @@
       <artifactId>xmltooling</artifactId>
       <version>${opensaml.xmltooling.version}</version>
       <scope>compile</scope>
-      <type>jar</type>      
+      <type>jar</type>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-httpclient</groupId>
+          <artifactId>commons-httpclient</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>joda-time</groupId>
+          <artifactId>joda-time</artifactId>
+        </exclusion>
+      </exclusions>      
     </dependency>
 
     <dependency>
@@ -95,7 +145,7 @@
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
-      <version>2.4</version>
+      <version>2.6</version>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
@@ -128,7 +178,7 @@
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
-      <version>1.2.16</version>
+      <version>1.2.17</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
