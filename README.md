@@ -20,6 +20,8 @@ This open source package is an extension to OpenSAML 3.X that offers utility cla
 
 Java API documentation of the opensaml-ext library is found at [https://litsec.github.io/opensaml-ext](https://litsec.github.io/opensaml-ext/).
 
+Generated project information is found at [https://litsec.github.io/opensaml-ext/site](https://litsec.github.io/opensaml-ext/site).
+
 *Limited support for OpenSAML 2.X is also part of the project. This library will not be updated and its purpose is to support older libraries built using OpenSAML 2.*
 
 > Note: Some features of this library is still experimental.
@@ -54,7 +56,7 @@ If you are making use of the Spring features in opensaml-ext you need to explici
 </dependency>
 ```
 
-Currently, opensaml-ext uses version `4.3.7.RELEASE` of Spring.
+Currently, opensaml-ext uses version `4.3.2.RELEASE` of Spring (which is the same version as Shibboleth IdP v3.3.1).
 
 If you are using the OpenSAML 2.X version of the library (with limited features) use:
 

@@ -6,7 +6,7 @@
   <groupId>se.litsec.opensaml</groupId>
   <artifactId>opensaml3-ext</artifactId>
   <packaging>jar</packaging>
-  <version>0.9.3</version>
+  <version>0.9.4</version>
 
   <name>Litsec :: OpenSAML 3.X utility extensions</name>
   <description>OpenSAML 3.X utility extension library</description>
@@ -48,7 +48,7 @@
     <opensaml.version>3.3.0</opensaml.version>
     <shibboleth.java-support.version>7.3.0</shibboleth.java-support.version>
     <slf4j.version>1.7.12</slf4j.version>
-    <spring.version>4.3.7.RELEASE</spring.version>
+    <spring.version>4.3.2.RELEASE</spring.version>
     
     <commons-lang.version>2.4</commons-lang.version>
     <joda-time.version>2.9</joda-time.version>    
@@ -76,6 +76,13 @@
       <version>${opensaml.version}</version>
       <type>jar</type>
       <scope>compile</scope>
+      <exclusions>
+        <!-- Uses an older version that we want -->
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -139,7 +146,15 @@
       <version>${opensaml.version}</version>
       <type>jar</type>
       <scope>compile</scope>      
-    </dependency>    
+    </dependency>
+    
+    <dependency>
+      <groupId>org.opensaml</groupId>
+      <artifactId>opensaml-storage-api</artifactId>
+      <version>${opensaml.version}</version>
+      <type>jar</type>
+      <scope>compile</scope>      
+    </dependency>
     
     <dependency>
       <groupId>net.shibboleth.utilities</groupId>
@@ -188,6 +203,23 @@
       <version>4.3.6</version>
       <scope>compile</scope>
       <type>jar</type>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-codec</groupId>
+          <artifactId>commons-codec</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    
+    <!-- To use the same version as Spring and not the older used by httpclient -->
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.2</version>
     </dependency>
 
     <!-- Referenced by OpenSAML -->
@@ -281,7 +313,7 @@
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
-      <version>1.2.16</version>
+      <version>1.2.17</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
