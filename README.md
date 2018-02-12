@@ -18,7 +18,7 @@ This open source package is an extension to OpenSAML 3.X that offers utility cla
 * Spring Framework factory beans for easier integration in a Spring environment.
 * A builder pattern for some commonly used objects, such as creating SAML attribute objects, entity descriptors (metadata) or authentication requests.
 
-Java API documentation of the opensaml-ext library is found at [https://github.com/litsec/opensaml-ext/tree/master/docs/javadoc/opensaml3/0.9.3/](https://github.com/litsec/opensaml-ext/tree/master/docs/javadoc/opensaml3/0.9.3/).
+Java API documentation of the opensaml-ext library is found at [https://litsec.github.io/opensaml-ext](https://litsec.github.io/opensaml-ext/).
 
 *Limited support for OpenSAML 2.X is also part of the project. This library will not be updated and its purpose is to support older libraries built using OpenSAML 2.*
 
