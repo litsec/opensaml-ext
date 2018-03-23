@@ -13,29 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.litsec.opensaml.common.validation;
+package se.litsec.opensaml.saml2.common.response;
 
-import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.common.assertion.ValidationContext;
-import org.opensaml.saml.common.assertion.ValidationResult;
 
 /**
- * Interface for validation of XML and SAML objects.
+ * Builder class for building the {@link ValidationContext} object for use as validation input to the
+ * {@link ResponseValidator}.
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  */
-public interface ObjectValidator<T extends XMLObject> {
+public class ResponseValidationParametersBuilder extends AbstractResponseValidationParametersBuilder<ResponseValidationParametersBuilder> {
 
   /**
-   * Validates the given object.
+   * Utility method that returns a builder instance.
    * 
-   * @param object
-   *          object to be evaluated
-   * @param context
-   *          current validation context
-   * 
-   * @return the result of the evaluation
+   * @return a builder
    */
-  ValidationResult validate(final T object, final ValidationContext context);
+  public static ResponseValidationParametersBuilder builder() {
+    return new ResponseValidationParametersBuilder();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  protected ResponseValidationParametersBuilder getThis() {
+    return this;
+  }
 
 }

@@ -15,27 +15,20 @@
  */
 package se.litsec.opensaml.common.validation;
 
-import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.common.assertion.ValidationContext;
-import org.opensaml.saml.common.assertion.ValidationResult;
 
 /**
- * Interface for validation of XML and SAML objects.
+ * Interface for a {@link ValidationContext} builder.
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  */
-public interface ObjectValidator<T extends XMLObject> {
+public interface ValidationParametersBuilder {
 
   /**
-   * Validates the given object.
+   * Builds a {@code ValidationContext} object.
    * 
-   * @param object
-   *          object to be evaluated
-   * @param context
-   *          current validation context
-   * 
-   * @return the result of the evaluation
+   * @return the {@code ValidationContext} object
    */
-  ValidationResult validate(final T object, final ValidationContext context);
+  ValidationContext build();
 
 }
