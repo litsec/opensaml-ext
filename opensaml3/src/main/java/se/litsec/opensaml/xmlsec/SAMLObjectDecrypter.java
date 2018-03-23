@@ -148,6 +148,7 @@ public class SAMLObjectDecrypter {
   private synchronized Decrypter getDecrypter() {
     if (this.decrypter == null) {
       this.decrypter = new Decrypter(this.parameters);
+      this.decrypter.setRootInNewDocument(true);
     }
     return this.decrypter;
   }
