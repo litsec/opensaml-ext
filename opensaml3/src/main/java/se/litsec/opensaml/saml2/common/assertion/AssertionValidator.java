@@ -56,9 +56,9 @@ import se.litsec.opensaml.common.validation.ValidationSupport.ValidationResultEx
  * 
  * <p>
  * Supports the following {@link ValidationContext} static parameters:
+ * </p>
  * <ul>
  * <li>The static parameters defined for {@link AbstractSignableObjectValidator}.</li>
- * <ul>
  * <li>{@link CoreValidatorParameters#STRICT_VALIDATION}: Optional. If not supplied, defaults to 'false'. Tells whether
  * strict validation should be performed.</li>
  * <li>{@link CoreValidatorParameters#ALLOWED_CLOCK_SKEW}: Optional. Gives the number of milliseconds that is the
@@ -73,10 +73,6 @@ import se.litsec.opensaml.common.validation.ValidationSupport.ValidationResultEx
  * must be given.</li>
  * <li>{@link CoreValidatorParameters#AUTHN_REQUEST_ID}: Required if the {@link CoreValidatorParameters#AUTHN_REQUEST}
  * is not assigned. Is used when validating the {@code InResponseTo} attribute of the response.</li>
- * <li>{@link #AUTHN_REQUEST_FORCE_AUTHN}: Optional. If supplied, the validator will check if the ForceAuthn flag was
- * honored by the IdP (i.e., that the assertion was not issued based on a previous authentication). If this parameter is
- * not set the validator will check if the {@link CoreValidatorParameters#AUTHN_REQUEST} is set and make the checks
- * using the ForceAuthn-flag found there.</li>
  * <li>{@link CoreValidatorParameters#RECEIVE_URL}: Required. A String holding the URL on which we received the response
  * message. Is used when the {@code Destination} attribute is validated.</li>
  * <li>{@link CoreValidatorParameters#EXPECTED_ISSUER}: Optional. If set, is used when the issuer of the response is
@@ -84,16 +80,14 @@ import se.litsec.opensaml.common.validation.ValidationSupport.ValidationResultEx
  * <li>{@link #RESPONSE_ISSUE_INSTANT}: Optional. If set, the IssueInstant of the Assertion being validated is compared
  * with the corresponding response issue instant.</li>
  * </ul>
- * </ul>
- * </p>
  * 
  * <p>
  * Supports the following {@link ValidationContext} dynamic parameters:
+ * </p>
  * <ul>
  * <li>{@link SAML2AssertionValidationParameters#CONFIRMED_SUBJECT_CONFIRMATION}: Optional. Will be present after
  * validation if subject confirmation was successfully performed.</li>
  * </ul>
- * </p>
  * 
  * <p>
  * <b>Note:</b> Also check the validation context parameters defined by the {@code SubjectConfirmationValidator} and

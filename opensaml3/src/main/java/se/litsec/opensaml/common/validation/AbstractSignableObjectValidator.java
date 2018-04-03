@@ -16,7 +16,6 @@
 package se.litsec.opensaml.common.validation;
 
 import org.opensaml.core.criterion.EntityIdCriterion;
-import org.opensaml.saml.common.assertion.AssertionValidationException;
 import org.opensaml.saml.common.assertion.ValidationContext;
 import org.opensaml.saml.common.assertion.ValidationResult;
 import org.opensaml.security.SecurityException;
@@ -38,20 +37,17 @@ import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
  * 
  * <p>
  * Supports the following {@link ValidationContext} static parameters:
- * <ul>
- * <li>The static parameters defined in {@link AbstractObjectValidator}.
- * </li>
- * <li>{@link CoreValidatorParameters#SIGNATURE_REQUIRED}: Optional. 
- * If not supplied, defaults to 'true'. If an object is signed, the signature is always evaluated and the result 
- * factored into the overall validation result, regardless of the value of this setting.
- * </li>
- * <li>{@link CoreValidatorParameters#SIGNATURE_VALIDATION_CRITERIA_SET}: Optional. 
- * If not supplied, a minimal criteria set will be constructed which contains an {@link EntityIDCriteria} 
- * containing the Issuer entityID, and a {@link UsageCriteria} of {@link UsageType#SIGNING}. If it is supplied, 
- * but either of those criteria are absent from the criteria set, they will be added with the above values.
- * </li>
- * </ul>
  * </p>
+ * <ul>
+ * <li>The static parameters defined in {@link AbstractObjectValidator}.</li>
+ * <li>{@link CoreValidatorParameters#SIGNATURE_REQUIRED}: Optional. If not supplied, defaults to 'true'. If an object
+ * is signed, the signature is always evaluated and the result factored into the overall validation result, regardless
+ * of the value of this setting.</li>
+ * <li>{@link CoreValidatorParameters#SIGNATURE_VALIDATION_CRITERIA_SET}: Optional. If not supplied, a minimal criteria
+ * set will be constructed which contains an {@link EntityIdCriterion} containing the Issuer entityID, and a
+ * {@link UsageCriterion} of {@link UsageType#SIGNING}. If it is supplied, but either of those criteria are absent from
+ * the criteria set, they will be added with the above values.</li>
+ * </ul>
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  *
@@ -89,11 +85,7 @@ public abstract class AbstractSignableObjectValidator<T extends SignableXMLObjec
    *          assertion whose signature will be validated
    * @param context
    *          current validation context
-   * 
    * @return the result of the signature validation
-   * 
-   * @throws AssertionValidationException
-   *           thrown if there is a problem determining the validity of the signature
    */
   protected ValidationResult validateSignature(T token, ValidationContext context) {
 
@@ -136,15 +128,15 @@ public abstract class AbstractSignableObjectValidator<T extends SignableXMLObjec
    * @return the validation result
    */
   protected ValidationResult performSignatureValidation(T token, ValidationContext context) {
-    
+
     // Temporary code until we figure out how to make the OpenSAML unmarshaller to
     // mark the ID attribute as an ID.
     //
     Attr idAttr = token.getDOM().getAttributeNode("ID");
     if (idAttr != null) {
       idAttr.getOwnerElement().setIdAttributeNode(idAttr, true);
-    }    
-    
+    }
+
     Signature signature = token.getSignature();
 
     String tokenIssuer = this.getIssuer(token);

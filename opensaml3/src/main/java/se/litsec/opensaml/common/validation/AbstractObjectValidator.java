@@ -23,6 +23,7 @@ import org.opensaml.saml.common.assertion.ValidationContext;
  * 
  * <p>
  * Supports the following {@link ValidationContext} static parameters:
+ * </p>
  * <ul>
  * <li>{@link CoreValidatorParameters#STRICT_VALIDATION}: Optional. If not supplied, defaults to 'false'. Tells whether
  * strict validation should be performed.</li>
@@ -31,7 +32,6 @@ import org.opensaml.saml.common.assertion.ValidationContext;
  * <li>{@link CoreValidatorParameters#MAX_AGE_MESSAGE}: Optional. Gives the maximum age (difference between issuance
  * time and the validation time). If not given, the {@link #DEFAULT_MAX_AGE_RECEIVED_MESSAGE} is used.</li>
  * </ul>
- * </p>
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  */

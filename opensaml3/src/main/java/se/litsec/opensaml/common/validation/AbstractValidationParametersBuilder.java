@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.opensaml.saml.common.assertion.ValidationContext;
-import org.opensaml.xmlsec.signature.support.SignatureTrustEngine;
 
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 
@@ -72,8 +71,8 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
   public T dynamicParameter(String name, Object value) {
     this.addStaticParameter(name, value);
     return this.getThis();
-  }  
-  
+  }
+
   /**
    * Tells whether strict validation should be performed.
    * 
@@ -124,8 +123,7 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
   }
 
   /**
-   * Gives the trust basis criteria set to use when verifying signatures (
-   * {@link SignatureTrustEngine#validate(org.opensaml.xmlsec.signature.Signature, CriteriaSet)}).
+   * Gives the trust basis criteria set to use when verifying signatures ({@code SignatureTrustEngine.validate}).
    * 
    * @param criteriaSet
    *          the criteria set
