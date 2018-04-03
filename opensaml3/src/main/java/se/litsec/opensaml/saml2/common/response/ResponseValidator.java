@@ -41,9 +41,9 @@ import se.litsec.opensaml.common.validation.ValidationSupport.ValidationResultEx
  * 
  * <p>
  * Supports the following {@link ValidationContext} static parameters:
+ * </p>
  * <ul>
  * <li>The static parameters defined for {@link AbstractSignableObjectValidator}.</li>
- * <ul>
  * <li>{@link CoreValidatorParameters#STRICT_VALIDATION}: Optional. If not supplied, defaults to 'false'. Tells whether
  * strict validation should be performed.</li>
  * <li>{@link CoreValidatorParameters#ALLOWED_CLOCK_SKEW}: Optional. Gives the number of milliseconds that is the
@@ -62,8 +62,6 @@ import se.litsec.opensaml.common.validation.ValidationSupport.ValidationResultEx
  * <li>{@link CoreValidatorParameters#EXPECTED_ISSUER}: Optional. If set, is used when the issuer of the response is
  * validated.</li>
  * </ul>
- * </ul>
- * </p>
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  */
@@ -178,11 +176,11 @@ public class ResponseValidator extends AbstractSignableObjectValidator<Response>
       return ValidationResult.INVALID;
     }
 
-    final long receiveInstant = this.getReceiveInstant(context);
+    final long receiveInstant = getReceiveInstant(context);
     final long issueInstant = response.getIssueInstant().getMillis();
 
-    final long maxAgeResponse = this.getMaxAgeReceivedMessage(context);
-    final long allowedClockSkew = this.getAllowedClockSkew(context);
+    final long maxAgeResponse = getMaxAgeReceivedMessage(context);
+    final long allowedClockSkew = getAllowedClockSkew(context);
 
     // Too old?
     //

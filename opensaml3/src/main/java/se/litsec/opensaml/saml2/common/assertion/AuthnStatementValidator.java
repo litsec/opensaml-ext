@@ -41,6 +41,7 @@ import se.litsec.opensaml.common.validation.ValidationSupport.ValidationResultEx
  * 
  * <p>
  * Supports the following {@link ValidationContext} static parameters:
+ * </p>
  * <ul>
  * <li>{@link CoreValidatorParameters#AUTHN_REQUEST}: Optional. If supplied will be used in a number of validations when
  * information from the corresponding {@code AuthnRequest} is needed. If not supplied, other, more detailed parameters
@@ -54,7 +55,6 @@ import se.litsec.opensaml.common.validation.ValidationSupport.ValidationResultEx
  * <li>{@link #MAX_ACCEPTED_SSO_SESSION_TIME}: For SSO, we may want to assert that the authentication is not too old. If
  * so, this parameter gives the maximum accepted session time.</li>
  * </ul>
- * </p>
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  */
