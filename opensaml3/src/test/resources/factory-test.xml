@@ -48,4 +48,12 @@
 
   </bean>
   
+  <bean id="contactPerson1" class="se.litsec.opensaml.saml2.metadata.build.spring.ContactPersonFactoryBean"
+    p:type="SUPPORT"
+    p:company="${metadata.contactPerson.support.company}"
+    p:givenName="${metadata.contactPerson.support.givenName}" 
+    p:surname="${metadata.contactPerson.support.surname}"
+    p:emailAddresses="${metadata.contactPerson.support.emailAddress}"
+    p:telephoneNumber="${metadata.contactPerson.support.phone}" />
+  
 </beans>
