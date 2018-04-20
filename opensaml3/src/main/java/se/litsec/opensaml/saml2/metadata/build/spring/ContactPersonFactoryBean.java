@@ -34,6 +34,13 @@ public class ContactPersonFactoryBean extends AbstractSAMLObjectBuilderFactoryBe
 
   /** The builder. */
   private ContactPersonBuilder builder;
+  
+  /**
+   * Constructor.
+   */
+  public ContactPersonFactoryBean() {
+    this.builder = new ContactPersonBuilder();
+  }
 
   /** {@inheritDoc} */
   @Override
