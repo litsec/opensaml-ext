@@ -49,7 +49,7 @@ public class MessageReplayCheckerImpl implements MessageReplayChecker, Initializ
   /** {@inheritDoc} */
   @Override
   public void checkReplay(String id) throws MessageReplayException {
-    if (!this.replayCache.check(this.replayCacheName, id, this.replayCacheExpiration)) {
+    if (!this.replayCache.check(this.replayCacheName, id, this.replayCacheExpiration + System.currentTimeMillis())) {
       String msg = String.format("Replay check of ID '%s' failed", id);
       log.warn(msg);
       throw new MessageReplayException(msg);
