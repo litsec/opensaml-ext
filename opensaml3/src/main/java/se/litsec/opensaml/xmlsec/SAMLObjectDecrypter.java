@@ -15,21 +15,31 @@
  */
 package se.litsec.opensaml.xmlsec;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.EncryptedElementType;
+import org.opensaml.saml.saml2.encryption.EncryptedElementTypeEncryptedKeyResolver;
 import org.opensaml.security.credential.Credential;
 import org.opensaml.xmlsec.DecryptionConfiguration;
 import org.opensaml.xmlsec.DecryptionParameters;
-import org.opensaml.xmlsec.encryption.EncryptedData;
-import org.opensaml.xmlsec.encryption.EncryptedKey;
+import org.opensaml.xmlsec.encryption.support.ChainingEncryptedKeyResolver;
 import org.opensaml.xmlsec.encryption.support.Decrypter;
 import org.opensaml.xmlsec.encryption.support.DecryptionException;
 import org.opensaml.xmlsec.encryption.support.InlineEncryptedKeyResolver;
+import org.opensaml.xmlsec.encryption.support.SimpleKeyInfoReferenceEncryptedKeyResolver;
+import org.opensaml.xmlsec.encryption.support.SimpleRetrievalMethodEncryptedKeyResolver;
+import org.opensaml.xmlsec.keyinfo.impl.ChainingKeyInfoCredentialResolver;
+import org.opensaml.xmlsec.keyinfo.impl.CollectionKeyInfoCredentialResolver;
+import org.opensaml.xmlsec.keyinfo.impl.LocalKeyInfoCredentialResolver;
 import org.opensaml.xmlsec.keyinfo.impl.StaticKeyInfoCredentialResolver;
+import org.opensaml.xmlsec.keyinfo.impl.provider.DEREncodedKeyValueProvider;
+import org.opensaml.xmlsec.keyinfo.impl.provider.DSAKeyValueProvider;
+import org.opensaml.xmlsec.keyinfo.impl.provider.InlineX509DataProvider;
+import org.opensaml.xmlsec.keyinfo.impl.provider.RSAKeyValueProvider;
 
 /**
  * A support bean for easy decryption.
@@ -40,11 +50,11 @@ import org.opensaml.xmlsec.keyinfo.impl.StaticKeyInfoCredentialResolver;
  * defaults:
  * </p>
  * <ul>
- * <li>For the encrypted key resolver an {@link InlineEncryptedKeyResolver} instance is used which which finds
- * {@link EncryptedKey} elements within the {@link org.opensaml.xmlsec.signature.KeyInfo} of the {@link EncryptedData}
- * context.</li>
- * <li>For the key encryption key resolver a {@link StaticKeyInfoCredentialResolver} instance holding the supplied
- * encryption credential(s) is used.</li>
+ * <li>For the encrypted key resolver a {@link ChainingKeyInfoCredentialResolver} instance is used that chains a
+ * {@link LocalKeyInfoCredentialResolver} and a {@link InlineEncryptedKeyResolver}.</li>
+ * <li>For the key encryption key resolver a {@link ChainingEncryptedKeyResolver} instance chaining the resolvers:
+ * {@link InlineEncryptedKeyResolver}, {@link EncryptedElementTypeEncryptedKeyResolver},
+ * {@link SimpleRetrievalMethodEncryptedKeyResolver} and {@link SimpleKeyInfoReferenceEncryptedKeyResolver}.</li>
  * </ul>
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
@@ -56,6 +66,17 @@ public class SAMLObjectDecrypter {
 
   /** Decryption parameters. */
   private DecryptionParameters parameters;
+
+  /**
+   * If using a HSM it is likely that the SunPKCS11 crypto provider is used. This provider does not have support for
+   * OAEP padding. This is used commonly for XML encryption since
+   * {@code http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p} is the default algorithm to use for key encryption. This
+   * class has a workaround for this limitation that is enabled by setting the {@code pkcs11Workaround} flag.
+   */
+  private boolean pkcs11Workaround = false;
+
+  /** For testing the workaround without the use of a HSM. */
+  private boolean pkcs11testMode = false;
 
   /**
    * Constructor given the credential to use to decrypt the messages (certificate or key pair).
@@ -76,8 +97,20 @@ public class SAMLObjectDecrypter {
    */
   public SAMLObjectDecrypter(List<Credential> decryptionCredentials) {
     this.parameters = new DecryptionParameters();
-    this.parameters.setKEKKeyInfoCredentialResolver(new StaticKeyInfoCredentialResolver(decryptionCredentials));
-    this.parameters.setEncryptedKeyResolver(new InlineEncryptedKeyResolver());
+
+    ChainingKeyInfoCredentialResolver kekKeyInfoCredentialResolver = new ChainingKeyInfoCredentialResolver(Arrays.asList(
+      new LocalKeyInfoCredentialResolver(
+        Arrays.asList(new RSAKeyValueProvider(), new DSAKeyValueProvider(), new DEREncodedKeyValueProvider(), new InlineX509DataProvider()),
+        new CollectionKeyInfoCredentialResolver(decryptionCredentials)),
+      new StaticKeyInfoCredentialResolver(decryptionCredentials)));
+
+    this.parameters.setKEKKeyInfoCredentialResolver(kekKeyInfoCredentialResolver);
+
+    ChainingEncryptedKeyResolver encryptedKeyResolver = new ChainingEncryptedKeyResolver(Arrays.asList(
+      new InlineEncryptedKeyResolver(), new EncryptedElementTypeEncryptedKeyResolver(),
+      new SimpleRetrievalMethodEncryptedKeyResolver(), new SimpleKeyInfoReferenceEncryptedKeyResolver()));
+
+    this.parameters.setEncryptedKeyResolver(encryptedKeyResolver);
   }
 
   /**
@@ -134,7 +167,7 @@ public class SAMLObjectDecrypter {
 
     XMLObject object = this.getDecrypter().decryptData(encryptedObject.getEncryptedData());
     if (!destinationClass.isInstance(object)) {
-      throw new DecryptionException(String.format("Decrypted object can not be cast to %s - is %s", 
+      throw new DecryptionException(String.format("Decrypted object can not be cast to %s - is %s",
         destinationClass.getSimpleName(), object.getClass().getSimpleName()));
     }
     return destinationClass.cast(object);
@@ -147,7 +180,15 @@ public class SAMLObjectDecrypter {
    */
   private synchronized Decrypter getDecrypter() {
     if (this.decrypter == null) {
-      this.decrypter = new Decrypter(this.parameters);
+      if (this.pkcs11Workaround) {
+        ExtendedDecrypter ed = new ExtendedDecrypter(this.parameters);
+        ed.setTestMode(this.pkcs11testMode);
+        ed.init();
+        this.decrypter = ed;
+      }
+      else {
+        this.decrypter = new Decrypter(this.parameters);
+      }
       this.decrypter.setRootInNewDocument(true);
     }
     return this.decrypter;
@@ -177,6 +218,29 @@ public class SAMLObjectDecrypter {
       throw new IllegalStateException("Object has already been initialized");
     }
     this.parameters.setWhitelistedAlgorithms(whitelistedAlgorithms);
+  }
+
+  /**
+   * If using a HSM it is likely that the SunPKCS11 crypto provider is used. This provider does not have support for
+   * OAEP padding. This is used commonly for XML encryption since
+   * {@code http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p} is the default algorithm to use for key encryption. This
+   * class has a workaround for this limitation that is enabled by setting the {@code pkcs11Workaround} flag.
+   * 
+   * @param pkcs11Workaround
+   *          whether to run in PKCS11 workaround mode
+   */
+  public void setPkcs11Workaround(boolean pkcs11Workaround) {
+    this.pkcs11Workaround = pkcs11Workaround;
+  }
+
+  /**
+   * For internal testing only.
+   * 
+   * @param pkcs11testMode
+   *          test flag
+   */
+  public void setPkcs11testMode(boolean pkcs11testMode) {
+    this.pkcs11testMode = pkcs11testMode;
   }
 
 }

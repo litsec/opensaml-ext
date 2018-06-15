@@ -15,7 +15,18 @@
       c:store-ref="keystore" c:alias="eid" c:password="secret"
       p:entityId="https://eid.litsec.se/sp/2" />
   </util:list>
-    
+  
+  <bean id="decrypter" class="se.litsec.opensaml.xmlsec.SAMLObjectDecrypter" scope="singleton">
+    <constructor-arg name="decryptionCredentials" ref="spEncryptionCredentials" />
+  </bean>
+  
+  <bean id="decrypterP11" class="se.litsec.opensaml.xmlsec.SAMLObjectDecrypter" scope="singleton">
+    <constructor-arg name="decryptionCredentials" ref="spEncryptionCredentials" />
+    <property name="pkcs11Workaround" value="true" />
+    <property name="pkcs11testMode" value="true" />    
+  </bean>
+  
+  <!--   
   <bean id="decrypter" class="se.litsec.opensaml.xmlsec.SAMLObjectDecrypter" scope="singleton">
     <constructor-arg name="decryptionConfiguration">
       <bean class="org.opensaml.xmlsec.impl.BasicDecryptionConfiguration"
@@ -23,7 +34,7 @@
         p:encryptedKeyResolver-ref="encryptedKeyResolver" />
     </constructor-arg>
   </bean>
-  
+    
   <bean id="keyEncryptionCredentialResolver" class="org.opensaml.xmlsec.keyinfo.impl.ChainingKeyInfoCredentialResolver">
     <constructor-arg>
       <list>
@@ -57,6 +68,6 @@
       </list>
     </constructor-arg>
   </bean>    
-  
+  -->
   
 </beans>
