@@ -22,6 +22,7 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.EncryptedAssertion;
 import org.opensaml.saml.saml2.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.ContextConfiguration;
@@ -39,8 +40,13 @@ import se.litsec.opensaml.utils.ObjectUtils;
 public class SAMLObjectDecrypterTest {
   
   @Autowired
+  @Qualifier("decrypter")
   private SAMLObjectDecrypter decrypter;
   
+  @Autowired
+  @Qualifier("decrypterP11")
+  private SAMLObjectDecrypter decrypterP11;
+    
   @Test
   public void test() throws Exception {
     
@@ -52,6 +58,18 @@ public class SAMLObjectDecrypterTest {
     Assertion assertion = decrypter.decrypt(encryptedAssertion, Assertion.class);
     Assert.assertNotNull(assertion);
     // System.out.println(SerializeSupport.prettyPrintXML(assertion.getDOM()));
+  }
+    
+  @Test
+  public void testP11workaround() throws Exception {
+    Resource r = new ClassPathResource("encrypted-basic.xml");
+    Response response = ObjectUtils.unmarshall(r.getInputStream(), Response.class);
+    
+    EncryptedAssertion encryptedAssertion = response.getEncryptedAssertions().get(0);
+    
+    Assertion assertion = decrypterP11.decrypt(encryptedAssertion, Assertion.class);
+    Assert.assertNotNull(assertion);
+    //System.out.println(SerializeSupport.prettyPrintXML(assertion.getDOM()));
   }
   
 }
