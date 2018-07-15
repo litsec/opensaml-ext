@@ -26,7 +26,6 @@ import org.opensaml.saml.common.messaging.context.SAMLBindingContext;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.binding.encoding.impl.HTTPRedirectDeflateEncoder;
 import org.opensaml.saml.saml2.core.RequestAbstractType;
-import org.opensaml.saml.saml2.metadata.Endpoint;
 import org.opensaml.security.x509.X509Credential;
 import org.opensaml.xmlsec.SecurityConfigurationSupport;
 import org.opensaml.xmlsec.SignatureSigningParameters;
@@ -40,7 +39,6 @@ import org.slf4j.LoggerFactory;
 
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
-import se.litsec.opensaml.utils.ObjectUtils;
 
 /**
  * A RequestHttpObject for sending using HTTP GET (redirect binding).
@@ -93,9 +91,6 @@ public class RedirectRequestHttpObject<T extends RequestAbstractType> extends HT
     MessageContext<SAMLObject> messageContext = new MessageContext<>();
     messageContext.setMessage(request);
     messageContext.getSubcontext(SAMLBindingContext.class, true).setRelayState(relayState);
-    Endpoint endpointObject = ObjectUtils.createSamlObject(Endpoint.class);
-    endpointObject.setBinding(this.getBindingURI());
-    endpointObject.setLocation(endpoint);
 
     if (signatureCredentials != null) {
       BasicSignatureSigningConfiguration signatureCreds = new BasicSignatureSigningConfiguration();
