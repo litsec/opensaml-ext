@@ -149,8 +149,18 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
    * @param value
    *          the value of the parameter
    */
-  protected final void addStaticParameter(String name, Object value) {
+  public final void addStaticParameter(String name, Object value) {
     this.staticParameters.put(name, value);
+  }
+
+  /**
+   * Adds static validation parameters.
+   * 
+   * @param pars
+   *          static validation parameters
+   */
+  public final void addStaticParameters(Map<String, Object> pars) {
+    this.staticParameters.putAll(pars);
   }
 
   /**
@@ -161,8 +171,18 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
    * @param value
    *          the value of the parameter
    */
-  protected final void addDynamicParameter(String name, Object value) {
+  public final void addDynamicParameter(String name, Object value) {
     this.staticParameters.put(name, value);
+  }
+
+  /**
+   * Adds dynamic validation parameters.
+   * 
+   * @param pars
+   *          dynamic validation parameters
+   */
+  public final void addDynamicParameters(Map<String, Object> pars) {
+    this.dynamicParameters.putAll(pars);
   }
 
 }
