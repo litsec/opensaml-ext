@@ -1,0 +1,16 @@
+org.opensaml.messaging
+org.opensaml.messaging.context
+org.opensaml.messaging.context.httpclient
+org.opensaml.messaging.context.navigate
+org.opensaml.messaging.decoder
+org.opensaml.messaging.decoder.httpclient
+org.opensaml.messaging.decoder.servlet
+org.opensaml.messaging.encoder
+org.opensaml.messaging.encoder.httpclient
+org.opensaml.messaging.encoder.servlet
+org.opensaml.messaging.error
+org.opensaml.messaging.error.servlet
+org.opensaml.messaging.handler
+org.opensaml.messaging.pipeline
+org.opensaml.messaging.pipeline.httpclient
+org.opensaml.messaging.pipeline.servlet
