@@ -46,7 +46,6 @@ import org.springframework.util.Assert;
 import net.shibboleth.utilities.java.support.codec.Base64Support;
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 import net.shibboleth.utilities.java.support.xml.XMLParserException;
-import se.litsec.opensaml.common.validation.ValidatorException;
 import se.litsec.opensaml.saml2.common.assertion.AssertionValidationParametersBuilder;
 import se.litsec.opensaml.saml2.common.assertion.AssertionValidator;
 import se.litsec.opensaml.saml2.metadata.PeerMetadataResolver;
@@ -97,7 +96,7 @@ public class ResponseProcessorImpl implements ResponseProcessor {
   @Override
   public ResponseProcessingResult processSamlResponse(String samlResponse, String relayState, ResponseProcessingInput input,
       PeerMetadataResolver peerMetadataResolver, ValidationContext validationContext) throws ResponseStatusErrorException,
-          ResponseProcessingException {
+      ResponseProcessingException {
 
     try {
       // Step 1: Decode the SAML response message.
@@ -148,9 +147,6 @@ public class ResponseProcessorImpl implements ResponseProcessor {
       //
       return new ResponseProcessingResultImpl(assertion);
     }
-    catch (ValidatorException e) {
-      throw new ResponseProcessingException("Validation of Response message failed: " + e.getMessage(), e);
-    }
     catch (MessageReplayException e) {
       throw new ResponseProcessingException("Message replay: " + e.getMessage(), e);
     }
@@ -160,8 +156,7 @@ public class ResponseProcessorImpl implements ResponseProcessor {
   }
 
   /**
-   * Initializes the component. Will be invoked by the {@link #afterPropertiesSet()}, so this method only needs to
-   * explicitly called if the bean is created outside of the Spring application context.
+   * Initializes the component.
    * 
    * @throws Exception
    *           for initialization errors
@@ -264,6 +259,8 @@ public class ResponseProcessorImpl implements ResponseProcessor {
    *          the relay state that was received
    * @param input
    *          the processing input
+   * @param idpMetadata
+   *          the IdP metadata
    * @param validationContext
    *          optional validation context
    * @throws ResponseValidationException
@@ -271,7 +268,7 @@ public class ResponseProcessorImpl implements ResponseProcessor {
    */
   protected void validateResponse(Response response, String relayState, ResponseProcessingInput input, EntityDescriptor idpMetadata,
       ValidationContext validationContext)
-          throws ResponseValidationException {
+      throws ResponseValidationException {
 
     if (input.getAuthnRequest() == null) {
       String msg = String.format("No AuthnRequest available when processing Response [%s]", logId(response));
@@ -366,8 +363,7 @@ public class ResponseProcessorImpl implements ResponseProcessor {
    *           for validation errors
    */
   protected void validateAssertion(Assertion assertion, Response response, ResponseProcessingInput input, EntityDescriptor idpMetadata,
-      ValidationContext validationContext)
-          throws ValidatorException, ResponseValidationException {
+      ValidationContext validationContext) throws ResponseValidationException {
 
     IDPSSODescriptor descriptor = idpMetadata != null ? idpMetadata.getIDPSSODescriptor(SAMLConstants.SAML20P_NS) : null;
     if (descriptor == null) {
@@ -379,21 +375,21 @@ public class ResponseProcessorImpl implements ResponseProcessor {
     if (authnRequest != null) {
       entityID = authnRequest.getIssuer().getValue();
     }
-    
+
     AssertionValidationParametersBuilder b = AssertionValidationParametersBuilder.builder()
-        .strictValidation(this.responseValidationSettings.isStrictValidation())
-        .allowedClockSkew(this.responseValidationSettings.getAllowedClockSkew())
-        .maxAgeReceivedMessage(this.responseValidationSettings.getMaxAgeResponse())
-        .signatureRequired(this.responseValidationSettings.isRequireSignedAssertions())
-        .signatureValidationCriteriaSet(new CriteriaSet(new RoleDescriptorCriterion(descriptor), new UsageCriterion(UsageType.SIGNING)))
-        .receiveInstant(input.getReceiveInstant())
-        .receiveUrl(input.getReceiveURL())
-        .authnRequest(authnRequest)
-        .expectedIssuer(idpMetadata.getEntityID())
-        .responseIssueInstant(response.getIssueInstant().getMillis())
-        .validAudiences(entityID)
-        .validRecipients(input.getReceiveURL(), entityID);
-    
+      .strictValidation(this.responseValidationSettings.isStrictValidation())
+      .allowedClockSkew(this.responseValidationSettings.getAllowedClockSkew())
+      .maxAgeReceivedMessage(this.responseValidationSettings.getMaxAgeResponse())
+      .signatureRequired(this.responseValidationSettings.isRequireSignedAssertions())
+      .signatureValidationCriteriaSet(new CriteriaSet(new RoleDescriptorCriterion(descriptor), new UsageCriterion(UsageType.SIGNING)))
+      .receiveInstant(input.getReceiveInstant())
+      .receiveUrl(input.getReceiveURL())
+      .authnRequest(authnRequest)
+      .expectedIssuer(idpMetadata.getEntityID())
+      .responseIssueInstant(response.getIssueInstant().getMillis())
+      .validAudiences(entityID)
+      .validRecipients(input.getReceiveURL(), entityID);
+
     if (validationContext != null) {
       b.addStaticParameters(validationContext.getStaticParameters());
       b.addDynamicParameters(validationContext.getDynamicParameters());
@@ -413,7 +409,7 @@ public class ResponseProcessorImpl implements ResponseProcessor {
       break;
     case INVALID:
       log.error("Validation of Assertion failed - {}", context.getValidationFailureMessage());
-      throw new ValidatorException(context);
+      throw new ResponseValidationException(context.getValidationFailureMessage());
     }
   }
 
