@@ -1,0 +1,12 @@
+org.opensaml.xmlsec
+org.opensaml.xmlsec.algorithm
+org.opensaml.xmlsec.algorithm.descriptors
+org.opensaml.xmlsec.config
+org.opensaml.xmlsec.context
+org.opensaml.xmlsec.criterion
+org.opensaml.xmlsec.crypto
+org.opensaml.xmlsec.encryption
+org.opensaml.xmlsec.encryption.support
+org.opensaml.xmlsec.keyinfo
+org.opensaml.xmlsec.signature
+org.opensaml.xmlsec.signature.support

@@ -1,0 +1,17 @@
+org.opensaml.soap.client
+org.opensaml.soap.client.http
+org.opensaml.soap.common
+org.opensaml.soap.messaging
+org.opensaml.soap.messaging.context
+org.opensaml.soap.soap11
+org.opensaml.soap.soap12
+org.opensaml.soap.util
+org.opensaml.soap.wsaddressing
+org.opensaml.soap.wsaddressing.messaging
+org.opensaml.soap.wsaddressing.util
+org.opensaml.soap.wsfed
+org.opensaml.soap.wspolicy
+org.opensaml.soap.wssecurity
+org.opensaml.soap.wssecurity.messaging
+org.opensaml.soap.wssecurity.util
+org.opensaml.soap.wstrust
