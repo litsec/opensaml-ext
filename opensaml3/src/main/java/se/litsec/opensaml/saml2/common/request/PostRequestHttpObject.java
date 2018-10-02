@@ -90,7 +90,7 @@ public class PostRequestHttpObject<T extends RequestAbstractType> extends HTTPPo
 
     // Assign endpoint (sendUrl)
     //
-    this.sendUrl = HTMLEncoder.encodeForHTMLAttribute(endpoint);
+    this.sendUrl = endpoint;
 
     // Assign SAMLRequest
     //
