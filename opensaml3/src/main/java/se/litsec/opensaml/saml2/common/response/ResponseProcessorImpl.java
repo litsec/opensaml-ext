@@ -287,6 +287,7 @@ public class ResponseProcessorImpl implements ResponseProcessor {
       .maxAgeReceivedMessage(this.responseValidationSettings.getMaxAgeResponse())
       .signatureRequired(Boolean.TRUE)
       .signatureValidationCriteriaSet(new CriteriaSet(new RoleDescriptorCriterion(descriptor), new UsageCriterion(UsageType.SIGNING)))
+      .expectedIssuer(idpMetadata.getEntityID())
       .receiveInstant(input.getReceiveInstant())
       .receiveUrl(input.getReceiveURL())
       .authnRequest(input.getAuthnRequest());
