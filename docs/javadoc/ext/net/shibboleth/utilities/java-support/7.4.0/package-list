@@ -1,0 +1,16 @@
+net.shibboleth.utilities.java.support.annotation
+net.shibboleth.utilities.java.support.annotation.constraint
+net.shibboleth.utilities.java.support.codec
+net.shibboleth.utilities.java.support.collection
+net.shibboleth.utilities.java.support.component
+net.shibboleth.utilities.java.support.httpclient
+net.shibboleth.utilities.java.support.logic
+net.shibboleth.utilities.java.support.net
+net.shibboleth.utilities.java.support.primitive
+net.shibboleth.utilities.java.support.resolver
+net.shibboleth.utilities.java.support.resource
+net.shibboleth.utilities.java.support.scripting
+net.shibboleth.utilities.java.support.security
+net.shibboleth.utilities.java.support.service
+net.shibboleth.utilities.java.support.velocity
+net.shibboleth.utilities.java.support.xml
