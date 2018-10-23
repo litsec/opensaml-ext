@@ -6,7 +6,7 @@
   <groupId>se.litsec.opensaml</groupId>
   <artifactId>opensaml3-ext</artifactId>
   <packaging>jar</packaging>
-  <version>1.2.0</version>
+  <version>1.2.1-SNAPSHOT</version>
 
   <name>Litsec :: OpenSAML 3.X utility extensions</name>
   <description>OpenSAML 3.X utility extension library</description>
@@ -50,6 +50,8 @@
     <slf4j.version>1.7.25</slf4j.version>
     <spring.version>4.3.19.RELEASE</spring.version>
     
+    <guava.version>27.0-jre</guava.version>
+    <bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
     <commons-lang.version>2.4</commons-lang.version>
     <joda-time.version>2.9</joda-time.version>    
     <junit.version>4.12</junit.version>
@@ -86,6 +88,19 @@
   </distributionManagement>  
 
   <dependencies>
+  
+    <!-- 
+      Explict dependency to org.bouncycastle:bcprov-jdk15on. OpenSAML 3.4.0 uses 1.59 which has been
+      reported to have vulnerabilities https://app.snyk.io/vuln/SNYK-JAVA-ORGBOUNCYCASTLE-32412 and
+      https://app.snyk.io/vuln/SNYK-JAVA-ORGBOUNCYCASTLE-32369. 
+    -->
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk15on</artifactId>
+      <version>${bcprov-jdk15on.version}</version>
+      <scope>compile</scope>
+      <type>jar</type>
+    </dependency>  
 
     <!-- OpenSAML -->
     <dependency>
@@ -137,6 +152,11 @@
           <groupId>commons-codec</groupId>
           <artifactId>commons-codec</artifactId>
         </exclusion>
+        <exclusion>
+          <!-- Included version is 1.59 which is vulnerable, see above.  -->
+          <groupId>org.bouncycastle</groupId>
+          <artifactId>bcprov-jdk15on</artifactId>
+        </exclusion>        
       </exclusions>
     </dependency>
     
@@ -186,6 +206,18 @@
       <version>${shibboleth.java-support.version}</version>
       <type>jar</type>
       <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <!-- https://app.snyk.io/vuln/SNYK-JAVA-COMGOOGLEGUAVA-32236 -->
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava</artifactId>
+        </exclusion>
+        <exclusion>
+          <!-- Our explicit include of guava introduces a newer version -->
+          <groupId>com.google.code.findbugs</groupId>
+          <artifactId>jsr305</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -199,7 +231,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>20.0</version>
+      <version>${guava.version}</version>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
@@ -319,14 +351,14 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
-      <version>9.3.8.v20160314</version>
+      <version>9.4.12.v20180830</version>
       <scope>test</scope>
     </dependency>
     
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-util</artifactId>
-      <version>9.3.8.v20160314</version>
+      <version>9.4.12.v20180830</version>
       <scope>test</scope>
     </dependency>    
 
@@ -521,7 +553,7 @@
                 <link>https://litsec.github.io/opensaml-ext/javadoc/ext/org/opensaml/opensaml-xmlsec-api/${opensaml.version}/</link>
                 <link>https://litsec.github.io/opensaml-ext/javadoc/ext/org/opensaml/opensaml-xmlsec-impl/${opensaml.version}/</link>
                 <link>https://litsec.github.io/opensaml-ext/javadoc/ext/net/shibboleth/utilities/java-support/${shibboleth.java-support.version}/</link>                
-                <link>https://litsec.github.io/opensaml-ext/javadoc/ext/net/shibboleth/ext/spring-extensions/5.3.0/</link>
+                <link>https://litsec.github.io/opensaml-ext/javadoc/ext/net/shibboleth/ext/spring-extensions/5.4.0/</link>
               </links>
               <detectJavaApiLink>true</detectJavaApiLink>
             </configuration>
