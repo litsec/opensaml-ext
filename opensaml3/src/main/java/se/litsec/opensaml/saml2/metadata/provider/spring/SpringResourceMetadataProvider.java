@@ -17,27 +17,84 @@ package se.litsec.opensaml.saml2.metadata.provider.spring;
 
 import java.io.IOException;
 
+import org.apache.commons.lang.Validate;
+import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
+import org.opensaml.saml.metadata.resolver.MetadataResolver;
+import org.opensaml.saml.metadata.resolver.filter.MetadataFilter;
+import org.opensaml.saml.metadata.resolver.impl.ResourceBackedMetadataResolver;
 import org.springframework.core.io.Resource;
 
-import se.litsec.opensaml.saml2.metadata.provider.FilesystemMetadataProvider;
+import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
+import net.shibboleth.utilities.java.support.resolver.ResolverException;
+import se.litsec.opensaml.saml2.metadata.provider.AbstractMetadataProvider;
+import se.litsec.opensaml.utils.spring.ResourceProxy;
 
 /**
  * Utility class that accepts a Spring Framework {@link org.springframework.core.io.Resource} as the metadata source.
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  */
-public class SpringResourceMetadataProvider extends FilesystemMetadataProvider {
+public class SpringResourceMetadataProvider extends AbstractMetadataProvider {
+
+  /** The underlying resolver. */
+  private ResourceBackedMetadataResolver metadataResolver;
+
+  /** The metadata resource. */
+  private Resource metadataResource;
 
   /**
    * Constructor taking a Spring Framework {@link org.springframework.core.io.Resource} as the metadata source.
    * 
    * @param metadataResource
    *          the metadata source
-   * @throws IOException
-   *           if the given resource can not be represented as a {@code File} object
    */
-  public SpringResourceMetadataProvider(Resource metadataResource) throws IOException {
-    super(metadataResource.getFile());
+  public SpringResourceMetadataProvider(Resource metadataResource) {
+    Validate.notNull(metadataResource, "metadataResource must not be null");
+    this.metadataResource = metadataResource;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public String getID() {
+    return this.metadataResource.getDescription();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public MetadataResolver getMetadataResolver() {
+    return this.metadataResolver;
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  protected void createMetadataResolver(boolean requireValidMetadata, boolean failFastInitialization, MetadataFilter filter)
+      throws ResolverException {
+
+    try {
+      this.metadataResolver = new ResourceBackedMetadataResolver(ResourceProxy.proxy(this.metadataResource));
+      this.metadataResolver.setId(this.getID());
+      this.metadataResolver.setRequireValidMetadata(requireValidMetadata);
+      this.metadataResolver.setFailFastInitialization(failFastInitialization);
+      this.metadataResolver.setMetadataFilter(filter);
+      this.metadataResolver.setParserPool(XMLObjectProviderRegistrySupport.getParserPool());
+    }
+    catch (IOException e) {
+      throw new ResolverException(e);
+    }
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  protected void initializeMetadataResolver() throws ComponentInitializationException {
+    this.metadataResolver.initialize();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  protected void destroyMetadataResolver() {
+    if (this.metadataResolver != null) {
+      this.metadataResolver.destroy();
+    }
   }
 
 }

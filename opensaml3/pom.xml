@@ -6,7 +6,7 @@
   <groupId>se.litsec.opensaml</groupId>
   <artifactId>opensaml3-ext</artifactId>
   <packaging>jar</packaging>
-  <version>1.2.1</version>
+  <version>1.2.2-SNAPSHOT</version>
 
   <name>Litsec :: OpenSAML 3.X utility extensions</name>
   <description>OpenSAML 3.X utility extension library</description>
@@ -46,7 +46,7 @@
 
     <!-- Versions on dependencies -->
     <opensaml.version>3.4.0</opensaml.version>
-    <shibboleth.java-support.version>7.4.0</shibboleth.java-support.version>
+    <shibboleth.java-support.version>7.4.1</shibboleth.java-support.version>
     <slf4j.version>1.7.25</slf4j.version>
     <spring.version>4.3.19.RELEASE</spring.version>
     
