@@ -18,10 +18,20 @@ package se.litsec.opensaml.saml2.attribute;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 import org.opensaml.core.xml.XMLObject;
+import org.opensaml.core.xml.schema.XSAny;
+import org.opensaml.core.xml.schema.XSBoolean;
+import org.opensaml.core.xml.schema.XSBooleanValue;
+import org.opensaml.core.xml.schema.XSDateTime;
+import org.opensaml.core.xml.schema.XSInteger;
 import org.opensaml.core.xml.schema.XSString;
 import org.opensaml.saml.saml2.core.Attribute;
+
+import se.litsec.opensaml.utils.ObjectUtils;
 
 /**
  * Helper methods for accessing attribute values. See also {@link AttributeBuilder}.
@@ -71,8 +81,7 @@ public class AttributeUtils {
   public static <T extends XMLObject> List<T> getAttributeValues(Attribute attribute, Class<T> type) {
     return attribute.getAttributeValues()
       .stream()
-      .filter(type::isInstance)
-      .map(type::cast)
+      .flatMap(o -> mapAttribute(o, type))
       .collect(Collectors.toList());
   }
 
@@ -90,8 +99,7 @@ public class AttributeUtils {
   public static <T extends XMLObject> T getAttributeValue(Attribute attribute, Class<T> type) {
     return attribute.getAttributeValues()
       .stream()
-      .filter(type::isInstance)
-      .map(type::cast)
+      .flatMap(o -> mapAttribute(o, type))
       .findFirst()
       .orElse(null);
   }
@@ -110,6 +118,82 @@ public class AttributeUtils {
       return Optional.empty();
     }
     return attributes.stream().filter(a -> a.getName().equals(name)).findFirst();
+  }
+
+  /**
+   * Helper method that filters attribute values based on the requested type.
+   * 
+   * <p>
+   * The SAML core specification section 2.7.3.1.1 states: "If the data content of an {@code <AttributeValue>} element
+   * is of an XML Schema simple type (such as xs:integer or xs:string), the datatype MAY be declared explicitly by means
+   * of an xsi:type declaration in the {@code <AttributeValue>} element."
+   * </p>
+   * <p>
+   * Therefore this method handles attribute values with no explicit type given for {@code XSString}, {@code XSInteger},
+   * {@code XSBoolean} and {@code XSDateTime}.
+   * </p>
+   * 
+   * @param obj
+   *          the object being streamed
+   * @param type
+   *          the requested type
+   * @return a stream holding one or zero elements
+   */
+  private static <T extends XMLObject, R extends XMLObject> Stream<T> mapAttribute(R obj, Class<T> type) {
+    if (type.isInstance(obj)) {
+      return Stream.of(type.cast(obj));
+    }
+    else if (XSAny.class.isInstance(obj)) {
+      if (type.isAssignableFrom(XSString.class)) {
+        XSString newObject = ObjectUtils.createXMLObject(XSString.class, XSString.TYPE_NAME);
+        newObject.setValue(((XSAny) obj).getTextContent());
+        return Stream.of(type.cast(newObject));
+      }
+      else if (type.isAssignableFrom(XSInteger.class)) {
+        try {
+          Integer v = Integer.parseInt(((XSAny) obj).getTextContent());
+          XSInteger newObject = ObjectUtils.createXMLObject(XSInteger.class, XSInteger.TYPE_NAME);
+          newObject.setValue(v);
+          return Stream.of(type.cast(newObject));
+        }
+        catch (NumberFormatException e) {
+          return Stream.empty();
+        }
+      }
+      else if (type.isAssignableFrom(XSBoolean.class)) {
+        String text = ((XSAny) obj).getTextContent();
+        if (text == null) {
+          return Stream.empty();
+        }
+        Boolean b = ("true".equalsIgnoreCase(text) || "1".equals(text))
+            ? Boolean.TRUE
+            : ("false".equalsIgnoreCase(text) || "0".equals(text)) ? Boolean.FALSE : null;
+        if (b != null) {
+          XSBoolean newObject = ObjectUtils.createXMLObject(XSBoolean.class, XSBoolean.TYPE_NAME);
+          XSBooleanValue newValue = XSBooleanValue.valueOf(text);
+          newObject.setValue(newValue);
+          return Stream.of(type.cast(newObject));
+        }
+      }
+      else if (type.isAssignableFrom(XSDateTime.class)) {
+        String text = ((XSAny) obj).getTextContent();
+        if (text == null) {
+          return Stream.empty();
+        }
+        try {
+          DateTime date = DateTime.parse(text, ISODateTimeFormat.dateTime()
+            .withChronology(org.joda.time.chrono.ISOChronology.getInstanceUTC()));
+          if (date != null) {
+            XSDateTime newObject = ObjectUtils.createXMLObject(XSDateTime.class, XSDateTime.TYPE_NAME);
+            newObject.setValue(date);
+            return Stream.of(type.cast(newObject));
+          }
+        }
+        catch (Exception e) {
+        }
+      }
+    }
+    return Stream.empty();
   }
 
   // Hidden

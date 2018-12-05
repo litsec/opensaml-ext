@@ -54,6 +54,7 @@ import se.litsec.opensaml.utils.KeyStoreUtils;
  * @see HTTPMetadataResolver
  * @see FileBackedHTTPMetadataResolver
  */
+@SuppressWarnings("deprecation")
 public class HTTPMetadataProvider extends AbstractMetadataProvider {
 
   /** Logging instance. */
