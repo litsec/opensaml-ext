@@ -6,7 +6,7 @@
   <groupId>se.litsec.opensaml</groupId>
   <artifactId>opensaml3-ext</artifactId>
   <packaging>jar</packaging>
-  <version>1.2.2-SNAPSHOT</version>
+  <version>1.2.2</version>
 
   <name>Litsec :: OpenSAML 3.X utility extensions</name>
   <description>OpenSAML 3.X utility extension library</description>
@@ -102,7 +102,7 @@
       <type>jar</type>
     </dependency>  
 
-    <!-- OpenSAML -->
+    <!-- OpenSAML -->    
     <dependency>
       <groupId>org.opensaml</groupId>
       <artifactId>opensaml-core</artifactId>
@@ -110,7 +110,11 @@
       <type>jar</type>
       <scope>compile</scope>
       <exclusions>
-        <!-- Uses an older version that we want -->
+        <!-- Uses older version that we want -->
+        <exclusion>
+          <groupId>net.shibboleth.utilities</groupId>
+          <artifactId>java-support</artifactId>
+        </exclusion>
         <exclusion>
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
@@ -124,6 +128,12 @@
       <version>${opensaml.version}</version>
       <type>jar</type>
       <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>net.shibboleth.utilities</groupId>
+          <artifactId>java-support</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -142,6 +152,10 @@
           <groupId>commons-collections</groupId>
           <artifactId>commons-collections</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>net.shibboleth.utilities</groupId>
+          <artifactId>java-support</artifactId>
+        </exclusion>        
       </exclusions>
     </dependency>
     
@@ -160,7 +174,11 @@
           <!-- Included version is 1.59 which is vulnerable, see above.  -->
           <groupId>org.bouncycastle</groupId>
           <artifactId>bcprov-jdk15on</artifactId>
-        </exclusion>        
+        </exclusion>
+        <exclusion>
+          <groupId>net.shibboleth.utilities</groupId>
+          <artifactId>java-support</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     
@@ -169,7 +187,13 @@
       <artifactId>opensaml-security-impl</artifactId>
       <version>${opensaml.version}</version>
       <type>jar</type>
-      <scope>compile</scope>      
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>net.shibboleth.utilities</groupId>
+          <artifactId>java-support</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     
     <dependency>
@@ -177,7 +201,13 @@
       <artifactId>opensaml-xmlsec-api</artifactId>
       <version>${opensaml.version}</version>
       <type>jar</type>
-      <scope>compile</scope>      
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>net.shibboleth.utilities</groupId>
+          <artifactId>java-support</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
         
     <dependency>
@@ -185,7 +215,13 @@
       <artifactId>opensaml-xmlsec-impl</artifactId>
       <version>${opensaml.version}</version>
       <type>jar</type>
-      <scope>compile</scope>      
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>net.shibboleth.utilities</groupId>
+          <artifactId>java-support</artifactId>
+        </exclusion>
+      </exclusions>      
     </dependency>
     
     <dependency>
@@ -193,7 +229,13 @@
       <artifactId>opensaml-messaging-api</artifactId>
       <version>${opensaml.version}</version>
       <type>jar</type>
-      <scope>compile</scope>      
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>net.shibboleth.utilities</groupId>
+          <artifactId>java-support</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     
     <dependency>
@@ -201,9 +243,15 @@
       <artifactId>opensaml-storage-api</artifactId>
       <version>${opensaml.version}</version>
       <type>jar</type>
-      <scope>compile</scope>      
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>net.shibboleth.utilities</groupId>
+          <artifactId>java-support</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
-    
+
     <dependency>
       <groupId>net.shibboleth.utilities</groupId>
       <artifactId>java-support</artifactId>
@@ -222,8 +270,8 @@
           <artifactId>jsr305</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-
+    </dependency>    
+    
     <dependency>
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
