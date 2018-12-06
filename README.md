@@ -4,7 +4,7 @@
 
 # opensaml-ext
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/se.litsec.opensaml/opensaml3-ext/badge.svg)](https://maven-badges.herokuapp.com/maven-central/se.litsec.opensaml/opensaml3-ext) [![Known Vulnerabilities](https://snyk.io/test/github/litsec/opensaml-ext/badge.svg?targetFile=opensaml3%2Fpom.xml)](https://snyk.io/test/github/litsec/opensaml-ext?targetFile=opensaml3%2Fpom.xml)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)[![Maven Central](https://maven-badges.herokuapp.com/maven-central/se.litsec.opensaml/opensaml3-ext/badge.svg)](https://maven-badges.herokuapp.com/maven-central/se.litsec.opensaml/opensaml3-ext) [![Known Vulnerabilities](https://snyk.io/test/github/litsec/opensaml-ext/badge.svg?targetFile=opensaml3%2Fpom.xml)](https://snyk.io/test/github/litsec/opensaml-ext?targetFile=opensaml3%2Fpom.xml)
 
 Utility extensions for OpenSAML 3.X.
 
