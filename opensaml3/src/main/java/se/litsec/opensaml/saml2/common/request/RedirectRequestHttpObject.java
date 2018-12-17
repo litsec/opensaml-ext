@@ -15,8 +15,11 @@
  */
 package se.litsec.opensaml.saml2.common.request;
 
+import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.opensaml.messaging.context.MessageContext;
@@ -37,6 +40,8 @@ import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.shibboleth.utilities.java.support.collection.Pair;
+import net.shibboleth.utilities.java.support.net.URLBuilder;
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
 
@@ -113,7 +118,43 @@ public class RedirectRequestHttpObject<T extends RequestAbstractType> extends HT
     //
     this.removeSignature(this.request);
     String encodedMessage = this.deflateAndBase64Encode(this.request);
-    this.sendUrl = this.buildRedirectURL(messageContext, endpoint, encodedMessage);
+
+    // OpenSAML has a bug in where it calculates the signature over any potential query parameters that
+    // are part of the IdP SingleSignOnService location URL. We implement a work-around for this.
+    //
+    URLBuilder urlBuilder = null;
+    try {
+      urlBuilder = new URLBuilder(endpoint);
+
+      List<Pair<String, String>> queryParams = urlBuilder.getQueryParams();
+      this.removeDisallowedQueryParams(queryParams);
+      if (!queryParams.isEmpty()) {
+        // The work-around kicks in. We can't supply the endpoint as-is. First we need to remove the
+        // query parameters.
+        //
+        // First make a copy ...
+        List<Pair<String, String>> qp = new ArrayList<>(queryParams);
+        // Then clear all query parameters ...
+        queryParams.clear();
+
+        // Build the URL ...
+        String tmpSendUrl = this.buildRedirectURL(messageContext, urlBuilder.buildURL(), encodedMessage);
+
+        // And finally, put the query params back ...
+        urlBuilder = new URLBuilder(tmpSendUrl);
+        queryParams = urlBuilder.getQueryParams();
+        queryParams.addAll(0, qp);
+        
+        this.sendUrl = urlBuilder.buildURL();
+      }
+      else {
+        this.sendUrl = this.buildRedirectURL(messageContext, endpoint, encodedMessage);
+      }
+    }
+    catch (final MalformedURLException e) {
+      throw new MessageEncodingException("Endpoint URL " + endpoint + " is not a valid URL", e);
+    }
+
     logger.trace("Redirect URL is {}", this.sendUrl);
 
     this.httpHeaders.put("Cache-control", "no-cache, no-store");
