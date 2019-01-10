@@ -6,7 +6,7 @@
   <groupId>se.litsec.opensaml</groupId>
   <artifactId>opensaml3-ext</artifactId>
   <packaging>jar</packaging>
-  <version>1.2.3</version>
+  <version>1.2.4-SNAPSHOT</version>
 
   <name>Litsec :: OpenSAML 3.X utility extensions</name>
   <description>OpenSAML 3.X utility extension library</description>
@@ -45,8 +45,8 @@
     <java.version>1.8</java.version>
 
     <!-- Versions on dependencies -->
-    <opensaml.version>3.4.0</opensaml.version>
-    <shibboleth.java-support.version>7.4.1</shibboleth.java-support.version>
+    <opensaml.version>3.4.2</opensaml.version>
+    <shibboleth.java-support.version>7.4.2</shibboleth.java-support.version>
     <slf4j.version>1.7.25</slf4j.version>
     <spring.version>4.3.19.RELEASE</spring.version>
     
@@ -605,7 +605,7 @@
                 <link>https://litsec.github.io/opensaml-ext/javadoc/ext/org/opensaml/opensaml-xmlsec-api/${opensaml.version}/</link>
                 <link>https://litsec.github.io/opensaml-ext/javadoc/ext/org/opensaml/opensaml-xmlsec-impl/${opensaml.version}/</link>
                 <link>https://litsec.github.io/opensaml-ext/javadoc/ext/net/shibboleth/utilities/java-support/${shibboleth.java-support.version}/</link>                
-                <link>https://litsec.github.io/opensaml-ext/javadoc/ext/net/shibboleth/ext/spring-extensions/5.4.0/</link>
+                <link>https://litsec.github.io/opensaml-ext/javadoc/ext/net/shibboleth/ext/spring-extensions/5.4.1/</link>
               </links>
               <detectJavaApiLink>true</detectJavaApiLink>
             </configuration>
