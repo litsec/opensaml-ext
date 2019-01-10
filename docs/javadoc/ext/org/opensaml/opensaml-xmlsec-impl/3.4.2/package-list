@@ -1,0 +1,9 @@
+org.opensaml.xmlsec.config.impl
+org.opensaml.xmlsec.encryption.impl
+org.opensaml.xmlsec.impl
+org.opensaml.xmlsec.keyinfo.impl
+org.opensaml.xmlsec.keyinfo.impl.provider
+org.opensaml.xmlsec.messaging.impl
+org.opensaml.xmlsec.signature.impl
+org.opensaml.xmlsec.signature.support.impl
+org.opensaml.xmlsec.signature.support.impl.provider
