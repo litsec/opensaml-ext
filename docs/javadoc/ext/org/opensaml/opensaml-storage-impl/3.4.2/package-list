@@ -1,0 +1,3 @@
+org.opensaml.storage.impl
+org.opensaml.storage.impl.client
+org.opensaml.storage.impl.memcached

@@ -1,0 +1,9 @@
+org.opensaml.security
+org.opensaml.security.credential
+org.opensaml.security.criteria
+org.opensaml.security.crypto
+org.opensaml.security.httpclient
+org.opensaml.security.messaging
+org.opensaml.security.trust
+org.opensaml.security.x509
+org.opensaml.security.x509.tls

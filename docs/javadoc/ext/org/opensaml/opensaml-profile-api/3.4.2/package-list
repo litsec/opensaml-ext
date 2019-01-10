@@ -1,0 +1,5 @@
+org.opensaml.profile
+org.opensaml.profile.action
+org.opensaml.profile.context
+org.opensaml.profile.context.navigate
+org.opensaml.profile.logic
