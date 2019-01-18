@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2019 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ public class ScopingBuilder extends AbstractSAMLObjectBuilder<Scoping> {
    * Adds the {@code IDPList} element.
    * 
    * @param completeUri
-   *          the {@code GetComplete} element of the {@code IDPList} element
+   *          the {@code GetComplete} element of the {@code IDPList} element (may be {@code null})
    * @param idpEntries
    *          the {@code IDPEntry} elements of the {@code IDPList} element
    * @return the builder
@@ -74,9 +74,11 @@ public class ScopingBuilder extends AbstractSAMLObjectBuilder<Scoping> {
     }
     else {
       IDPList idpList = ObjectUtils.createSamlObject(IDPList.class);
-      GetComplete getComplete = ObjectUtils.createSamlObject(GetComplete.class);
-      getComplete.setGetComplete(completeUri);
-      idpList.setGetComplete(getComplete);
+      if (completeUri != null) {
+        GetComplete getComplete = ObjectUtils.createSamlObject(GetComplete.class);
+        getComplete.setGetComplete(completeUri);
+        idpList.setGetComplete(getComplete);
+      }
       if (idpEntries != null) {
         for (IDPEntry e : idpEntries) {
           try {
@@ -96,7 +98,7 @@ public class ScopingBuilder extends AbstractSAMLObjectBuilder<Scoping> {
    * @see #idpList(String, List)
    * 
    * @param completeUri
-   *          the {@code GetComplete} element of the {@code IDPList} element
+   *          the {@code GetComplete} element of the {@code IDPList} element (may be {@code null})
    * @param idpEntries
    *          the {@code IDPEntry} elements of the {@code IDPList} element
    * @return the builder
