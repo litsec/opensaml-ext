@@ -1,8 +1,0 @@
-org.opensaml.security.config
-org.opensaml.security.credential.criteria.impl
-org.opensaml.security.credential.impl
-org.opensaml.security.httpclient.impl
-org.opensaml.security.messaging.impl
-org.opensaml.security.trust.impl
-org.opensaml.security.x509.impl
-org.opensaml.security.x509.tls.impl

@@ -1,5 +1,0 @@
-org.opensaml.xacml.config
-org.opensaml.xacml.ctx.impl
-org.opensaml.xacml.ctx.provider
-org.opensaml.xacml.impl
-org.opensaml.xacml.policy.impl

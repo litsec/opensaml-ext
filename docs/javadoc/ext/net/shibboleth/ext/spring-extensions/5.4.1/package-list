@@ -1,7 +1,0 @@
-net.shibboleth.ext.spring.config
-net.shibboleth.ext.spring.context
-net.shibboleth.ext.spring.error
-net.shibboleth.ext.spring.factory
-net.shibboleth.ext.spring.resource
-net.shibboleth.ext.spring.service
-net.shibboleth.ext.spring.util
