@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.util.List;
 
+import org.opensaml.saml.saml2.metadata.EncryptionMethod;
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
 import org.opensaml.security.credential.UsageType;
 import org.opensaml.security.x509.X509Credential;
@@ -104,7 +105,7 @@ public class KeyDescriptorFactoryBean extends AbstractSAMLObjectBuilderFactoryBe
    * Assigns a list of encryption methods.
    * <p>
    * Note: the method only accepts algorithm URI:s. If you need to assign other parts of an {@code EncryptionMethod}
-   * object you must install the method manually and not via the builder.
+   * object use {@link #setEncryptionMethodsExt(List)}. 
    * </p>
    * 
    * @param encryptionMethods
@@ -113,6 +114,16 @@ public class KeyDescriptorFactoryBean extends AbstractSAMLObjectBuilderFactoryBe
   public void setEncryptionMethods(List<String> encryptionMethods) {
     this.builder.encryptionMethods(encryptionMethods);
   }
+  
+  /**
+   * Assigns a list of encryption methods.
+   * 
+   * @param encryptionMethods
+   *          list of algorithms
+   */
+  public void setEncryptionMethodsExt(List<EncryptionMethod> encryptionMethods) {
+    this.builder.encryptionMethodsExt(encryptionMethods);
+  }  
 
   /** {@inheritDoc} */
   @Override

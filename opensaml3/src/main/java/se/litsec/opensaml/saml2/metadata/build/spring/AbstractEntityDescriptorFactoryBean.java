@@ -17,6 +17,8 @@ package se.litsec.opensaml.saml2.metadata.build.spring;
 
 import java.util.List;
 
+import org.opensaml.saml.ext.saml2alg.DigestMethod;
+import org.opensaml.saml.ext.saml2alg.SigningMethod;
 import org.opensaml.saml.ext.saml2mdui.UIInfo;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.metadata.ContactPerson;
@@ -118,7 +120,7 @@ public abstract class AbstractEntityDescriptorFactoryBean<T extends AbstractEnti
   public void setEntityCategories(List<String> entityCategories) {
     this._builder().entityCategories(entityCategories);
   }
-  
+
   /**
    * Assigns the {@code mdui:UIInfo} element as an extension to the role descriptor.
    * 
@@ -128,7 +130,7 @@ public abstract class AbstractEntityDescriptorFactoryBean<T extends AbstractEnti
   public void setUiInfoExtension(UIInfo uiInfo) {
     this._builder().uiInfoExtension(uiInfo);
   }
-  
+
   /**
    * Adds the key descriptor elements.
    * 
@@ -140,6 +142,54 @@ public abstract class AbstractEntityDescriptorFactoryBean<T extends AbstractEnti
   }
 
   /**
+   * Adds a ordered list of {@code alg:SigningMethod} elements according to "SAML v2.0 Metadata Profile for Algorithm
+   * Support Version 1.0" to the entity descriptor extensions element.
+   * 
+   * @param signingMethods
+   *          the methods to add
+   * @see #setSigningMethodsRole(List)
+   */
+  public void setSigningMethodsGlobal(List<SigningMethod> signingMethods) {
+    this._builder().signingMethods(false, signingMethods);
+  }
+
+  /**
+   * Adds a ordered list of {@code alg:SigningMethod} elements according to "SAML v2.0 Metadata Profile for Algorithm
+   * Support Version 1.0" to the extensions element of the role descriptor. These extensions have precedence over those
+   * given as extensions to the entity descriptor (see {@link #setSigningMethodsGlobal(List)}).
+   * 
+   * @param signingMethods
+   *          the methods to add
+   */
+  public void setSigningMethodsRole(List<SigningMethod> signingMethods) {
+    this._builder().signingMethods(true, signingMethods);
+  }
+
+  /**
+   * Adds a ordered list of {@code alg:DigestMethod} elements according to "SAML v2.0 Metadata Profile for Algorithm
+   * Support Version 1.0" to the entity descriptor extensions element.
+   * 
+   * @param digestMethods
+   *          the methods to add
+   * @see #setDigestMethodsRole(List)
+   */  
+  public void setDigestMethodsGlobal(List<DigestMethod> digestMethods) {
+    this._builder().digestMethods(false, digestMethods);
+  }
+
+  /**
+   * Adds a ordered list of {@code alg:DigestMethod} elements according to "SAML v2.0 Metadata Profile for Algorithm
+   * Support Version 1.0" to the extensions element of the role descriptor. These extensions have precedence over those
+   * given as extensions to the entity descriptor (see {@link #setDigestMethodsGlobal(List)}).
+   * 
+   * @param digestMethods
+   *          the methods to add
+   */  
+  public void setDigestMethodsRole(List<DigestMethod> digestMethods) {
+    this._builder().digestMethods(true, digestMethods);
+  }
+
+  /**
    * Assigns the {@code md:NameIDFormat} elements.
    * 
    * @param nameIDFormats
@@ -148,7 +198,7 @@ public abstract class AbstractEntityDescriptorFactoryBean<T extends AbstractEnti
   public void setNameIDFormats(List<String> nameIDFormats) {
     this._builder().nameIDFormats(nameIDFormats);
   }
-  
+
   /**
    * Adds {@code md:SingleLogoutService} elements to the {@code SSODescriptor}.
    * 
@@ -158,7 +208,7 @@ public abstract class AbstractEntityDescriptorFactoryBean<T extends AbstractEnti
   public void setSingleLogoutServices(List<SingleLogoutService> singleLogoutServices) {
     this._builder().singleLogoutServices(singleLogoutServices);
   }
-  
+
   /**
    * Assigns the {@code Organization} element to the entity descriptor.
    * 
@@ -168,7 +218,7 @@ public abstract class AbstractEntityDescriptorFactoryBean<T extends AbstractEnti
   public void setOrganization(Organization organization) {
     this._builder().organization(organization);
   }
-  
+
   /**
    * Assigns the {@code ContactPerson} elements to the entity descriptor.
    * 
@@ -178,7 +228,7 @@ public abstract class AbstractEntityDescriptorFactoryBean<T extends AbstractEnti
   public void setContactPersons(List<ContactPerson> contactPersons) {
     this._builder().contactPersons(contactPersons);
   }
-  
+
   /** {@inheritDoc} */
   @Override
   public Class<?> getObjectType() {

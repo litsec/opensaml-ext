@@ -28,6 +28,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.ext.idpdisco.DiscoveryResponse;
+import org.opensaml.saml.ext.saml2alg.DigestMethod;
+import org.opensaml.saml.ext.saml2alg.SigningMethod;
 import org.opensaml.saml.ext.saml2mdattr.EntityAttributes;
 import org.opensaml.saml.ext.saml2mdui.Logo;
 import org.opensaml.saml.ext.saml2mdui.UIInfo;
@@ -36,11 +38,14 @@ import org.opensaml.saml.saml2.core.NameID;
 import org.opensaml.saml.saml2.metadata.AssertionConsumerService;
 import org.opensaml.saml.saml2.metadata.ContactPerson;
 import org.opensaml.saml.saml2.metadata.ContactPersonTypeEnumeration;
+import org.opensaml.saml.saml2.metadata.EncryptionMethod;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
 import org.opensaml.saml.saml2.metadata.SingleSignOnService;
 import org.opensaml.security.credential.UsageType;
+import org.opensaml.xmlsec.encryption.support.EncryptionConstants;
+import org.opensaml.xmlsec.signature.support.SignatureConstants;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.w3c.dom.Element;
@@ -73,6 +78,22 @@ public class EntityDescriptorBuilderTest extends OpenSAMLTestBase {
     LocalDateTime validUntil = LocalDateTime.now();
     validUntil.plusDays(7);
     long cacheDuration = 3600000L;
+    
+    final DigestMethod[] digestMethods = { 
+        DigestMethodBuilder.builder().algorithm(SignatureConstants.ALGO_ID_DIGEST_SHA256).build(), 
+        DigestMethodBuilder.builder().algorithm(SignatureConstants.ALGO_ID_DIGEST_SHA384).build(), 
+        DigestMethodBuilder.builder().algorithm(SignatureConstants.ALGO_ID_DIGEST_SHA512).build() };
+    
+    final SigningMethod[] signingMethods = { 
+        SigningMethodBuilder.builder().algorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256).minKeySize(2048).build(),
+        SigningMethodBuilder.builder().algorithm(SignatureConstants.ALGO_ID_SIGNATURE_ECDSA_SHA512).build() };
+    
+    final EncryptionMethod[] encryptionMethods = {
+      EncryptionMethodBuilder.builder().algorithm(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES256).build(),
+      EncryptionMethodBuilder.builder().algorithm(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128).build(),
+      EncryptionMethodBuilder.builder().algorithm(EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP).build(),
+      EncryptionMethodBuilder.builder().algorithm(EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSA15).build()
+    };
 
     final String[] entityCategories = { "http://id.elegnamnden.se/ec/1.0/loa3-pnr", "http://id.elegnamnden.se/ec/1.0/eidas-naturalperson" };
 
@@ -161,6 +182,8 @@ public class EntityDescriptorBuilderTest extends OpenSAMLTestBase {
           .logos(uiLogos)
           .build())
       .discoveryResponses(discoveryResponses)
+      .signingMethods(true, signingMethods)
+      .digestMethods(false, digestMethods)
       .keyDescriptors(
         KeyDescriptorBuilder.builder()
           .use(UsageType.SIGNING)
@@ -171,6 +194,7 @@ public class EntityDescriptorBuilderTest extends OpenSAMLTestBase {
           .use(UsageType.ENCRYPTION)
           .keyName("Litsec Encrypt")
           .certificate(encryptionCertificate)
+          .encryptionMethods(encryptionMethods)
           .build())
       .nameIDFormats(nameIDFormats)
       .assertionConsumerServices(assertionConsumerServices)
@@ -207,9 +231,28 @@ public class EntityDescriptorBuilderTest extends OpenSAMLTestBase {
       AbstractEntityDescriptorBuilder.ENTITY_CATEGORY_ATTRIBUTE_NAME, entityAttributes.get().getAttributes());
     Assert.assertTrue(entityCategoryAttribute.isPresent());
     Assert.assertEquals(Arrays.asList(entityCategories), AttributeUtils.getAttributeStringValues(entityCategoryAttribute.get()));
+    
+    Assert.assertEquals(3, MetadataUtils.getDigestMethods(ed).size());
+    Assert.assertEquals(3, ed.getExtensions().getUnknownXMLObjects(DigestMethod.DEFAULT_ELEMENT_NAME).size());
+    
+    Assert.assertEquals(2, MetadataUtils.getSigningMethods(ed).size());
+    Assert.assertTrue(ed.getExtensions().getUnknownXMLObjects(SigningMethod.DEFAULT_ELEMENT_NAME).isEmpty());
+    
+    List<DigestMethod> digestList = MetadataUtils.getDigestMethods(ed);
+    Assert.assertEquals(digestMethods[0].getAlgorithm(), digestList.get(0).getAlgorithm());
+    Assert.assertEquals(digestMethods[1].getAlgorithm(), digestList.get(1).getAlgorithm());
+    Assert.assertEquals(digestMethods[2].getAlgorithm(), digestList.get(2).getAlgorithm());
 
     SPSSODescriptor ssoDescriptor = ed.getSPSSODescriptor(SAMLConstants.SAML20P_NS);
-
+    
+    Assert.assertEquals(2, ssoDescriptor.getExtensions().getUnknownXMLObjects(SigningMethod.DEFAULT_ELEMENT_NAME).size());
+    Assert.assertTrue(ssoDescriptor.getExtensions().getUnknownXMLObjects(DigestMethod.DEFAULT_ELEMENT_NAME).isEmpty());
+    
+    List<SigningMethod> signingList = MetadataUtils.getSigningMethods(ed);
+    Assert.assertEquals(signingMethods[0].getAlgorithm(), signingList.get(0).getAlgorithm());
+    Assert.assertEquals(signingMethods[0].getMinKeySize(), signingList.get(0).getMinKeySize());
+    Assert.assertEquals(signingMethods[1].getAlgorithm(), signingList.get(1).getAlgorithm());
+    
     Assert.assertTrue(ssoDescriptor.isAuthnRequestsSigned());
     Assert.assertTrue(ssoDescriptor.getWantAssertionsSigned());
 
@@ -242,6 +285,7 @@ public class EntityDescriptorBuilderTest extends OpenSAMLTestBase {
     Assert.assertEquals(UsageType.ENCRYPTION, ssoDescriptor.getKeyDescriptors().get(1).getUse());
     Assert.assertEquals("Litsec Encrypt", ssoDescriptor.getKeyDescriptors().get(1).getKeyInfo().getKeyNames().get(0).getValue());
     Assert.assertTrue(ssoDescriptor.getKeyDescriptors().get(1).getKeyInfo().getX509Datas().get(0).getX509Certificates().size() == 1);
+    Assert.assertEquals(4, ssoDescriptor.getKeyDescriptors().get(1).getEncryptionMethods().size());
 
     Assert.assertEquals(Arrays.asList(nameIDFormats), ssoDescriptor.getNameIDFormats().stream().map(n -> n.getFormat()).collect(Collectors
       .toList()));

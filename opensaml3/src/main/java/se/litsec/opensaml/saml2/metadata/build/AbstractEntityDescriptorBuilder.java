@@ -24,10 +24,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import javax.xml.namespace.QName;
+
 import org.joda.time.DateTime;
+import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.core.xml.io.UnmarshallingException;
 import org.opensaml.core.xml.util.XMLObjectSupport;
+import org.opensaml.saml.ext.saml2alg.DigestMethod;
+import org.opensaml.saml.ext.saml2alg.SigningMethod;
 import org.opensaml.saml.ext.saml2mdattr.EntityAttributes;
 import org.opensaml.saml.ext.saml2mdui.UIInfo;
 import org.opensaml.saml.saml2.core.Attribute;
@@ -50,9 +55,10 @@ import se.litsec.opensaml.utils.ObjectUtils;
  * Abstract base builder for creating {@code EntityDescriptor} objects using the builder pattern, and optionally a
  * template object.
  * <p>
- * When a template object is used, the builder is created using the {@link #AbstractEntityDescriptorBuilder(InputStream)} 
- * or {@link #AbstractEntityDescriptorBuilder(EntityDescriptor)} constructors. The user may later change, or add, any of
- * the elements and attributes of the template object using the assignment methods.
+ * When a template object is used, the builder is created using the
+ * {@link #AbstractEntityDescriptorBuilder(InputStream)} or {@link #AbstractEntityDescriptorBuilder(EntityDescriptor)}
+ * constructors. The user may later change, or add, any of the elements and attributes of the template object using the
+ * assignment methods.
  * </p>
  * <p>
  * Note that no Signature will be included.
@@ -336,22 +342,10 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
       }
       ssoDescriptor.setExtensions(ObjectUtils.createSamlObject(Extensions.class));
     }
-    Optional<UIInfo> previousUIInfo = MetadataUtils.getMetadataExtension(ssoDescriptor.getExtensions(), UIInfo.class);
-    if (previousUIInfo.isPresent()) {
-      ssoDescriptor.getExtensions().getUnknownXMLObjects().remove(previousUIInfo.get());
-      if (uiInfo == null) {
-        if (ssoDescriptor.getExtensions().getUnknownXMLObjects().isEmpty()) {
-          ssoDescriptor.setExtensions(null);
-        }
-        return this.getThis();
-      }
-    }
-    try {
-      ssoDescriptor.getExtensions().getUnknownXMLObjects().add(XMLObjectSupport.cloneXMLObject(uiInfo));
-    }
-    catch (MarshallingException | UnmarshallingException e) {
-      throw new RuntimeException(e);
-    }
+    this.updateExtensions(ssoDescriptor.getExtensions(), uiInfo != null ? Arrays.asList(uiInfo) : null, UIInfo.DEFAULT_ELEMENT_NAME);
+    if (ssoDescriptor.getExtensions().getUnknownXMLObjects().isEmpty()) {
+      ssoDescriptor.setExtensions(null);
+    }    
     return this.getThis();
   }
 
@@ -385,6 +379,124 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
   }
 
   /**
+   * Adds a ordered list of {@code alg:SigningMethod} elements according to "SAML v2.0 Metadata Profile for Algorithm
+   * Support Version 1.0".
+   * 
+   * @param addToRole
+   *          whether the {@code alg:SigningMethod} elements should be added to an extension under the EntityDescriptor
+   *          or under the role descriptor
+   * @param signingMethods
+   *          the signing methods to add
+   * @return the builder
+   */
+  public T signingMethods(boolean addToRole, List<SigningMethod> signingMethods) {
+
+    Extensions extensions = null;
+
+    if (addToRole) {
+      extensions = this.ssoDescriptor().getExtensions();      
+    }
+    else {
+      extensions = this.object().getExtensions();
+    }
+
+    if (extensions == null) {
+      if (signingMethods == null || signingMethods.isEmpty()) {
+        return this.getThis();
+      }
+      extensions = ObjectUtils.createSamlObject(Extensions.class);
+      if (addToRole) {
+        this.ssoDescriptor().setExtensions(extensions);        
+      }
+      else {
+        this.object().setExtensions(extensions);
+      }
+    }
+    this.updateExtensions(extensions, signingMethods, SigningMethod.DEFAULT_ELEMENT_NAME);
+    if (extensions.getUnknownXMLObjects().isEmpty()) {
+      if (addToRole) {
+        this.ssoDescriptor().setExtensions(null);        
+      }
+      else {
+        this.object().setExtensions(null);
+      }
+    }
+    return this.getThis();
+  }
+
+  /**
+   * @see #signingMethods(boolean, List)
+   * @param addToRole
+   *          whether the {@code alg:SigningMethod} elements should be added to an extension under the EntityDescriptor
+   *          or under the role descriptor
+   * @param signingMethods
+   *          the signing methods to add
+   * @return the builder
+   */
+  public T signingMethods(boolean addToRole, SigningMethod... signingMethods) {
+    return this.signingMethods(addToRole, signingMethods != null ? Arrays.asList(signingMethods) : null);
+  }
+  
+  /**
+   * Adds a ordered list of {@code alg:DigestMethod} elements according to "SAML v2.0 Metadata Profile for Algorithm
+   * Support Version 1.0".
+   * 
+   * @param addToRole
+   *          whether the {@code alg:DigestMethod} elements should be added to an extension under the EntityDescriptor
+   *          or under the role descriptor
+   * @param digestMethods
+   *          the digest methods to add
+   * @return the builder
+   */
+  public T digestMethods(boolean addToRole, List<DigestMethod> digestMethods) {
+
+    Extensions extensions = null;
+
+    if (addToRole) {
+      extensions = this.ssoDescriptor().getExtensions();      
+    }
+    else {
+      extensions = this.object().getExtensions();
+    }
+
+    if (extensions == null) {
+      if (digestMethods == null || digestMethods.isEmpty()) {
+        return this.getThis();
+      }
+      extensions = ObjectUtils.createSamlObject(Extensions.class);
+      if (addToRole) {
+        this.ssoDescriptor().setExtensions(extensions);        
+      }
+      else {
+        this.object().setExtensions(extensions);
+      }
+    }
+    this.updateExtensions(extensions, digestMethods, DigestMethod.DEFAULT_ELEMENT_NAME);
+    if (extensions.getUnknownXMLObjects().isEmpty()) {
+      if (addToRole) {
+        this.ssoDescriptor().setExtensions(null);        
+      }
+      else {
+        this.object().setExtensions(null);
+      }
+    }
+    return this.getThis();
+  }
+
+  /**
+   * @see #digestMethods(boolean, List)
+   * @param addToRole
+   *          whether the {@code alg:DigestMethod} elements should be added to an extension under the EntityDescriptor
+   *          or under the role descriptor
+   * @param digestMethods
+   *          the digest methods to add
+   * @return the builder
+   */
+  public T digestMethods(boolean addToRole, DigestMethod... digestMethods) {
+    return this.digestMethods(addToRole, digestMethods != null ? Arrays.asList(digestMethods) : null);
+  }  
+
+  /**
    * Assigns the {@code md:NameIDFormat} elements.
    * 
    * @param nameIDFormats
@@ -415,7 +527,7 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
   public T nameIDFormats(String... nameIDFormats) {
     return this.nameIDFormats(nameIDFormats != null ? Arrays.asList(nameIDFormats) : null);
   }
-    
+
   /**
    * Adds {@code md:SingleLogoutService} elements to the {@code SSODescriptor}.
    * 
@@ -424,7 +536,7 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
    * @return the builder
    */
   public T singleLogoutServices(List<SingleLogoutService> singleLogoutServices) {
-    SSODescriptor ssoDescriptor = this.ssoDescriptor(); 
+    SSODescriptor ssoDescriptor = this.ssoDescriptor();
     ssoDescriptor.getSingleLogoutServices().clear();
     if (singleLogoutServices == null) {
       return this.getThis();
@@ -446,11 +558,10 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
    * @param singleLogoutServices
    *          single logout service objects (cloned before assignment)
    * @return the builder
-   */  
+   */
   public T singleLogoutServices(SingleLogoutService... singleLogoutServices) {
     return this.singleLogoutServices(singleLogoutServices != null ? Arrays.asList(singleLogoutServices) : null);
   }
-
 
   /**
    * Assigns the {@code Organization} element to the entity descriptor.
@@ -502,4 +613,32 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
     return this.contactPersons(contactPersons != null ? Arrays.asList(contactPersons) : null);
   }
 
+  /**
+   * Support method that updates an {@code Extensions} element with the supplied elements. It first removes any other
+   * matching types before adding the new ones.
+   * 
+   * @param extensions
+   *          the element to update.
+   * @param elements
+   *          the elements to add (may be {@code null} or empty for the remove-case)
+   * @param elementName
+   *          the QName of the types to add
+   */
+  protected <E extends XMLObject> void updateExtensions(Extensions extensions, List<E> elements, QName elementName) {
+    List<XMLObject> previousContent = extensions.getUnknownXMLObjects(elementName);
+    for (XMLObject p : previousContent) {
+      extensions.getUnknownXMLObjects().remove(p);
+    }
+    if (elements == null || elements.isEmpty()) {
+      return;
+    }
+    for (E elm : elements) {
+      try {
+        extensions.getUnknownXMLObjects().add(XMLObjectSupport.cloneXMLObject(elm));
+      }
+      catch (MarshallingException | UnmarshallingException e) {
+        throw new RuntimeException(e);
+      }
+    }
+  }
 }

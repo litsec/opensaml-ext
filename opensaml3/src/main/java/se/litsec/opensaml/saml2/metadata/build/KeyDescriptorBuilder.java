@@ -23,6 +23,9 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
+import org.opensaml.core.xml.io.MarshallingException;
+import org.opensaml.core.xml.io.UnmarshallingException;
+import org.opensaml.core.xml.util.XMLObjectSupport;
 import org.opensaml.saml.saml2.metadata.EncryptionMethod;
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
 import org.opensaml.security.credential.UsageType;
@@ -180,7 +183,7 @@ public class KeyDescriptorBuilder extends AbstractSAMLObjectBuilder<KeyDescripto
    * Assigns a list of encryption methods.
    * <p>
    * Note: the method only accepts algorithm URI:s. If you need to assign other parts of an {@code EncryptionMethod}
-   * object you must install the method manually and not via the builder.
+   * object you must use {@link #encryptionMethodsExt(List)}.
    * </p>
    * 
    * @param algorithms
@@ -188,12 +191,15 @@ public class KeyDescriptorBuilder extends AbstractSAMLObjectBuilder<KeyDescripto
    * @return the builder
    */
   public KeyDescriptorBuilder encryptionMethods(List<String> algorithms) {
-    if (algorithms != null) {
+    if (algorithms != null && !algorithms.isEmpty()) {
       for (String algo : algorithms) {
         EncryptionMethod method = ObjectUtils.createSamlObject(EncryptionMethod.class);
         method.setAlgorithm(algo);
         this.object().getEncryptionMethods().add(method);
       }
+    }
+    else {
+      this.object().getEncryptionMethods().clear();
     }
     return this;
   }
@@ -207,6 +213,41 @@ public class KeyDescriptorBuilder extends AbstractSAMLObjectBuilder<KeyDescripto
    */
   public KeyDescriptorBuilder encryptionMethods(String... algorithms) {
     return this.encryptionMethods(algorithms != null ? Arrays.asList(algorithms) : null);
+  }
+
+  /**
+   * Assigns a list of encryption methods.
+   * 
+   * @param algorithms
+   *          ordered list of encryption methods
+   * @return the builder
+   */
+  public KeyDescriptorBuilder encryptionMethodsExt(List<EncryptionMethod> algorithms) {
+    if (algorithms != null && !algorithms.isEmpty()) {
+      for (EncryptionMethod em : algorithms) {
+        try {
+          this.object().getEncryptionMethods().add(XMLObjectSupport.cloneXMLObject(em));
+        }
+        catch (MarshallingException | UnmarshallingException e) {
+          throw new RuntimeException(e);
+        }
+      }
+    }
+    else {
+      this.object().getEncryptionMethods().clear();
+    }
+    return this;
+  }
+
+  /**
+   * See {@link #encryptionMethodsExt(List)}.
+   * 
+   * @param algorithms
+   *          ordered list of encryption methods
+   * @return the builder
+   */
+  public KeyDescriptorBuilder encryptionMethods(EncryptionMethod... algorithms) {
+    return this.encryptionMethodsExt(algorithms != null ? Arrays.asList(algorithms) : null);
   }
 
 }
