@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 
 import org.opensaml.core.xml.schema.XSString;
 import org.opensaml.saml.common.xml.SAMLConstants;
+import org.opensaml.saml.ext.saml2alg.DigestMethod;
+import org.opensaml.saml.ext.saml2alg.SigningMethod;
 import org.opensaml.saml.ext.saml2mdattr.EntityAttributes;
 import org.opensaml.saml.ext.saml2mdui.Description;
 import org.opensaml.saml.ext.saml2mdui.DisplayName;
@@ -62,7 +64,7 @@ public class MetadataUtils {
     if (extensions == null) {
       return Optional.empty();
     }
-    return extensions.getOrderedChildren()
+    return extensions.getUnknownXMLObjects()
       .stream()
       .filter(e -> clazz.isAssignableFrom(e.getClass()))
       .map(clazz::cast)
@@ -84,7 +86,7 @@ public class MetadataUtils {
     if (extensions == null) {
       return Collections.emptyList();
     }
-    return extensions.getOrderedChildren()
+    return extensions.getUnknownXMLObjects()
       .stream()
       .filter(e -> clazz.isAssignableFrom(e.getClass()))
       .map(clazz::cast)
@@ -207,6 +209,46 @@ public class MetadataUtils {
       }
     }
     return creds;
+  }
+
+  /**
+   * Returns a (possibly) empty list of {@code alg:DigestMethod} elements. "SAML v2.0 Metadata Profile for Algorithm
+   * Support Version 1.0" states that elements found in the extension under the role descriptor has precedence over
+   * those found under the entity descriptor extensions, and the sets should not be combined if both are present.
+   * 
+   * @param ed
+   *          the entity descriptor
+   * @return a list of digest methods (may be empty)
+   */
+  public static List<DigestMethod> getDigestMethods(EntityDescriptor ed) {
+    SSODescriptor descriptor = getSSODescriptor(ed);
+    if (descriptor != null) {
+      List<DigestMethod> methods = getMetadataExtensions(descriptor.getExtensions(), DigestMethod.class);
+      if (!methods.isEmpty()) {
+        return methods;
+      }
+    }
+    return getMetadataExtensions(ed.getExtensions(), DigestMethod.class);
+  }
+
+  /**
+   * Returns a (possibly) empty list of {@code alg:SigningMethod} elements. "SAML v2.0 Metadata Profile for Algorithm
+   * Support Version 1.0" states that elements found in the extension under the role descriptor has precedence over
+   * those found under the entity descriptor extensions, and the sets should not be combined if both are present.
+   * 
+   * @param ed
+   *          the entity descriptor
+   * @return a list of signing methods (may be empty)
+   */
+  public static List<SigningMethod> getSigningMethods(EntityDescriptor ed) {
+    SSODescriptor descriptor = getSSODescriptor(ed);
+    if (descriptor != null) {
+      List<SigningMethod> methods = getMetadataExtensions(descriptor.getExtensions(), SigningMethod.class);
+      if (!methods.isEmpty()) {
+        return methods;
+      }
+    }
+    return getMetadataExtensions(ed.getExtensions(), SigningMethod.class);
   }
 
   /**
