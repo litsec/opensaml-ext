@@ -258,7 +258,7 @@ public class MetadataUtils {
    *          the entity descriptor
    * @return the SSODescriptor
    */
-  private static SSODescriptor getSSODescriptor(EntityDescriptor ed) {
+  public static SSODescriptor getSSODescriptor(EntityDescriptor ed) {
     if (ed.getIDPSSODescriptor(SAMLConstants.SAML20P_NS) != null) {
       return ed.getIDPSSODescriptor(SAMLConstants.SAML20P_NS);
     }

@@ -26,6 +26,7 @@ import org.opensaml.saml.saml2.encryption.EncryptedElementTypeEncryptedKeyResolv
 import org.opensaml.security.credential.Credential;
 import org.opensaml.xmlsec.DecryptionConfiguration;
 import org.opensaml.xmlsec.DecryptionParameters;
+import org.opensaml.xmlsec.encryption.EncryptedData;
 import org.opensaml.xmlsec.encryption.support.ChainingEncryptedKeyResolver;
 import org.opensaml.xmlsec.encryption.support.Decrypter;
 import org.opensaml.xmlsec.encryption.support.DecryptionException;
@@ -164,8 +165,26 @@ public class SAMLObjectDecrypter {
     if (encryptedObject.getEncryptedData() == null) {
       throw new DecryptionException("Object contains no encrypted data");
     }
+    return this.decrypt(encryptedObject.getEncryptedData(), destinationClass);
+  }
 
-    XMLObject object = this.getDecrypter().decryptData(encryptedObject.getEncryptedData());
+  /**
+   * Decrypts the supplied encrypted object into an object of the given type.
+   * 
+   * @param encryptedData
+   *          the encrypted data
+   * @param destinationClass
+   *          the class of the destination object
+   * @param <T>
+   *          the type of the destination object
+   * @return the decrypted element of object T
+   * @throws DecryptionException
+   *           for decryption errors
+   */
+  public <T extends XMLObject> T decrypt(EncryptedData encryptedData, Class<T> destinationClass)
+      throws DecryptionException {
+
+    XMLObject object = this.getDecrypter().decryptData(encryptedData);
     if (!destinationClass.isInstance(object)) {
       throw new DecryptionException(String.format("Decrypted object can not be cast to %s - is %s",
         destinationClass.getSimpleName(), object.getClass().getSimpleName()));
