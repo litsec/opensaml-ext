@@ -15,6 +15,7 @@
  */
 package se.litsec.opensaml.xmlsec;
 
+import org.opensaml.core.config.ConfigurationService;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.criterion.RoleDescriptorCriterion;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
@@ -62,8 +63,7 @@ public class SAMLObjectEncrypter {
   private SAMLMetadataEncryptionParametersResolver encryptionParameterResolver;
 
   /** The default encryption configuration. */
-  private EncryptionConfiguration defaultEncryptionConfiguration = DefaultSecurityConfigurationBootstrap
-    .buildDefaultEncryptionConfiguration();
+  private EncryptionConfiguration defaultEncryptionConfiguration;
 
   /** The encrypter to use. */
   private Encrypter encrypter = new Encrypter();
@@ -77,6 +77,12 @@ public class SAMLObjectEncrypter {
    */
   public SAMLObjectEncrypter() throws ComponentInitializationException {
     this(null);
+    
+    this.defaultEncryptionConfiguration = ConfigurationService.get(EncryptionConfiguration.class);
+    if (this.defaultEncryptionConfiguration == null) {
+      this.defaultEncryptionConfiguration = 
+          DefaultSecurityConfigurationBootstrap.buildDefaultEncryptionConfiguration();
+    }
   }
 
   /**
@@ -91,7 +97,7 @@ public class SAMLObjectEncrypter {
     if (metadataProvider != null) {
       this.metadataProvider = metadataProvider;
     }
-
+    
     MetadataCredentialResolver credentialResolver = new MetadataCredentialResolver();
     credentialResolver.setKeyInfoCredentialResolver(DefaultSecurityConfigurationBootstrap.buildBasicInlineKeyInfoCredentialResolver());
     credentialResolver.initialize();
