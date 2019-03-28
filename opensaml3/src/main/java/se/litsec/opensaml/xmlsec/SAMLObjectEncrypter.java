@@ -77,12 +77,6 @@ public class SAMLObjectEncrypter {
    */
   public SAMLObjectEncrypter() throws ComponentInitializationException {
     this(null);
-    
-    this.defaultEncryptionConfiguration = ConfigurationService.get(EncryptionConfiguration.class);
-    if (this.defaultEncryptionConfiguration == null) {
-      this.defaultEncryptionConfiguration = 
-          DefaultSecurityConfigurationBootstrap.buildDefaultEncryptionConfiguration();
-    }
   }
 
   /**
@@ -96,6 +90,12 @@ public class SAMLObjectEncrypter {
   public SAMLObjectEncrypter(MetadataProvider metadataProvider) throws ComponentInitializationException {
     if (metadataProvider != null) {
       this.metadataProvider = metadataProvider;
+    }
+    
+    this.defaultEncryptionConfiguration = ConfigurationService.get(EncryptionConfiguration.class);
+    if (this.defaultEncryptionConfiguration == null) {
+      this.defaultEncryptionConfiguration = 
+          DefaultSecurityConfigurationBootstrap.buildDefaultEncryptionConfiguration();
     }
     
     MetadataCredentialResolver credentialResolver = new MetadataCredentialResolver();
