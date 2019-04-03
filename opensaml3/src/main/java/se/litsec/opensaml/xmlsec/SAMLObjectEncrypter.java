@@ -91,13 +91,12 @@ public class SAMLObjectEncrypter {
     if (metadataProvider != null) {
       this.metadataProvider = metadataProvider;
     }
-    
+
     this.defaultEncryptionConfiguration = ConfigurationService.get(EncryptionConfiguration.class);
     if (this.defaultEncryptionConfiguration == null) {
-      this.defaultEncryptionConfiguration = 
-          DefaultSecurityConfigurationBootstrap.buildDefaultEncryptionConfiguration();
+      this.defaultEncryptionConfiguration = DefaultSecurityConfigurationBootstrap.buildDefaultEncryptionConfiguration();
     }
-    
+
     MetadataCredentialResolver credentialResolver = new MetadataCredentialResolver();
     credentialResolver.setKeyInfoCredentialResolver(DefaultSecurityConfigurationBootstrap.buildBasicInlineKeyInfoCredentialResolver());
     credentialResolver.initialize();
@@ -131,8 +130,9 @@ public class SAMLObjectEncrypter {
    *          the peer to whom we encrypt for
    * @param configuration
    *          the encryption configuration
-   * @return
+   * @return an {@code EncryptedData} object
    * @throws EncryptionException
+   *           for encryption errors
    */
   public EncryptedData encrypt(XMLObject xmlObject, Peer peer, EncryptionConfiguration configuration) throws EncryptionException {
     Constraint.isNotNull(xmlObject, "xmlObject must not be null");
@@ -263,7 +263,7 @@ public class SAMLObjectEncrypter {
    * Sets the {@link AlgorithmRegistry} instance used when resolving algorithm URIs. Defaults to the registry resolved
    * via {@link AlgorithmSupport#getGlobalAlgorithmRegistry()}.
    * 
-   * @param registry
+   * @param algorithmRegistry
    *          the new algorithm registry instance
    */
   public void setAlgorithmRegistry(AlgorithmRegistry algorithmRegistry) {
