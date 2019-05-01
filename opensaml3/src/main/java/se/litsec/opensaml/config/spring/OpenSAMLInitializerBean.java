@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2019 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,13 @@
  */
 package se.litsec.opensaml.config.spring;
 
+import java.util.List;
+
 import org.springframework.beans.factory.InitializingBean;
 
 import net.shibboleth.utilities.java.support.xml.ParserPool;
-import se.litsec.opensaml.config.OpenSAMLInitializer;
+import se.swedenconnect.opensaml.OpenSAMLInitializer;
+import se.swedenconnect.opensaml.OpenSAMLInitializerConfig;
 
 /**
  * Bean for initializing the OpenSAML 3.X library.
@@ -30,6 +33,9 @@ public class OpenSAMLInitializerBean implements InitializingBean {
 
   /** The initializer bean may be assigned a configured parser pool. */
   private ParserPool parserPool;
+
+  /** Additional custom configuration. */
+  private OpenSAMLInitializerConfig[] customConfiguration;
 
   /**
    * Initializes the OpenSAML library.
@@ -44,7 +50,7 @@ public class OpenSAMLInitializerBean implements InitializingBean {
       if (this.parserPool != null) {
         initializer.setParserPool(this.parserPool);
       }
-      initializer.initialize();
+      initializer.initialize(this.customConfiguration);
     }
     else if (this.parserPool != null) {
       initializer.setParserPool(this.parserPool);
@@ -56,9 +62,22 @@ public class OpenSAMLInitializerBean implements InitializingBean {
    * 
    * @param parserPool
    *          the parserPool to assign
-   */  
+   */
   public void setParserPool(ParserPool parserPool) {
     this.parserPool = parserPool;
+  }
+
+  /**
+   * Sets additional configuration that should be provided in the
+   * {@link OpenSAMLInitializer#initialize(OpenSAMLInitializerConfig...)} call.
+   * 
+   * @param customConfiguration
+   *          additional configuration
+   */
+  public void setCustomConfiguration(List<OpenSAMLInitializerConfig> customConfiguration) {
+    this.customConfiguration = customConfiguration != null
+        ? customConfiguration.stream().toArray(OpenSAMLInitializerConfig[]::new)
+        : new OpenSAMLInitializerConfig[] {};
   }
 
   /**

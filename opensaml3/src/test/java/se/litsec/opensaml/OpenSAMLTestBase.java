@@ -17,7 +17,8 @@ package se.litsec.opensaml;
 
 import org.junit.BeforeClass;
 
-import se.litsec.opensaml.config.OpenSAMLInitializer;
+import se.swedenconnect.opensaml.OpenSAMLInitializer;
+import se.swedenconnect.opensaml.OpenSAMLSecurityExtensionConfig;
 
 /**
  * Abstract base class that initializes OpenSAML for test classes.
@@ -36,7 +37,7 @@ public abstract class OpenSAMLTestBase {
   public static void initializeOpenSAML() throws Exception {
     OpenSAMLInitializer bootstrapper = OpenSAMLInitializer.getInstance();
     if (!bootstrapper.isInitialized()) {
-      bootstrapper.initialize();
+      bootstrapper.initialize(new OpenSAMLSecurityExtensionConfig());
     }
   }
 

@@ -7,6 +7,12 @@
   
   default-lazy-init="false" >
   
-  <bean id="openSamlInitializer" class="se.litsec.opensaml.config.spring.OpenSAMLInitializerBean" scope="singleton" />
+  <bean id="openSamlInitializer" class="se.litsec.opensaml.config.spring.OpenSAMLInitializerBean" scope="singleton">
+    <property name="customConfiguration">
+      <list>
+        <bean class="se.swedenconnect.opensaml.OpenSAMLSecurityExtensionConfig" />
+      </list>
+    </property>
+  </bean>
 
 </beans>
