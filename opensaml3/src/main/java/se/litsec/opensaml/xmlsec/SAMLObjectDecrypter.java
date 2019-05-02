@@ -83,6 +83,10 @@ public class SAMLObjectDecrypter {
     Constraint.isNotEmpty(decryptionCredentials, "At least one credential must be supplied to SAMLObjectDecrypter");
     this.parameters = DecryptionUtils.createDecryptionParameters(
       decryptionCredentials.stream().toArray(Credential[]::new));
+    
+    // Should be assigned explicitly
+    this.parameters.setBlacklistedAlgorithms(Collections.emptyList());
+    this.parameters.setWhitelistedAlgorithms(Collections.emptyList());    
   }
 
   /**
