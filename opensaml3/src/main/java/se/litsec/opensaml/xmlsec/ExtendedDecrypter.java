@@ -58,6 +58,7 @@ import com.google.common.base.Strings;
 
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
+import se.swedenconnect.opensaml.xmlsec.encryption.support.Pkcs11Decrypter;
 
 /**
  * An extension of OpenSAML:s {@link Decrypter} implementation that handles the problem that when using the SunPKCS11
@@ -67,9 +68,13 @@ import net.shibboleth.utilities.java.support.resolver.ResolverException;
  * "https://stackoverflow.com/questions/23844694/bad-padding-exception-rsa-ecb-oaepwithsha-256andmgf1padding-in-pkcs11?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa">
  * Stack overflow</a>.
  * </p>
+ * <p>
+ * Deprecated: Use {@link Pkcs11Decrypter} instead.
+ * </p>
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  */
+@Deprecated
 public class ExtendedDecrypter extends Decrypter {
 
   /** Class logger. */
