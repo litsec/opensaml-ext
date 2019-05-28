@@ -109,7 +109,13 @@
       <artifactId>opensaml-security-ext</artifactId>
       <version>${opensaml-security-ext.version}</version>
       <type>jar</type>
-      <scope>compile</scope>      
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.velocity</groupId>
+          <artifactId>velocity</artifactId>
+        </exclusion>
+      </exclusions>      
     </dependency>
     
     <dependency>
