@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2019 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -345,7 +345,7 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
     this.updateExtensions(ssoDescriptor.getExtensions(), uiInfo != null ? Arrays.asList(uiInfo) : null, UIInfo.DEFAULT_ELEMENT_NAME);
     if (ssoDescriptor.getExtensions().getUnknownXMLObjects().isEmpty()) {
       ssoDescriptor.setExtensions(null);
-    }    
+    }
     return this.getThis();
   }
 
@@ -394,7 +394,7 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
     Extensions extensions = null;
 
     if (addToRole) {
-      extensions = this.ssoDescriptor().getExtensions();      
+      extensions = this.ssoDescriptor().getExtensions();
     }
     else {
       extensions = this.object().getExtensions();
@@ -406,7 +406,7 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
       }
       extensions = ObjectUtils.createSamlObject(Extensions.class);
       if (addToRole) {
-        this.ssoDescriptor().setExtensions(extensions);        
+        this.ssoDescriptor().setExtensions(extensions);
       }
       else {
         this.object().setExtensions(extensions);
@@ -415,7 +415,7 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
     this.updateExtensions(extensions, signingMethods, SigningMethod.DEFAULT_ELEMENT_NAME);
     if (extensions.getUnknownXMLObjects().isEmpty()) {
       if (addToRole) {
-        this.ssoDescriptor().setExtensions(null);        
+        this.ssoDescriptor().setExtensions(null);
       }
       else {
         this.object().setExtensions(null);
@@ -436,7 +436,7 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
   public T signingMethods(boolean addToRole, SigningMethod... signingMethods) {
     return this.signingMethods(addToRole, signingMethods != null ? Arrays.asList(signingMethods) : null);
   }
-  
+
   /**
    * Adds a ordered list of {@code alg:DigestMethod} elements according to "SAML v2.0 Metadata Profile for Algorithm
    * Support Version 1.0".
@@ -453,7 +453,7 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
     Extensions extensions = null;
 
     if (addToRole) {
-      extensions = this.ssoDescriptor().getExtensions();      
+      extensions = this.ssoDescriptor().getExtensions();
     }
     else {
       extensions = this.object().getExtensions();
@@ -465,7 +465,7 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
       }
       extensions = ObjectUtils.createSamlObject(Extensions.class);
       if (addToRole) {
-        this.ssoDescriptor().setExtensions(extensions);        
+        this.ssoDescriptor().setExtensions(extensions);
       }
       else {
         this.object().setExtensions(extensions);
@@ -474,7 +474,7 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
     this.updateExtensions(extensions, digestMethods, DigestMethod.DEFAULT_ELEMENT_NAME);
     if (extensions.getUnknownXMLObjects().isEmpty()) {
       if (addToRole) {
-        this.ssoDescriptor().setExtensions(null);        
+        this.ssoDescriptor().setExtensions(null);
       }
       else {
         this.object().setExtensions(null);
@@ -494,7 +494,7 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
    */
   public T digestMethods(boolean addToRole, DigestMethod... digestMethods) {
     return this.digestMethods(addToRole, digestMethods != null ? Arrays.asList(digestMethods) : null);
-  }  
+  }
 
   /**
    * Assigns the {@code md:NameIDFormat} elements.
@@ -623,6 +623,8 @@ public abstract class AbstractEntityDescriptorBuilder<T extends AbstractSAMLObje
    *          the elements to add (may be {@code null} or empty for the remove-case)
    * @param elementName
    *          the QName of the types to add
+   * @param <E>
+   *          the extension type
    */
   protected <E extends XMLObject> void updateExtensions(Extensions extensions, List<E> elements, QName elementName) {
     List<XMLObject> previousContent = extensions.getUnknownXMLObjects(elementName);
