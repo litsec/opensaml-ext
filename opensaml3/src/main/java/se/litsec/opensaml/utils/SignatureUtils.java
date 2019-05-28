@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2019 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.saml.common.SignableSAMLObject;
 import org.opensaml.security.credential.Credential;
 import org.opensaml.xmlsec.SecurityConfigurationSupport;
+import org.opensaml.xmlsec.SignatureSigningConfiguration;
 import org.opensaml.xmlsec.SignatureSigningParameters;
 import org.opensaml.xmlsec.criterion.SignatureSigningConfigurationCriterion;
 import org.opensaml.xmlsec.impl.BasicSignatureSigningConfiguration;
@@ -51,6 +52,30 @@ public class SignatureUtils {
    *           for signature creation errors
    */
   public static <T extends SignableSAMLObject> void sign(T object, Credential signingCredentials) throws SignatureException {
+    sign(object, signingCredentials, SecurityConfigurationSupport.getGlobalSignatureSigningConfiguration());
+  }
+
+  /**
+   * Signs the supplied SAML object using the supplied credentials and signature configuration.
+   * 
+   * @param object
+   *          object to sign
+   * @param signingCredentials
+   *          signature credentials
+   * @param config
+   *          signature configuration
+   * @param <T>
+   *          the object type
+   * @throws SignatureException
+   *           for signature creation errors
+   */
+  public static <T extends SignableSAMLObject> void sign(T object, Credential signingCredentials, SignatureSigningConfiguration config)
+      throws SignatureException {
+    
+    if (config == null) {
+      config = SecurityConfigurationSupport.getGlobalSignatureSigningConfiguration();
+    }
+    
     try {
       object.setSignature(null);
 
@@ -58,8 +83,7 @@ public class SignatureUtils {
       signatureCreds.setSigningCredentials(Collections.singletonList(signingCredentials));
 
       BasicSignatureSigningParametersResolver signatureParametersResolver = new BasicSignatureSigningParametersResolver();
-      CriteriaSet criteriaSet = new CriteriaSet(new SignatureSigningConfigurationCriterion(SecurityConfigurationSupport
-        .getGlobalSignatureSigningConfiguration(), signatureCreds));
+      CriteriaSet criteriaSet = new CriteriaSet(new SignatureSigningConfigurationCriterion(config, signatureCreds));
 
       SignatureSigningParameters parameters = signatureParametersResolver.resolveSingle(criteriaSet);
       SignatureSupport.signObject(object, parameters);

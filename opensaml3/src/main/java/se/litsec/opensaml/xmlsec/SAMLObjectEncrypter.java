@@ -15,7 +15,6 @@
  */
 package se.litsec.opensaml.xmlsec;
 
-import org.opensaml.core.config.ConfigurationService;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.criterion.RoleDescriptorCriterion;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
@@ -25,6 +24,7 @@ import org.opensaml.security.credential.UsageType;
 import org.opensaml.security.criteria.UsageCriterion;
 import org.opensaml.xmlsec.EncryptionConfiguration;
 import org.opensaml.xmlsec.EncryptionParameters;
+import org.opensaml.xmlsec.SecurityConfigurationSupport;
 import org.opensaml.xmlsec.algorithm.AlgorithmRegistry;
 import org.opensaml.xmlsec.algorithm.AlgorithmSupport;
 import org.opensaml.xmlsec.config.impl.DefaultSecurityConfigurationBootstrap;
@@ -93,7 +93,7 @@ public class SAMLObjectEncrypter {
       this.metadataProvider = metadataProvider;
     }
 
-    this.defaultEncryptionConfiguration = ConfigurationService.get(EncryptionConfiguration.class);
+    this.defaultEncryptionConfiguration = SecurityConfigurationSupport.getGlobalEncryptionConfiguration(); 
     if (this.defaultEncryptionConfiguration == null) {
       this.defaultEncryptionConfiguration = ExtendedDefaultSecurityConfigurationBootstrap.buildDefaultEncryptionConfiguration();
     }
@@ -241,8 +241,7 @@ public class SAMLObjectEncrypter {
   /**
    * Sets the default encryption configuration to use.
    * <p>
-   * If not assigned, the {@link DefaultSecurityConfigurationBootstrap#buildDefaultEncryptionConfiguration()} will be
-   * used as default.
+   * If not assigned, the system defaults will be used.
    * </p>
    * 
    * @param encryptionConfiguration
