@@ -70,25 +70,7 @@ If you are using the OpenSAML 2.X version of the library (with limited features)
 ```
 ### Initializing the OpenSAML library
 
-The OpenSAML library needs to be initialized before it can be used. The opensaml-ext library offers a simple default way of doing this.
-
-In order to initialize the OpenSAML library, include the following code somewhere in your application. It must be exectuted before any other code that is dependent on OpenSAML runs.
-
-```
-OpenSAMLInitializer.getInstance().initialize();
-```
-
-The OpenSAMLInitializer may also be supplied a customized parser pool. If none is assigned, a default parser pool is used.
-
-If you are using opensaml-ext in a Spring environment you may use the `OpenSAMLInitializerBean` to initialize OpenSAML. Include the following bean declaration in your Spring XML context:
-
-```
-<bean id="openSamlInitializer" 
-      class="se.litsec.opensaml.config.spring.OpenSAMLInitializerBean" 
-      scope="singleton" 
-      lazy-init="false" />
-```
-
+See <https://github.com/swedenconnect/opensaml-security-ext>.
 
 Copyright &copy; 2016-2019, [Litsec AB](http://www.litsec.se). Licensed under version 2.0 of the [Apache License](http://www.apache.org/licenses/LICENSE-2.0).
 
