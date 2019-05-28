@@ -6,7 +6,7 @@
   <groupId>se.litsec.opensaml</groupId>
   <artifactId>opensaml3-ext</artifactId>
   <packaging>jar</packaging>
-  <version>1.2.5</version>
+  <version>1.3.0-SNAPSHOT</version>
 
   <name>Litsec :: OpenSAML 3.X utility extensions</name>
   <description>OpenSAML 3.X utility extension library</description>
@@ -47,6 +47,7 @@
     <!-- Versions on dependencies -->
     <opensaml.version>3.4.2</opensaml.version>
     <shibboleth.java-support.version>7.4.2</shibboleth.java-support.version>
+    <opensaml-security-ext.version>1.0.2</opensaml-security-ext.version>
     <slf4j.version>1.7.25</slf4j.version>
     <spring.version>4.3.19.RELEASE</spring.version>
     
@@ -102,7 +103,21 @@
       <type>jar</type>
     </dependency>  
 
-    <!-- OpenSAML -->    
+    <!-- OpenSAML -->
+    <dependency>
+      <groupId>se.swedenconnect.opensaml</groupId>
+      <artifactId>opensaml-security-ext</artifactId>
+      <version>${opensaml-security-ext.version}</version>
+      <type>jar</type>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.velocity</groupId>
+          <artifactId>velocity</artifactId>
+        </exclusion>
+      </exclusions>      
+    </dependency>
+    
     <dependency>
       <groupId>org.opensaml</groupId>
       <artifactId>opensaml-core</artifactId>
@@ -403,7 +418,7 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
-      <version>9.4.12.v20180830</version>
+      <version>9.4.17.v20190418</version>
       <scope>test</scope>
     </dependency>
     
@@ -589,6 +604,7 @@
                 <link>https://build.shibboleth.net/nexus/content/sites/site/java-support/7.2.0/apidocs/</link>
                 <link>https://build.shibboleth.net/nexus/content/sites/site/spring-extensions/5.2.0/apidocs/</link>
                 -->
+                <link>https://docs.swedenconnect.se/opensaml-security-ext/javadoc/${opensaml-security-ext.version}</link>
                 <link>https://litsec.github.io/opensaml-javadoc-mirror/org/opensaml/opensaml-core/${opensaml.version}/</link>
                 <link>https://litsec.github.io/opensaml-javadoc-mirror/org/opensaml/opensaml-messaging-api/${opensaml.version}/</link>
                 <link>https://litsec.github.io/opensaml-javadoc-mirror/org/opensaml/opensaml-messaging-impl/${opensaml.version}/</link>

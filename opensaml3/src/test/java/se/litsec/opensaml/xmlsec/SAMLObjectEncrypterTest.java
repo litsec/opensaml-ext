@@ -264,7 +264,7 @@ public class SAMLObjectEncrypterTest extends OpenSAMLTestBase {
 
     Assert.assertEquals(CONTENTS, decryptedMsg);
   }  
-    
+  
   private String decrypt(EncryptedData encrypted, Resource jks, String password, String alias) throws Exception {
     KeyStore keyStore = KeyStoreUtils.loadKeyStore(jks.getInputStream(), password, "JKS");
     Credential cred = new KeyStoreX509CredentialAdapter(keyStore, alias, password.toCharArray());

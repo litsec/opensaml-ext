@@ -24,8 +24,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import se.litsec.opensaml.config.OpenSAMLInitializer;
 import se.litsec.opensaml.utils.ObjectUtils;
+import se.swedenconnect.opensaml.OpenSAMLInitializer;
 
 /**
  * Test cases for {@code OpenSAMLInitializerBean}.

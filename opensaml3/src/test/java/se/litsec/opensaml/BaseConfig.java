@@ -24,7 +24,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
 
-import se.litsec.opensaml.config.OpenSAMLInitializer;
+import se.swedenconnect.opensaml.OpenSAMLInitializer;
+import se.swedenconnect.opensaml.OpenSAMLSecurityExtensionConfig;
 
 /**
  * Base Spring configuration file for tests.
@@ -46,7 +47,7 @@ public class BaseConfig {
   public OpenSAMLInitializer openSAMLInitializer() throws Exception {
     OpenSAMLInitializer bootstrapper = OpenSAMLInitializer.getInstance();
     if (!bootstrapper.isInitialized()) {
-      bootstrapper.initialize();
+      bootstrapper.initialize(new OpenSAMLSecurityExtensionConfig());
     }
     return bootstrapper;
   }
@@ -64,7 +65,7 @@ public class BaseConfig {
   public X509Certificate samlSigningCertificate(@Value("${litsec.saml.signing-cert}") Resource location) throws Exception {
     return this.getCertificate(location);
   }
-  
+
   /**
    * Bean for SAML encryption certificate used in tests.
    * 
@@ -77,8 +78,8 @@ public class BaseConfig {
   @Bean(name = "samlEncryptionCertificate")
   public X509Certificate samlEncryptionCertificate(@Value("${litsec.saml.encryption-cert}") Resource location) throws Exception {
     return this.getCertificate(location);
-  }  
-  
+  }
+
   private X509Certificate getCertificate(Resource location) throws Exception {
     return (X509Certificate) CertificateFactory.getInstance("X.509").generateCertificate(location.getInputStream());
   }

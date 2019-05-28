@@ -15,48 +15,31 @@
  */
 package se.litsec.opensaml.xmlsec;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.saml2.core.EncryptedElementType;
-import org.opensaml.saml.saml2.encryption.EncryptedElementTypeEncryptedKeyResolver;
 import org.opensaml.security.credential.Credential;
 import org.opensaml.xmlsec.DecryptionConfiguration;
 import org.opensaml.xmlsec.DecryptionParameters;
 import org.opensaml.xmlsec.encryption.EncryptedData;
-import org.opensaml.xmlsec.encryption.support.ChainingEncryptedKeyResolver;
 import org.opensaml.xmlsec.encryption.support.Decrypter;
 import org.opensaml.xmlsec.encryption.support.DecryptionException;
-import org.opensaml.xmlsec.encryption.support.InlineEncryptedKeyResolver;
-import org.opensaml.xmlsec.encryption.support.SimpleKeyInfoReferenceEncryptedKeyResolver;
-import org.opensaml.xmlsec.encryption.support.SimpleRetrievalMethodEncryptedKeyResolver;
-import org.opensaml.xmlsec.keyinfo.impl.ChainingKeyInfoCredentialResolver;
-import org.opensaml.xmlsec.keyinfo.impl.CollectionKeyInfoCredentialResolver;
-import org.opensaml.xmlsec.keyinfo.impl.LocalKeyInfoCredentialResolver;
-import org.opensaml.xmlsec.keyinfo.impl.StaticKeyInfoCredentialResolver;
-import org.opensaml.xmlsec.keyinfo.impl.provider.DEREncodedKeyValueProvider;
-import org.opensaml.xmlsec.keyinfo.impl.provider.DSAKeyValueProvider;
-import org.opensaml.xmlsec.keyinfo.impl.provider.InlineX509DataProvider;
-import org.opensaml.xmlsec.keyinfo.impl.provider.RSAKeyValueProvider;
+
+import net.shibboleth.utilities.java.support.logic.Constraint;
+import se.swedenconnect.opensaml.xmlsec.encryption.support.DecryptionUtils;
+import se.swedenconnect.opensaml.xmlsec.encryption.support.Pkcs11Decrypter;
 
 /**
  * A support bean for easy decryption.
  * <p>
  * For some reason, OpenSAML offers two ways to represent decryption parameters, the {@link DecryptionParameters} and
  * the {@link DecryptionConfiguration}. This bean supports being initialized by either of these two, but also, and
- * perhaps easier to use; it supports initialization with just the encryption credentials and assigns the following
- * defaults:
+ * perhaps easier to use; it supports initialization with just the encryption credentials and assigns the defaults from
+ * {@link DecryptionUtils#createDecryptionParameters(Credential...)}.
  * </p>
- * <ul>
- * <li>For the encrypted key resolver a {@link ChainingKeyInfoCredentialResolver} instance is used that chains a
- * {@link LocalKeyInfoCredentialResolver} and a {@link InlineEncryptedKeyResolver}.</li>
- * <li>For the key encryption key resolver a {@link ChainingEncryptedKeyResolver} instance chaining the resolvers:
- * {@link InlineEncryptedKeyResolver}, {@link EncryptedElementTypeEncryptedKeyResolver},
- * {@link SimpleRetrievalMethodEncryptedKeyResolver} and {@link SimpleKeyInfoReferenceEncryptedKeyResolver}.</li>
- * </ul>
  * 
  * @author Martin Lindström (martin.lindstrom@litsec.se)
  */
@@ -97,21 +80,13 @@ public class SAMLObjectDecrypter {
    *          decryption credentials
    */
   public SAMLObjectDecrypter(List<Credential> decryptionCredentials) {
-    this.parameters = new DecryptionParameters();
-
-    ChainingKeyInfoCredentialResolver kekKeyInfoCredentialResolver = new ChainingKeyInfoCredentialResolver(Arrays.asList(
-      new LocalKeyInfoCredentialResolver(
-        Arrays.asList(new RSAKeyValueProvider(), new DSAKeyValueProvider(), new DEREncodedKeyValueProvider(), new InlineX509DataProvider()),
-        new CollectionKeyInfoCredentialResolver(decryptionCredentials)),
-      new StaticKeyInfoCredentialResolver(decryptionCredentials)));
-
-    this.parameters.setKEKKeyInfoCredentialResolver(kekKeyInfoCredentialResolver);
-
-    ChainingEncryptedKeyResolver encryptedKeyResolver = new ChainingEncryptedKeyResolver(Arrays.asList(
-      new InlineEncryptedKeyResolver(), new EncryptedElementTypeEncryptedKeyResolver(),
-      new SimpleRetrievalMethodEncryptedKeyResolver(), new SimpleKeyInfoReferenceEncryptedKeyResolver()));
-
-    this.parameters.setEncryptedKeyResolver(encryptedKeyResolver);
+    Constraint.isNotEmpty(decryptionCredentials, "At least one credential must be supplied to SAMLObjectDecrypter");
+    this.parameters = DecryptionUtils.createDecryptionParameters(
+      decryptionCredentials.stream().toArray(Credential[]::new));
+    
+    // Should be assigned explicitly
+    this.parameters.setBlacklistedAlgorithms(Collections.emptyList());
+    this.parameters.setWhitelistedAlgorithms(Collections.emptyList());    
   }
 
   /**
@@ -200,10 +175,9 @@ public class SAMLObjectDecrypter {
   private synchronized Decrypter getDecrypter() {
     if (this.decrypter == null) {
       if (this.pkcs11Workaround) {
-        ExtendedDecrypter ed = new ExtendedDecrypter(this.parameters);
-        ed.setTestMode(this.pkcs11testMode);
-        ed.init();
-        this.decrypter = ed;
+        Pkcs11Decrypter p11Decrypter = new Pkcs11Decrypter(this.parameters);
+        p11Decrypter.setTestMode(this.pkcs11testMode);
+        this.decrypter = p11Decrypter;
       }
       else {
         this.decrypter = new Decrypter(this.parameters);

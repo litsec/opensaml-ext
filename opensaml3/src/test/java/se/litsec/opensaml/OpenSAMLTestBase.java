@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2019 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,10 @@ package se.litsec.opensaml;
 
 import org.junit.BeforeClass;
 
-import se.litsec.opensaml.config.OpenSAMLInitializer;
+import se.swedenconnect.opensaml.OpenSAMLInitializer;
+import se.swedenconnect.opensaml.OpenSAMLSecurityDefaultsConfig;
+import se.swedenconnect.opensaml.OpenSAMLSecurityExtensionConfig;
+import se.swedenconnect.opensaml.xmlsec.config.DefaultSecurityConfiguration;
 
 /**
  * Abstract base class that initializes OpenSAML for test classes.
@@ -36,7 +39,9 @@ public abstract class OpenSAMLTestBase {
   public static void initializeOpenSAML() throws Exception {
     OpenSAMLInitializer bootstrapper = OpenSAMLInitializer.getInstance();
     if (!bootstrapper.isInitialized()) {
-      bootstrapper.initialize();
+      bootstrapper.initialize(
+        new OpenSAMLSecurityDefaultsConfig(new DefaultSecurityConfiguration()),
+        new OpenSAMLSecurityExtensionConfig());
     }
   }
 
