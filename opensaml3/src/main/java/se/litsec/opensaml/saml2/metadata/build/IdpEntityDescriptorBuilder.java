@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2019 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,6 +100,45 @@ public class IdpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<
     super(template);
   }
 
+  /**
+   * Utility method that creates an {@code IdpEntityDescriptorBuilder} instance.
+   * 
+   * @return an {@code IdpEntityDescriptorBuilder} instance
+   */
+  public static IdpEntityDescriptorBuilder builder() {
+    return new IdpEntityDescriptorBuilder();
+  }
+
+  /**
+   * Utility method that creates an {@code IdpEntityDescriptorBuilder} instance from a supplied input stream.
+   * 
+   * @param resource
+   *          the template resource
+   * @throws IOException
+   *           if the resource can not be read
+   * @throws UnmarshallingException
+   *           for unmarshalling errors
+   * @throws XMLParserException
+   *           for XML parsing errors
+   */
+  public static IdpEntityDescriptorBuilder builder(InputStream resource) throws XMLParserException, UnmarshallingException, IOException {
+    return new IdpEntityDescriptorBuilder(resource);
+  }
+
+  /**
+   * Utility method that creates an {@code IdpEntityDescriptorBuilder} instance from a supplied template.
+   * 
+   * @param template
+   *          the template
+   * @throws UnmarshallingException
+   *           for unmarshalling errors
+   * @throws MarshallingException
+   *           for marshalling errors
+   */
+  public static IdpEntityDescriptorBuilder builder(EntityDescriptor template) throws UnmarshallingException, MarshallingException {
+    return new IdpEntityDescriptorBuilder(template);
+  }
+
   /** {@inheritDoc} */
   @Override
   protected IdpEntityDescriptorBuilder getThis() {
@@ -125,7 +164,7 @@ public class IdpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<
     }
     return this.object().getIDPSSODescriptor(SAMLConstants.SAML20P_NS) != null;
   }
-  
+
   /**
    * Assigns the {@code WantAuthnRequestsSigned} attribute of the {@code md:IDPSSODescriptor} element.
    * 
@@ -161,7 +200,9 @@ public class IdpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<
         Collections.singletonList(ASSURANCE_CERTIFICATION_ATTRIBUTE_TEMPLATE.createBuilder().value(uris).build()));
     }
     List<Attribute> attributeList = new ArrayList<>();
-    entityAttributes.get().getAttributes().stream()
+    entityAttributes.get()
+      .getAttributes()
+      .stream()
       .filter(a -> !ASSURANCE_CERTIFICATION_ATTRIBUTE_NAME.equals(a.getName()))
       .forEach(attributeList::add);
     if (uris != null) {
@@ -169,7 +210,7 @@ public class IdpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<
     }
     return this.entityAttributesExtension(attributeList);
   }
-  
+
   /**
    * @see #assuranceCertificationUris(List)
    * 
@@ -177,11 +218,11 @@ public class IdpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<
    *          the assurance URI values that should be added
    * @return the builder
    * @see #entityAttributesExtension(List)
-   */  
+   */
   public IdpEntityDescriptorBuilder assuranceCertificationUris(String... uris) {
     return this.assuranceCertificationUris(uris != null ? Arrays.asList(uris) : null);
   }
-  
+
   /**
    * Adds {@code md:SingleSignOnService} elements to the {@code IDPSSODescriptor}.
    * 
@@ -212,7 +253,7 @@ public class IdpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<
    * @param singleSignOnServices
    *          single sign on service objects (cloned before assignment)
    * @return the builder
-   */  
+   */
   public IdpEntityDescriptorBuilder singleSignOnServices(SingleSignOnService... singleSignOnServices) {
     return this.singleSignOnServices(singleSignOnServices != null ? Arrays.asList(singleSignOnServices) : null);
   }

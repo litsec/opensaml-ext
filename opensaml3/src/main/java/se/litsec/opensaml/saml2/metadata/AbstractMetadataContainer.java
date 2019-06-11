@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2019 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import org.opensaml.saml.common.SignableSAMLObject;
 import org.opensaml.saml.saml2.common.CacheableSAMLObject;
 import org.opensaml.saml.saml2.common.TimeBoundSAMLObject;
 import org.opensaml.security.x509.X509Credential;
+import org.opensaml.xmlsec.SecurityConfigurationSupport;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -151,7 +152,7 @@ public abstract class AbstractMetadataContainer<T extends TimeBoundSAMLObject & 
       return this.update(true);
     }
     
-    SignatureUtils.sign(this.descriptor, this.signatureCredentials);
+    SignatureUtils.sign(this.descriptor, this.signatureCredentials, SecurityConfigurationSupport.getGlobalSignatureSigningConfiguration());
     logger.debug("Descriptor '{}' successfully signed.", this.getLogString(this.descriptor));
 
     return this.descriptor;

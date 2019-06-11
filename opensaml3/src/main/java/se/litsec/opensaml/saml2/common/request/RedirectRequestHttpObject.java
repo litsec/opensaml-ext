@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2019 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,10 @@ import org.opensaml.saml.common.messaging.context.SAMLBindingContext;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.binding.encoding.impl.HTTPRedirectDeflateEncoder;
 import org.opensaml.saml.saml2.core.RequestAbstractType;
+import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.security.x509.X509Credential;
 import org.opensaml.xmlsec.SecurityConfigurationSupport;
+import org.opensaml.xmlsec.SignatureSigningConfiguration;
 import org.opensaml.xmlsec.SignatureSigningParameters;
 import org.opensaml.xmlsec.context.SecurityParametersContext;
 import org.opensaml.xmlsec.criterion.SignatureSigningConfigurationCriterion;
@@ -44,6 +46,7 @@ import net.shibboleth.utilities.java.support.collection.Pair;
 import net.shibboleth.utilities.java.support.net.URLBuilder;
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 import net.shibboleth.utilities.java.support.resolver.ResolverException;
+import se.litsec.opensaml.utils.SignatureUtils;
 
 /**
  * A RequestHttpObject for sending using HTTP GET (redirect binding).
@@ -71,7 +74,7 @@ public class RedirectRequestHttpObject<T extends RequestAbstractType> extends HT
   private Map<String, String> httpHeaders = new HashMap<>();
 
   /**
-   * Constructor that puts together to resulting object.
+   * Constructor that puts together the resulting object.
    * 
    * @param request
    *          the request object
@@ -85,9 +88,36 @@ public class RedirectRequestHttpObject<T extends RequestAbstractType> extends HT
    *           for encoding errors
    * @throws SignatureException
    *           for signature errors
+   * @deprecated Use
+   *             {@link #RedirectRequestHttpObject(RequestAbstractType, String, X509Credential, String, EntityDescriptor)}
+   *             instead
    */
+  @Deprecated
   public RedirectRequestHttpObject(T request, String relayState, X509Credential signatureCredentials, String endpoint)
       throws MessageEncodingException, SignatureException {
+    this(request, relayState, signatureCredentials, endpoint, null);
+  }
+
+  /**
+   * Constructor that puts together the resulting object.
+   * 
+   * @param request
+   *          the request object
+   * @param relayState
+   *          the relay state
+   * @param signatureCredentials
+   *          optional signature credentials
+   * @param endpoint
+   *          the endpoint where we send this request to
+   * @param recipientMetadata
+   *          the recipient metadata (may be {@code null})
+   * @throws MessageEncodingException
+   *           for encoding errors
+   * @throws SignatureException
+   *           for signature errors
+   */
+  public RedirectRequestHttpObject(T request, String relayState, X509Credential signatureCredentials,
+      String endpoint, EntityDescriptor recipientMetadata) throws MessageEncodingException, SignatureException {
 
     this.request = request;
 
@@ -98,12 +128,25 @@ public class RedirectRequestHttpObject<T extends RequestAbstractType> extends HT
     messageContext.getSubcontext(SAMLBindingContext.class, true).setRelayState(relayState);
 
     if (signatureCredentials != null) {
+      
+      // Check if the recipient has specified any signature preferences in its metadata.
+      SignatureSigningConfiguration peerConfig = SignatureUtils.getSignaturePreferences(recipientMetadata);
+      
+      SignatureSigningConfiguration[] configs = new SignatureSigningConfiguration[2 + (peerConfig != null ? 1 : 0)];
+      int pos = 0;
+      if (peerConfig != null) {
+        configs[pos++] = peerConfig;
+      }
+      // The system wide configuration for signing.
+      configs[pos++] = SecurityConfigurationSupport.getGlobalSignatureSigningConfiguration();
+      
+      // And finally our signing credential.
       BasicSignatureSigningConfiguration signatureCreds = new BasicSignatureSigningConfiguration();
       signatureCreds.setSigningCredentials(Collections.singletonList(signatureCredentials));
+      configs[pos] = signatureCreds;
 
       BasicSignatureSigningParametersResolver signatureParametersResolver = new BasicSignatureSigningParametersResolver();
-      CriteriaSet criteriaSet = new CriteriaSet(new SignatureSigningConfigurationCriterion(SecurityConfigurationSupport
-        .getGlobalSignatureSigningConfiguration(), signatureCreds));
+      CriteriaSet criteriaSet = new CriteriaSet(new SignatureSigningConfigurationCriterion(configs));
 
       try {
         SignatureSigningParameters parameters = signatureParametersResolver.resolveSingle(criteriaSet);
@@ -144,7 +187,7 @@ public class RedirectRequestHttpObject<T extends RequestAbstractType> extends HT
         urlBuilder = new URLBuilder(tmpSendUrl);
         queryParams = urlBuilder.getQueryParams();
         queryParams.addAll(0, qp);
-        
+
         this.sendUrl = urlBuilder.buildURL();
       }
       else {

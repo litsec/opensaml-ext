@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2019 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,9 @@ import org.opensaml.saml.common.binding.SAMLBindingSupport;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.binding.encoding.impl.HTTPPostEncoder;
 import org.opensaml.saml.saml2.core.RequestAbstractType;
+import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.security.x509.X509Credential;
+import org.opensaml.xmlsec.SecurityConfigurationSupport;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +67,7 @@ public class PostRequestHttpObject<T extends RequestAbstractType> extends HTTPPo
   private Map<String, String> postParameters = new HashMap<>();
 
   /**
-   * Constructor that puts together to resulting object.
+   * Constructor that puts together the resulting object.
    *
    * @param request
    *          the request object
@@ -79,9 +81,36 @@ public class PostRequestHttpObject<T extends RequestAbstractType> extends HTTPPo
    *           for encoding errors
    * @throws SignatureException
    *           for signature errors
+   * @deprecated Use
+   *             {@link #PostRequestHttpObject(RequestAbstractType, String, X509Credential, String, EntityDescriptor)}
+   *             instead
    */
+  @Deprecated
   public PostRequestHttpObject(T request, String relayState, X509Credential signatureCredentials, String endpoint)
       throws MessageEncodingException, SignatureException {
+    this(request, relayState, signatureCredentials, endpoint, null);
+  }
+
+  /**
+   * Constructor that puts together the resulting object.
+   *
+   * @param request
+   *          the request object
+   * @param relayState
+   *          the relay state
+   * @param signatureCredentials
+   *          optional signature credentials
+   * @param endpoint
+   *          the endpoint where we send this request to
+   * @param recipientMetadata
+   *          the recipient metadata (may be {@code null})
+   * @throws MessageEncodingException
+   *           for encoding errors
+   * @throws SignatureException
+   *           for signature errors
+   */
+  public PostRequestHttpObject(T request, String relayState, X509Credential signatureCredentials,
+      String endpoint, EntityDescriptor recipientMetadata) throws MessageEncodingException, SignatureException {
 
     this.request = request;
 
@@ -96,7 +125,8 @@ public class PostRequestHttpObject<T extends RequestAbstractType> extends HTTPPo
     //
     if (signatureCredentials != null) {
       logger.trace("Signing SAML Request message ...");
-      SignatureUtils.sign(this.request, signatureCredentials);
+      SignatureUtils.sign(this.request, signatureCredentials,
+        SecurityConfigurationSupport.getGlobalSignatureSigningConfiguration(), recipientMetadata);
     }
 
     logger.trace("Marshalling and Base64 encoding SAML message");

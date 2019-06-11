@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2019 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,6 +84,47 @@ public class SpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<S
    */
   public SpEntityDescriptorBuilder(EntityDescriptor template) throws UnmarshallingException, MarshallingException {
     super(template);
+  }
+
+  /**
+   * Utility method that creates a {@code SpEntityDescriptorBuilder} instance.
+   * 
+   * @return a {@code SpEntityDescriptorBuilder} instance
+   */
+  public static SpEntityDescriptorBuilder builder() {
+    return new SpEntityDescriptorBuilder();
+  }
+
+  /**
+   * Utility method that creates a {@code SpEntityDescriptorBuilder} instance from a supplied input stream.
+   * 
+   * @param resource
+   *          the template resource
+   * @return a {@code SpEntityDescriptorBuilder} instance
+   * @throws IOException
+   *           if the resource can not be read
+   * @throws UnmarshallingException
+   *           for unmarshalling errors
+   * @throws XMLParserException
+   *           for XML parsing errors
+   */
+  public static SpEntityDescriptorBuilder builder(InputStream resource) throws XMLParserException, UnmarshallingException, IOException {
+    return new SpEntityDescriptorBuilder(resource);
+  }
+
+  /**
+   * Utility method that creates a {@code SpEntityDescriptorBuilder} instance from a supplied template.
+   * 
+   * @param template
+   *          the template
+   * @return a {@code SpEntityDescriptorBuilder} instance
+   * @throws UnmarshallingException
+   *           for unmarshalling errors
+   * @throws MarshallingException
+   *           for marshalling errors
+   */
+  public static SpEntityDescriptorBuilder builder(EntityDescriptor template) throws UnmarshallingException, MarshallingException {
+    return new SpEntityDescriptorBuilder(template);
   }
 
   /** {@inheritDoc} */
