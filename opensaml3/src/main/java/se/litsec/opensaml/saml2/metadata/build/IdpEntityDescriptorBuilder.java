@@ -114,6 +114,7 @@ public class IdpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<
    * 
    * @param resource
    *          the template resource
+   * @return an {@code IdpEntityDescriptorBuilder} instance
    * @throws IOException
    *           if the resource can not be read
    * @throws UnmarshallingException
@@ -130,6 +131,7 @@ public class IdpEntityDescriptorBuilder extends AbstractEntityDescriptorBuilder<
    * 
    * @param template
    *          the template
+   * @return an {@code IdpEntityDescriptorBuilder} instance
    * @throws UnmarshallingException
    *           for unmarshalling errors
    * @throws MarshallingException

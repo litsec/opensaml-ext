@@ -137,6 +137,8 @@ public class SignatureUtils {
    *          signature configuration
    * @param recipientMetadata
    *          recipient's metadata
+   * @param <T>
+   *          the object type
    * @throws SignatureException
    *           for signature errors
    */
@@ -154,7 +156,7 @@ public class SignatureUtils {
       configs[pos++] = peerConfig;
     }
     configs[pos] = config;
-    
+
     sign(object, signingCredentials, configs);
   }
 

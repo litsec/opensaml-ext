@@ -6,7 +6,7 @@
   <groupId>se.litsec.opensaml</groupId>
   <artifactId>opensaml3-ext</artifactId>
   <packaging>jar</packaging>
-  <version>1.4.0-SNAPSHOT</version>
+  <version>1.4.0</version>
 
   <name>Litsec :: OpenSAML 3.X utility extensions</name>
   <description>OpenSAML 3.X utility extension library</description>
@@ -45,16 +45,11 @@
     <java.version>1.8</java.version>
 
     <!-- Versions on dependencies -->
-    <!-- Versions on dependencies -->
     <opensaml.version>3.4.3</opensaml.version>
     <opensaml-security-ext.version>1.0.3</opensaml-security-ext.version>    
     <slf4j.version>1.7.25</slf4j.version>
     <spring.version>4.3.19.RELEASE</spring.version>
     
-    <!-- 
-    <guava.version>27.0-jre</guava.version>
-    <bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
-    -->
     <commons-lang.version>2.4</commons-lang.version>
     <joda-time.version>2.9</joda-time.version>    
     <junit.version>4.12</junit.version>
@@ -113,14 +108,6 @@
       <version>${opensaml-security-ext.version}</version>
       <type>jar</type>
       <scope>compile</scope>
-      <!-- 
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.velocity</groupId>
-          <artifactId>velocity</artifactId>
-        </exclusion>
-      </exclusions>
-      -->      
     </dependency>
     
     <dependency>
