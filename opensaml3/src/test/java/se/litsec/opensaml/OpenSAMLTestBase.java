@@ -15,7 +15,17 @@
  */
 package se.litsec.opensaml;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+
 import org.junit.BeforeClass;
+import org.opensaml.security.x509.X509Credential;
+import org.opensaml.security.x509.impl.KeyStoreX509CredentialAdapter;
 
 import se.swedenconnect.opensaml.OpenSAMLInitializer;
 import se.swedenconnect.opensaml.OpenSAMLSecurityDefaultsConfig;
@@ -44,5 +54,44 @@ public abstract class OpenSAMLTestBase {
         new OpenSAMLSecurityExtensionConfig());
     }
   }
+  
+  /**
+   * Loads a {@link KeyStore} based on the given arguments.
+   * 
+   * @param keyStorePath
+   *          the path to the key store
+   * @param keyStorePassword
+   *          the key store password
+   * @param keyStoreType
+   *          the type of the keystore (if {@code null} the default keystore type will be assumed)
+   * @return a {@code KeyStore} instance
+   * @throws KeyStoreException
+   *           for errors loading the keystore
+   * @throws IOException
+   *           for IO errors
+   */
+  public static KeyStore loadKeyStore(String keyStorePath, String keyStorePassword, String keyStoreType) throws KeyStoreException,
+      IOException {
+    return loadKeyStore(new FileInputStream(keyStorePath), keyStorePassword, keyStoreType);
+  }
+
+  public static KeyStore loadKeyStore(InputStream keyStoreStream, String keyStorePassword, String keyStoreType) throws KeyStoreException,
+      IOException {
+    try {
+      KeyStore keyStore = keyStoreType != null ? KeyStore.getInstance(keyStoreType) : KeyStore.getInstance(KeyStore.getDefaultType());
+      keyStore.load(keyStoreStream, keyStorePassword.toCharArray());
+      return keyStore;
+    }
+    catch (NoSuchAlgorithmException | CertificateException e) {
+      throw new KeyStoreException(e);
+    }
+  }
+
+  public static X509Credential loadKeyStoreCredential(InputStream keyStoreStream, String keyStorePassword, String alias, String keyPassword)
+      throws KeyStoreException, IOException {
+    KeyStore keyStore = loadKeyStore(keyStoreStream, keyStorePassword, "jks");
+    return new KeyStoreX509CredentialAdapter(keyStore, alias, keyPassword.toCharArray());
+  }
+  
 
 }

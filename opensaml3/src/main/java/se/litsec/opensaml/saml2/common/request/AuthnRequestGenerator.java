@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2019 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,5 +17,13 @@ package se.litsec.opensaml.saml2.common.request;
 
 import org.opensaml.saml.saml2.core.AuthnRequest;
 
+/**
+ * Interface for generating {@code AuthnRequest} messages.
+ * 
+ * @author Martin Lindström (martin.lindstrom@litsec.se)
+ *
+ * @param <I>
+ *          request input type
+ */
 public interface AuthnRequestGenerator<I extends RequestGeneratorInput> extends RequestGenerator<AuthnRequest, I> {
 }

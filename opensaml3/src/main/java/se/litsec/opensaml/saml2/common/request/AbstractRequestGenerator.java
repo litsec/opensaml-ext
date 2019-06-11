@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2019 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,9 +107,35 @@ public abstract class AbstractRequestGenerator<T extends RequestAbstractType, I 
    * @return a request HTTP object
    * @throws RequestGenerationException
    *           for errors during signing or encoding
+   * @deprecated Use
+   *             {@link #buildRequestHttpObject(RequestAbstractType, RequestGeneratorInput, String, String, EntityDescriptor)}
+   *             instead
    */
+  @Deprecated
   protected RequestHttpObject<T> buildRequestHttpObject(T request, I input, String binding, String destination)
       throws RequestGenerationException {
+    return this.buildRequestHttpObject(request, input, binding, destination, null);
+  }
+
+  /**
+   * Builds a request HTTP object (including signing).
+   * 
+   * @param request
+   *          the actual request
+   * @param input
+   *          the request generation input
+   * @param binding
+   *          the binding to use
+   * @param destination
+   *          the destination URL
+   * @param recipientMetadata
+   *          the recipient metadata (may be {@code null})
+   * @return a request HTTP object
+   * @throws RequestGenerationException
+   *           for errors during signing or encoding
+   */
+  protected RequestHttpObject<T> buildRequestHttpObject(T request, I input, String binding,
+      String destination, EntityDescriptor recipientMetadata) throws RequestGenerationException {
 
     X509Credential signCred = input.getOverrideSigningCredential();
     if (signCred == null) {
@@ -119,11 +145,11 @@ public abstract class AbstractRequestGenerator<T extends RequestAbstractType, I 
     try {
       if (SAMLConstants.SAML2_REDIRECT_BINDING_URI.equals(binding)) {
         // Redirect binding
-        return new RedirectRequestHttpObject<>(request, input.getRelayState(), signCred, destination);
+        return new RedirectRequestHttpObject<>(request, input.getRelayState(), signCred, destination, recipientMetadata);
       }
       else if (SAMLConstants.SAML2_POST_BINDING_URI.equals(binding)) {
         // POST binding
-        return new PostRequestHttpObject<>(request, input.getRelayState(), signCred, destination);
+        return new PostRequestHttpObject<>(request, input.getRelayState(), signCred, destination, recipientMetadata);
       }
       else {
         throw new RequestGenerationException("Unsupported binding: " + binding);
