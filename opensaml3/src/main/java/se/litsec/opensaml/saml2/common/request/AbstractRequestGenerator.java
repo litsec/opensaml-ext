@@ -24,6 +24,8 @@ import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.core.RequestAbstractType;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.security.x509.X509Credential;
+import org.opensaml.xmlsec.SecurityConfigurationSupport;
+import org.opensaml.xmlsec.SignatureSigningConfiguration;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -136,6 +138,32 @@ public abstract class AbstractRequestGenerator<T extends RequestAbstractType, I 
    */
   protected RequestHttpObject<T> buildRequestHttpObject(T request, I input, String binding,
       String destination, EntityDescriptor recipientMetadata) throws RequestGenerationException {
+    return this.buildRequestHttpObject(request, input, binding, destination, recipientMetadata, null);
+  }
+
+  /**
+   * Builds a request HTTP object (including signing).
+   * 
+   * @param request
+   *          the actual request
+   * @param input
+   *          the request generation input
+   * @param binding
+   *          the binding to use
+   * @param destination
+   *          the destination URL
+   * @param recipientMetadata
+   *          the recipient metadata (may be {@code null})
+   * @param defaultSignatureSigningConfiguration
+   *          the default signature configuration for the application. If {@code null}, the value returned from
+   *          {@link SecurityConfigurationSupport#getGlobalSignatureSigningConfiguration()} will be used
+   * @return a request HTTP object
+   * @throws RequestGenerationException
+   *           for errors during signing or encoding
+   */
+  protected RequestHttpObject<T> buildRequestHttpObject(T request, I input, String binding,
+      String destination, EntityDescriptor recipientMetadata, SignatureSigningConfiguration defaultSignatureSigningConfiguration)
+      throws RequestGenerationException {
 
     X509Credential signCred = input.getOverrideSigningCredential();
     if (signCred == null) {
@@ -149,7 +177,8 @@ public abstract class AbstractRequestGenerator<T extends RequestAbstractType, I 
       }
       else if (SAMLConstants.SAML2_POST_BINDING_URI.equals(binding)) {
         // POST binding
-        return new PostRequestHttpObject<>(request, input.getRelayState(), signCred, destination, recipientMetadata);
+        return new PostRequestHttpObject<>(request, input.getRelayState(), signCred, destination, recipientMetadata,
+          defaultSignatureSigningConfiguration);
       }
       else {
         throw new RequestGenerationException("Unsupported binding: " + binding);
