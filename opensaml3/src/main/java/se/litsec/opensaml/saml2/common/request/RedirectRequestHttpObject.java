@@ -118,6 +118,34 @@ public class RedirectRequestHttpObject<T extends RequestAbstractType> extends HT
    */
   public RedirectRequestHttpObject(T request, String relayState, X509Credential signatureCredentials,
       String endpoint, EntityDescriptor recipientMetadata) throws MessageEncodingException, SignatureException {
+    
+    this(request, relayState, signatureCredentials, endpoint, recipientMetadata, null);
+  }
+
+  /**
+   * Constructor that puts together the resulting object.
+   * 
+   * @param request
+   *          the request object
+   * @param relayState
+   *          the relay state
+   * @param signatureCredentials
+   *          optional signature credentials
+   * @param endpoint
+   *          the endpoint where we send this request to
+   * @param recipientMetadata
+   *          the recipient metadata (may be {@code null})
+   * @param defaultSignatureSigningConfiguration
+   *          the default signature configuration for the application. If {@code null}, the value returned from
+   *          {@link SecurityConfigurationSupport#getGlobalSignatureSigningConfiguration()} will be used
+   * @throws MessageEncodingException
+   *           for encoding errors
+   * @throws SignatureException
+   *           for signature errors
+   */
+  public RedirectRequestHttpObject(T request, String relayState, X509Credential signatureCredentials,
+      String endpoint, EntityDescriptor recipientMetadata, SignatureSigningConfiguration defaultSignatureSigningConfiguration)
+      throws MessageEncodingException, SignatureException {
 
     this.request = request;
 
@@ -128,18 +156,20 @@ public class RedirectRequestHttpObject<T extends RequestAbstractType> extends HT
     messageContext.getSubcontext(SAMLBindingContext.class, true).setRelayState(relayState);
 
     if (signatureCredentials != null) {
-      
+
       // Check if the recipient has specified any signature preferences in its metadata.
       SignatureSigningConfiguration peerConfig = SignatureUtils.getSignaturePreferences(recipientMetadata);
-      
+
       SignatureSigningConfiguration[] configs = new SignatureSigningConfiguration[2 + (peerConfig != null ? 1 : 0)];
       int pos = 0;
       if (peerConfig != null) {
         configs[pos++] = peerConfig;
       }
       // The system wide configuration for signing.
-      configs[pos++] = SecurityConfigurationSupport.getGlobalSignatureSigningConfiguration();
-      
+      configs[pos++] = defaultSignatureSigningConfiguration != null
+          ? defaultSignatureSigningConfiguration
+          : SecurityConfigurationSupport.getGlobalSignatureSigningConfiguration();
+
       // And finally our signing credential.
       BasicSignatureSigningConfiguration signatureCreds = new BasicSignatureSigningConfiguration();
       signatureCreds.setSigningCredentials(Collections.singletonList(signatureCredentials));
