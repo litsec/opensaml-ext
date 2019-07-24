@@ -85,7 +85,7 @@ public class PostRequestHttpObject<T extends RequestAbstractType> extends HTTPPo
    * @deprecated Use
    *             {@link #PostRequestHttpObject(RequestAbstractType, String, X509Credential, String, EntityDescriptor)}
    *             or
-   *             {@link #PostRequestHttpObject(RequestAbstractType, String, X509Credential, String, EntityDescriptor, SignatureSigningConfiguration)
+   *             {@link #PostRequestHttpObject(RequestAbstractType, String, X509Credential, String, EntityDescriptor, SignatureSigningConfiguration)}
    *             instead
    */
   @Deprecated
