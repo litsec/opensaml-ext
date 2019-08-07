@@ -29,6 +29,10 @@ import org.opensaml.security.credential.Credential;
 import org.opensaml.xmlsec.SecurityConfigurationSupport;
 import org.opensaml.xmlsec.SignatureSigningConfiguration;
 import org.opensaml.xmlsec.SignatureSigningParameters;
+import org.opensaml.xmlsec.algorithm.AlgorithmDescriptor;
+import org.opensaml.xmlsec.algorithm.AlgorithmDescriptor.AlgorithmType;
+import org.opensaml.xmlsec.algorithm.AlgorithmRegistry;
+import org.opensaml.xmlsec.algorithm.AlgorithmSupport;
 import org.opensaml.xmlsec.criterion.SignatureSigningConfigurationCriterion;
 import org.opensaml.xmlsec.impl.BasicSignatureSigningConfiguration;
 import org.opensaml.xmlsec.impl.BasicSignatureSigningParametersResolver;
@@ -81,13 +85,35 @@ public class SignatureUtils {
     if (digestMethods.isEmpty()) {
       digestMethods = MetadataUtils.getMetadataExtensions(metadata.getExtensions(), DigestMethod.class);
     }
+    
+    // Filter those that we don't support
+    //    
+    final AlgorithmRegistry registry = AlgorithmSupport.getGlobalAlgorithmRegistry();    
+    if (!signingMethods.isEmpty()) {
+      signingMethods = signingMethods.stream().filter(s -> {
+        AlgorithmDescriptor ad = registry.get(s.getAlgorithm());
+        if (ad != null) {
+          return AlgorithmType.Signature.equals(ad.getType());
+        }
+        return false;
+      }).collect(Collectors.toList());
+    }
+    if (!digestMethods.isEmpty()) {
+      digestMethods = digestMethods.stream().filter(s -> {
+        AlgorithmDescriptor ad = registry.get(s.getAlgorithm());
+        if (ad != null) {
+          return AlgorithmType.MessageDigest.equals(ad.getType());
+        }
+        return false;
+      }).collect(Collectors.toList());
+    }
 
     if (signingMethods.isEmpty() && digestMethods.isEmpty()) {
       return null;
     }
 
     BasicSignatureSigningConfiguration config = new BasicSignatureSigningConfiguration();
-    if (!signingMethods.isEmpty()) {
+    if (!signingMethods.isEmpty()) {      
       // We can't handle key lengths here!
       config.setSignatureAlgorithms(
         signingMethods.stream().map(SigningMethod::getAlgorithm).collect(Collectors.toList()));

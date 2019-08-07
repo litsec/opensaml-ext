@@ -105,6 +105,31 @@ public class SignatureUtilsTest extends OpenSAMLTestBase {
 
       Assert.assertEquals(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA512, authnRequest.getSignature().getSignatureAlgorithm());
   }
+  
+  @Test
+  public void testBadAlgorithms() throws Exception {
+    X509Credential rsaCredential = OpenSAMLTestBase.loadKeyStoreCredential(
+      new ClassPathResource("rsakey.jks").getInputStream(), "Test1234", "key1", "Test1234");
+
+    EntityDescriptor metadata = IdpEntityDescriptorBuilder.builder()
+      .entityID("http://www.dummy.com/idp")
+      .digestMethods(false,
+        DigestMethodBuilder.builder().algorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA512).build(),
+        DigestMethodBuilder.builder().algorithm(SignatureConstants.ALGO_ID_DIGEST_SHA384).build())
+      .signingMethods(true,
+        SigningMethodBuilder.builder().algorithm(SignatureConstants.ALGO_ID_DIGEST_SHA384).build(),
+        SigningMethodBuilder.builder().algorithm(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA384_MGF1).build())
+      .build();
+
+    AuthnRequest authnRequest = getMockAuthnRequest();
+
+    SignatureUtils.sign(authnRequest, rsaCredential,
+      SecurityConfigurationSupport.getGlobalSignatureSigningConfiguration(), metadata);
+
+    Assert.assertEquals(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA384_MGF1, authnRequest.getSignature().getSignatureAlgorithm());
+    Assert.assertTrue(ObjectUtils.toString(authnRequest).contains(
+      "<ds:DigestMethod Algorithm=\"" + SignatureConstants.ALGO_ID_DIGEST_SHA384 + "\""));
+  }  
 
   /**
    * Creates an {@link AuthnRequest} that we sign.
