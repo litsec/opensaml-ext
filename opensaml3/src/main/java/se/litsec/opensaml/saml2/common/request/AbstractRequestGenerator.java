@@ -173,7 +173,8 @@ public abstract class AbstractRequestGenerator<T extends RequestAbstractType, I 
     try {
       if (SAMLConstants.SAML2_REDIRECT_BINDING_URI.equals(binding)) {
         // Redirect binding
-        return new RedirectRequestHttpObject<>(request, input.getRelayState(), signCred, destination, recipientMetadata);
+        return new RedirectRequestHttpObject<>(request, input.getRelayState(), signCred, destination, recipientMetadata,
+        		defaultSignatureSigningConfiguration);
       }
       else if (SAMLConstants.SAML2_POST_BINDING_URI.equals(binding)) {
         // POST binding
