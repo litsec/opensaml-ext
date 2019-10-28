@@ -57,7 +57,7 @@ If you are making use of the Spring features in opensaml-ext you need to explici
 </dependency>
 ```
 
-Currently, opensaml-ext uses version `4.3.19.RELEASE` of Spring (which is the same version as Shibboleth IdP v3.4.3).
+Currently, opensaml-ext uses version `4.3.19.RELEASE` of Spring (which is the same version as Shibboleth IdP v3.4.6).
 
 Also, we have explicitly excluded some of the dependencies you normally get from OpenSAML since [Snyk](https://snyk.io) has reported vulnerabilities for them. In some cases we have explicitly included the "correct" version, for example for Bounce Castle's `org.bouncycastle:bcprov-jdk15on` where version 1.59 is replaced with 1.60. In other cases you have to include the dependency yourself (velocity) if you need it. Run a `mvn dependency:tree` for your project using the opensaml-ext library and verify that everything looks like you want it to.
 
