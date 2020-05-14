@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<md:EntitiesDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="metadata_part2" cacheDuration="PT10M0.000S" validUntil="2020-05-04T21:17:39.086Z">
+<md:EntitiesDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="metadata_part2" cacheDuration="PT10M0.000S" validUntil="2030-05-04T21:17:39.086Z">
   <md:EntityDescriptor xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" entityID="http://sts-pt.transportstyrelsen.se/adfs/services/trust/"
     xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
     <SPSSODescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" WantAssertionsSigned="true"
