@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:util="http://www.springframework.org/schema/util" xmlns:c="http://www.springframework.org/schema/c" xmlns:p="http://www.springframework.org/schema/p"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+  http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+  
+  <import resource="opensaml-init.xml" />
+  
+  <bean id="keystore" class="se.litsec.opensaml.utils.spring.KeyStoreFactoryBean"
+    c:storeLocation="classpath:sp-enc-cert.jks" c:storePassword="secret" />    
+    
+  <util:list id="spEncryptionCredentials">
+    <bean class="org.opensaml.security.x509.impl.KeyStoreX509CredentialAdapter"
+      c:store-ref="keystore" c:alias="eid" c:password="secret"
+      p:entityId="https://eid.litsec.se/sp/2" />
+  </util:list>
+  
+  <bean id="decrypter" class="se.litsec.opensaml.xmlsec.SAMLObjectDecrypter" scope="singleton">
+    <constructor-arg name="decryptionCredentials" ref="spEncryptionCredentials" />
+  </bean>
+  
+  <bean id="decrypterP11" class="se.litsec.opensaml.xmlsec.SAMLObjectDecrypter" scope="singleton">
+    <constructor-arg name="decryptionCredentials" ref="spEncryptionCredentials" />
+    <property name="pkcs11Workaround" value="true" />
+    <property name="pkcs11testMode" value="true" />    
+  </bean>
+  
+  <!--   
+  <bean id="decrypter" class="se.litsec.opensaml.xmlsec.SAMLObjectDecrypter" scope="singleton">
+    <constructor-arg name="decryptionConfiguration">
+      <bean class="org.opensaml.xmlsec.impl.BasicDecryptionConfiguration"
+        p:KEKKeyInfoCredentialResolver-ref="keyEncryptionCredentialResolver"
+        p:encryptedKeyResolver-ref="encryptedKeyResolver" />
+    </constructor-arg>
+  </bean>
+    
+  <bean id="keyEncryptionCredentialResolver" class="org.opensaml.xmlsec.keyinfo.impl.ChainingKeyInfoCredentialResolver">
+    <constructor-arg>
+      <list>
+        <bean class="org.opensaml.xmlsec.keyinfo.impl.LocalKeyInfoCredentialResolver">
+          <constructor-arg name="localCredentialResolver">
+            <bean class="org.opensaml.xmlsec.keyinfo.impl.CollectionKeyInfoCredentialResolver"
+              c:credentials-ref="spEncryptionCredentials" />
+          </constructor-arg>
+          <constructor-arg name="keyInfoProviders">
+            <list>
+              <bean class="org.opensaml.xmlsec.keyinfo.impl.provider.RSAKeyValueProvider" />
+              <bean class="org.opensaml.xmlsec.keyinfo.impl.provider.DSAKeyValueProvider" />
+              <bean class="org.opensaml.xmlsec.keyinfo.impl.provider.DEREncodedKeyValueProvider" />
+              <bean class="org.opensaml.xmlsec.keyinfo.impl.provider.InlineX509DataProvider" />
+            </list>
+          </constructor-arg>
+        </bean>
+        <bean class="org.opensaml.xmlsec.keyinfo.impl.StaticKeyInfoCredentialResolver"
+          c:credentials-ref="spEncryptionCredentials" />
+      </list>
+    </constructor-arg>
+  </bean>
+  
+  <bean id="encryptedKeyResolver" class="org.opensaml.xmlsec.encryption.support.ChainingEncryptedKeyResolver" c:recipient="https://eid.litsec.se/sp/2">
+    <constructor-arg name="encKeyResolvers">
+      <list>
+        <bean class="org.opensaml.xmlsec.encryption.support.InlineEncryptedKeyResolver" />
+        <bean class="org.opensaml.saml.saml2.encryption.EncryptedElementTypeEncryptedKeyResolver" />
+        <bean class="org.opensaml.xmlsec.encryption.support.SimpleRetrievalMethodEncryptedKeyResolver" />
+        <bean class="org.opensaml.xmlsec.encryption.support.SimpleKeyInfoReferenceEncryptedKeyResolver" />
+      </list>
+    </constructor-arg>
+  </bean>    
+  -->
+  
+</beans>
