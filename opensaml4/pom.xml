@@ -1,0 +1,440 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>se.litsec.opensaml</groupId>
+  <artifactId>opensaml4-ext</artifactId>
+  <packaging>jar</packaging>
+  <version>2.0.0-SNAPSHOT</version>
+
+  <name>Litsec :: OpenSAML 4.X utility extensions</name>
+  <description>OpenSAML 4.X utility extension library</description>
+  <url>https://github.com/litsec/opensaml-ext</url>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:https://github.com/litsec/opensaml-ext.git</connection>
+    <developerConnection>scm:https://github.com/litsec/opensaml-ext.git</developerConnection>
+    <url>https://github.com/litsec/opensaml-ext/tree/master</url>
+  </scm>
+
+  <developers>
+    <developer>
+      <name>Martin Lindström</name>
+      <email>martin.lindstrom@litsec.se</email>
+      <organization>Litsec AB</organization>
+      <organizationUrl>http://www.litsec.se</organizationUrl>      
+    </developer>
+  </developers>
+
+  <organization>
+    <name>Litsec AB</name>
+    <url>http://www.litsec.se</url>
+  </organization>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>11</java.version>
+
+    <junit.version>4.13.1</junit.version>
+  </properties>
+  
+  <repositories>
+    <repository>
+      <id>central</id>
+      <name>Maven Central</name>
+      <url>https://repo1.maven.org/maven2/</url>
+    </repository>
+    <repository>
+      <id>shibboleth</id>
+      <name>Shibboleth Maven Repo</name>
+      <url>https://build.shibboleth.net/nexus/content/repositories/releases</url>
+    </repository>
+  </repositories>  
+  
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+    <id>ossrh</id>
+    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+    
+  <dependencies>
+    
+    <!-- OpenSAML -->    
+    <dependency>
+      <groupId>org.opensaml</groupId>
+      <artifactId>opensaml-core</artifactId>
+      <version>[4.0.0,)</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opensaml</groupId>
+      <artifactId>opensaml-saml-api</artifactId>
+      <version>[4.0.0,)</version>
+      <exclusions>
+        <!-- Older versions than other OpenSAML deps ... -->
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-codec</groupId>
+          <artifactId>commons-codec</artifactId>
+        </exclusion>        
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opensaml</groupId>
+      <artifactId>opensaml-saml-impl</artifactId>
+      <version>[4.0.0,)</version>
+      <exclusions>
+        <!-- Older versions than other OpenSAML deps ... -->
+        <exclusion>
+          <groupId>commons-codec</groupId>
+          <artifactId>commons-codec</artifactId>
+        </exclusion>        
+      </exclusions>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.opensaml</groupId>
+      <artifactId>opensaml-security-api</artifactId>
+      <version>[4.0.0,)</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-core</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.opensaml</groupId>
+      <artifactId>opensaml-security-impl</artifactId>
+      <version>[4.0.0,)</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.opensaml</groupId>
+      <artifactId>opensaml-xmlsec-api</artifactId>
+      <version>[4.0.0,)</version>
+    </dependency>
+        
+    <dependency>
+      <groupId>org.opensaml</groupId>
+      <artifactId>opensaml-xmlsec-impl</artifactId>
+      <version>[4.0.0,)</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.opensaml</groupId>
+      <artifactId>opensaml-messaging-api</artifactId>
+      <version>[4.0.0,)</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.opensaml</groupId>
+      <artifactId>opensaml-storage-api</artifactId>
+      <version>[4.0.0,)</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>se.swedenconnect.opensaml</groupId>
+      <artifactId>opensaml-security-ext</artifactId>
+      <version>[2.0.0,)</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+    
+    <!-- Referenced by OpenSAML -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
+    </dependency>    
+    
+    <!-- Spring -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>[5.0.0.RELEASE,)</version>
+      <scope>compile</scope>
+      <type>jar</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+      <version>[5.0.0.RELEASE,)</version>
+      <scope>compile</scope>
+      <type>jar</type>
+    </dependency>
+
+    <!-- For testing -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+      <type>jar</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>se.swedenconnect.security</groupId>
+      <artifactId>credentials-support</artifactId>
+      <version>[1.0.0,)</version>
+      <scope>test</scope>
+    </dependency>
+     
+    <dependency>
+      <groupId>pl.pragmatists</groupId>
+      <artifactId>JUnitParams</artifactId>
+      <version>1.1.1</version>
+      <scope>test</scope>
+      <type>jar</type>
+      <exclusions>
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+        </exclusion>
+      </exclusions>      
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>[5.0.0.RELEASE,)</version>
+      <scope>test</scope>
+    </dependency>    
+    
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>[5.0.0.RELEASE,)</version>
+      <scope>test</scope>
+      <type>jar</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+      <version>11.0.0</version>
+      <!-- <version>9.4.18.v20190429</version> -->
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-util</artifactId>
+      <!-- <version>9.4.18.v20190429</version> -->
+      <version>11.0.0</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+      </exclusions>      
+    </dependency>    
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.8.0</version>
+      <scope>test</scope>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.30</version>
+      <type>jar</type>
+      <scope>test</scope>
+    </dependency>    
+
+  </dependencies>
+
+  <build>
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.0</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>test-output</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.9</version>      
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>3.0.0-M3</version>
+        <executions>
+          <execution>
+            <id>enforce</id>
+            <configuration>
+              <rules>
+                <dependencyConvergence />
+              </rules>
+            </configuration>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+          </execution>
+        </executions>        
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>           
+          <doctitle>OpenSAML 4.x utility extensions - ${project.version}</doctitle>
+          <windowtitle>OpenSAML 4.x utility extensions - ${project.version}</windowtitle>             
+          <links>
+            <link>https://build.shibboleth.net/nexus/content/sites/site/java-opensaml/4.0.1/apidocs/</link>
+            <link>https://build.shibboleth.net/nexus/content/sites/site/java-support/8.0.0/apidocs/</link>
+            <link>https://docs.swedenconnect.se/opensaml-security-ext/javadoc/2.0.0/</link>
+          </links>
+          <detectJavaApiLink>true</detectJavaApiLink>
+        </configuration>
+      </plugin>      
+
+    </plugins>
+
+  </build>
+
+  <profiles>
+
+    <profile>
+      <id>release</id>
+      
+      <!-- See http://central.sonatype.org/pages/apache-maven.html for setup -->
+      
+      <build>
+        <plugins>
+        
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.8</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>false</autoReleaseAfterClose>
+              <!--
+                Allows manual inspection of the staging repo before deploying
+                it to the central repo.
+                Use 'mvn nexus-staging:release -Prelease' to release and
+                'mvn nexus-staging:drop' to abort. 
+               -->
+            </configuration>
+          </plugin>        
+        
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.2.0</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>attach-test-sources</id>
+                <goals>
+                  <goal>test-jar-no-fork</goal>
+                </goals>
+              </execution>              
+            </executions>
+          </plugin>
+          
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadoc</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+
+    </profile>
+
+  </profiles>
+
+</project>
