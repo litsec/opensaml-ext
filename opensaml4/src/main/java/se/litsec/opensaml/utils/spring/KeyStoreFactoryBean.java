@@ -24,7 +24,7 @@ import org.springframework.core.io.Resource;
 /**
  * An implementation of a Spring {@code FactoryBean} that reads a keystore file.
  * 
- * @deprecated use {@link se.swedenconnect.security.credential.factory.KeyStoreFactoryBean} from the credentials-support
+ * @deprecated use {@code se.swedenconnect.security.credential.factory.KeyStoreFactoryBean} from the credentials-support
  *             library instead
  * 
  * @author Martin Lindström (martin@litsec.se)

@@ -25,7 +25,7 @@ import org.springframework.core.io.Resource;
 /**
  * A factory bean for creating X.509 certificates read from file.
  * 
- * * @deprecated use {@link se.swedenconnect.security.credential.factory.X509CertificateFactoryBean} from the
+ * * @deprecated use {@code se.swedenconnect.security.credential.factory.X509CertificateFactoryBean} from the
  * credentials-support library instead
  * 
  * @author Martin Lindström (martin@litsec.se)

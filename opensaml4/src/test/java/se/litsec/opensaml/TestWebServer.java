@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2019 Litsec AB
+ * Copyright 2016-2021 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,6 @@
 package se.litsec.opensaml;
 
 import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Request;
@@ -53,20 +49,19 @@ public class TestWebServer {
    * @param keyStorePassword
    *          the password for the keystore
    */
-  @SuppressWarnings("deprecation")
   public TestWebServer(ResourceProvider resourceProvider, String keyStorePath, String keyStorePassword) {
     QueuedThreadPool serverThreads = new QueuedThreadPool();
     serverThreads.setName("server");
     this.server = new Server(serverThreads);
 
-    SslContextFactory contextFactory = null;
+    SslContextFactory.Server contextFactory = null;
     if (keyStorePath != null) {
-      contextFactory = new SslContextFactory(true);
+      contextFactory = new SslContextFactory.Server();
+      contextFactory.setTrustAll(true);
       contextFactory.setKeyStorePath(keyStorePath);
       contextFactory.setKeyStorePassword(keyStorePassword);
       contextFactory.setMaxCertPathLength(-1);
       contextFactory.setProtocol("TLS");
-      //contextFactory.setIncludeCipherSuites("TLS_RSA_WITH_AES_128_CBC_SHA256");
     }
 
     ServerConnector connector = new ServerConnector(this.server, contextFactory);
@@ -127,11 +122,12 @@ public class TestWebServer {
     }
 
     @Override
-    public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException,
-        ServletException {
+    public void handle(String target, Request baseRequest, jakarta.servlet.http.HttpServletRequest request,
+        jakarta.servlet.http.HttpServletResponse response) throws IOException, jakarta.servlet.ServletException {
 
       response.getOutputStream().write(IOUtils.toByteArray(this.resourceProvider.getResource().getInputStream()));
       baseRequest.setHandled(true);
+
     }
 
   }
