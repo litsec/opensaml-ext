@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2021 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public class ValidatorException extends Exception {
    * @param context
    *          validation context
    */
-  public ValidatorException(ValidationContext context) {
+  public ValidatorException(final ValidationContext context) {
     super(context.getValidationFailureMessage());
   }
 
@@ -43,19 +43,19 @@ public class ValidatorException extends Exception {
    * @param message
    *          the error message
    */
-  public ValidatorException(String message) {
+  public ValidatorException(final String message) {
     super(message);
   }
 
   /**
-   * Constructor accepting an error message and the cause of the error
+   * Constructor accepting an error message and the cause of the error.
    * 
    * @param message
    *          the error message
    * @param cause
    *          the cause of the error
    */
-  public ValidatorException(String message, Throwable cause) {
+  public ValidatorException(final String message, final Throwable cause) {
     super(message, cause);
   }
 

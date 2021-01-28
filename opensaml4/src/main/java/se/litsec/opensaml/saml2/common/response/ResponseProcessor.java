@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2021 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,8 +45,8 @@ public interface ResponseProcessor {
    * @throws ResponseProcessingException
    *           for other processing errors
    */
-  ResponseProcessingResult processSamlResponse(String samlResponse, String relayState, ResponseProcessingInput input,
-      PeerMetadataResolver peerMetadataResolver, ValidationContext validationContext) throws ResponseStatusErrorException,
-          ResponseProcessingException;
+  ResponseProcessingResult processSamlResponse(final String samlResponse, final String relayState, 
+      final ResponseProcessingInput input, final PeerMetadataResolver peerMetadataResolver, 
+      final ValidationContext validationContext) throws ResponseStatusErrorException, ResponseProcessingException;
 
 }

@@ -17,6 +17,7 @@ package se.litsec.opensaml.saml2.common.assertion;
 
 import static se.litsec.opensaml.common.validation.ValidationSupport.check;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import org.opensaml.saml.common.assertion.AssertionValidationException;
 import org.opensaml.saml.common.assertion.ValidationContext;
 import org.opensaml.saml.common.assertion.ValidationResult;
 import org.opensaml.saml.saml2.assertion.ConditionValidator;
+import org.opensaml.saml.saml2.assertion.SAML20AssertionValidator;
 import org.opensaml.saml.saml2.assertion.SAML2AssertionValidationParameters;
 import org.opensaml.saml.saml2.assertion.StatementValidator;
 import org.opensaml.saml.saml2.assertion.SubjectConfirmationValidator;
@@ -60,13 +62,13 @@ import se.litsec.opensaml.common.validation.ValidationSupport.ValidationResultEx
  * <li>The static parameters defined for {@link AbstractSignableObjectValidator}.</li>
  * <li>{@link CoreValidatorParameters#STRICT_VALIDATION}: Optional. If not supplied, defaults to 'false'. Tells whether
  * strict validation should be performed.</li>
- * <li>{@link CoreValidatorParameters#ALLOWED_CLOCK_SKEW}: Optional. Gives the number of milliseconds that is the
- * maximum allowed clock skew. If not given {@link AbstractObjectValidator#DEFAULT_ALLOWED_CLOCK_SKEW} is used.</li>
+ * <li>{@link SAML2AssertionValidationParameters#CLOCK_SKEW}: Optional. Gives the number of milliseconds that is the
+ * maximum allowed clock skew. If not given {@link SAML20AssertionValidator#DEFAULT_CLOCK_SKEW} is used.</li>
  * <li>{@link CoreValidatorParameters#MAX_AGE_MESSAGE}: Optional. Gives the maximum age (difference between issuance
  * time and the validation time). If not given, the {@link AbstractObjectValidator#DEFAULT_MAX_AGE_RECEIVED_MESSAGE} is
  * used.</li>
- * <li>{@link CoreValidatorParameters#RECEIVE_INSTANT}: Optional. Gives the timestamp (milliseconds since epoch) for
- * when the response message was received. If not given the current time is used.</li>
+ * <li>{@link CoreValidatorParameters#RECEIVE_INSTANT}: Optional. Gives the timestamp (Instant) for when the response
+ * message was received. If not given the current time is used.</li>
  * <li>{@link CoreValidatorParameters#AUTHN_REQUEST}: Optional. If supplied will be used in a number of validations when
  * information from the corresponding {@code AuthnRequest} is needed. If not supplied, other, more detailed parameters
  * must be given.</li>
@@ -98,7 +100,7 @@ import se.litsec.opensaml.common.validation.ValidationSupport.ValidationResultEx
 public class AssertionValidator extends AbstractSignableObjectValidator<Assertion> {
 
   /**
-   * Carries a {@link Long} holding the issue instant of the Response that contained the assertion being validated.
+   * Carries a {@link Instant} holding the issue instant of the Response that contained the assertion being validated.
    */
   public static final String RESPONSE_ISSUE_INSTANT = CoreValidatorParameters.STD_PREFIX + ".ResponseIssueInstant";
 
@@ -128,7 +130,8 @@ public class AssertionValidator extends AbstractSignableObjectValidator<Assertio
    * @param statementValidators
    *          validators used to validate {@link Statement}s within the assertion
    */
-  public AssertionValidator(final SignatureTrustEngine trustEngine, final SignaturePrevalidator signaturePrevalidator,
+  public AssertionValidator(final SignatureTrustEngine trustEngine,
+      final SignaturePrevalidator signaturePrevalidator,
       final Collection<SubjectConfirmationValidator> confirmationValidators,
       final Collection<ConditionValidator> conditionValidators,
       final Collection<StatementValidator> statementValidators) {
@@ -160,7 +163,6 @@ public class AssertionValidator extends AbstractSignableObjectValidator<Assertio
         }
       }
     }
-
   }
 
   /**
@@ -242,11 +244,11 @@ public class AssertionValidator extends AbstractSignableObjectValidator<Assertio
     // is before the response issue instant. In these cases we assume that the response issue instant
     // has been verified.
     //
-    Long responseIssueInstant = (Long) context.getStaticParameters().get(RESPONSE_ISSUE_INSTANT);
+    Instant responseIssueInstant = this.getResponseIssueInstant(context); 
     if (responseIssueInstant != null) {
-      if (assertion.getIssueInstant().isAfter(Instant.ofEpochMilli(responseIssueInstant))) {
+      if (assertion.getIssueInstant().isAfter(responseIssueInstant)) {
         final String msg = String.format("Invalid Assertion - Its issue-instant (%s) is after the response message issue-instant (%s)",
-          assertion.getIssueInstant(), Instant.ofEpochMilli(responseIssueInstant));
+          assertion.getIssueInstant(), responseIssueInstant);
         context.setValidationFailureMessage(msg);
         return ValidationResult.INVALID;
       }
@@ -254,32 +256,54 @@ public class AssertionValidator extends AbstractSignableObjectValidator<Assertio
     else {
       // Otherwise, we have to make more checks.
 
-      final long receiveInstant = getReceiveInstant(context);
-      final long issueInstant = assertion.getIssueInstant().toEpochMilli();
+      final Instant receiveInstant = getReceiveInstant(context);
+      final long receiveInstantMillis = receiveInstant.toEpochMilli();
+      final Instant issueInstant = assertion.getIssueInstant();
+      final long issueInstantMillis = issueInstant.toEpochMilli();
 
-      final long maxAgeResponse = getMaxAgeReceivedMessage(context);
-      final long allowedClockSkew = getAllowedClockSkew(context);
+      final Duration maxAgeResponse = getMaxAgeReceivedMessage(context);
+      final Duration allowedClockSkew = getAllowedClockSkew(context);
 
       // Too old?
       //
-      if ((receiveInstant - issueInstant) > (maxAgeResponse + allowedClockSkew)) {
+      if ((receiveInstantMillis - issueInstantMillis) > (maxAgeResponse.toMillis() + allowedClockSkew.toMillis())) {
         final String msg = String.format("Received Assertion is too old - issue-instant: %s - receive-time: %s",
-          assertion.getIssueInstant(), Instant.ofEpochMilli(receiveInstant));
+          assertion.getIssueInstant(), receiveInstant);
         context.setValidationFailureMessage(msg);
         return ValidationResult.INVALID;
       }
 
       // Not yet valid? -> Clock skew is unacceptable.
       //
-      if ((issueInstant - receiveInstant) > allowedClockSkew) {
+      if ((issueInstantMillis - receiveInstantMillis) > allowedClockSkew.toMillis()) {
         final String msg = String.format("Issue-instant of Assertion (%s) is newer than receive time (%s) - Non accepted clock skew",
-          assertion.getIssueInstant(), Instant.ofEpochMilli(receiveInstant));
+          assertion.getIssueInstant(), receiveInstant);
         context.setValidationFailureMessage(msg);
         return ValidationResult.INVALID;
       }
     }
 
     return ValidationResult.VALID;
+  }
+
+  /**
+   * Gets the {@link #RESPONSE_ISSUE_INSTANT} setting.
+   * 
+   * @param context
+   *          the context
+   * @return the response issue instant, or null if it is not set
+   */
+  protected Instant getResponseIssueInstant(final ValidationContext context) {
+    Object object = context.getStaticParameters().get(RESPONSE_ISSUE_INSTANT);
+    if (object != null) {
+      if (Instant.class.isInstance(object)) {
+        return Instant.class.cast(object);
+      }
+      else if (Long.class.isInstance(object)) {
+        return Instant.ofEpochMilli(Long.class.cast(object));
+      }
+    }
+    return null;
   }
 
   /**
@@ -326,14 +350,14 @@ public class AssertionValidator extends AbstractSignableObjectValidator<Assertio
    */
   protected ValidationResult validateSubject(final Assertion assertion, final ValidationContext context) {
     if (assertion.getSubject() == null) {
-      
+
       // Assertions containing AuthnStatements must contain a Subject.
       //
       if (assertion.getAuthnStatements() != null && !assertion.getAuthnStatements().isEmpty()) {
         context.setValidationFailureMessage("Assertion contains AuthnStatement but no Subject - invalid");
         return ValidationResult.INVALID;
       }
-      
+
       log.debug("Assertion does not contain a Subject element - allowed by default assertion validator");
       return ValidationResult.VALID;
     }
@@ -363,7 +387,7 @@ public class AssertionValidator extends AbstractSignableObjectValidator<Assertio
       final ValidationContext context) {
 
     for (SubjectConfirmation confirmation : subjectConfirmations) {
-      SubjectConfirmationValidator validator = subjectConfirmationValidators.get(confirmation.getMethod());
+      final SubjectConfirmationValidator validator = subjectConfirmationValidators.get(confirmation.getMethod());
       if (validator != null) {
         try {
           ValidationResult r = validator.validate(confirmation, assertion, context);
@@ -373,8 +397,8 @@ public class AssertionValidator extends AbstractSignableObjectValidator<Assertio
             return ValidationResult.VALID;
           }
           else {
-            log.info("Validation of SubjectConfirmation with method '{}' failed - {}", confirmation.getMethod(), context
-              .getValidationFailureMessage());
+            log.info("Validation of SubjectConfirmation with method '{}' failed - {}", confirmation.getMethod(), 
+              context.getValidationFailureMessage());
           }
         }
         catch (AssertionValidationException e) {
@@ -400,7 +424,7 @@ public class AssertionValidator extends AbstractSignableObjectValidator<Assertio
    */
   protected ValidationResult validateConditions(final Assertion assertion, final ValidationContext context) {
 
-    Conditions conditions = assertion.getConditions();
+    final Conditions conditions = assertion.getConditions();
     if (conditions == null) {
       log.debug("Assertion contained no Conditions element - allowed by default assertion validator");
       return ValidationResult.VALID;
@@ -472,21 +496,20 @@ public class AssertionValidator extends AbstractSignableObjectValidator<Assertio
       return ValidationResult.VALID;
     }
 
-    long clockSkew = getAllowedClockSkew(context);
-    Long _receiveInstant = (Long) context.getStaticParameters().get(CoreValidatorParameters.RECEIVE_INSTANT);
-    Instant receiveInstant = _receiveInstant != null ? Instant.ofEpochMilli(_receiveInstant) : Instant.now();
+    final Duration clockSkew = getAllowedClockSkew(context);
+    final Instant receiveInstant = getReceiveInstant(context);
 
-    Instant notBefore = conditions.getNotBefore();
-    log.debug("Evaluating Conditions NotBefore '{}' against 'skewed now' time '{}'", notBefore, receiveInstant.plusMillis(clockSkew)); 
-    if (notBefore != null && notBefore.isAfter(receiveInstant.plusMillis(clockSkew))) {
+    final Instant notBefore = conditions.getNotBefore();
+    log.debug("Evaluating Conditions NotBefore '{}' against 'skewed now' time '{}'", notBefore, receiveInstant.plus(clockSkew));
+    if (notBefore != null && notBefore.isAfter(receiveInstant.plus(clockSkew))) {
       context.setValidationFailureMessage(String.format(
         "Assertion '%s' with NotBefore condition of '%s' is not yet valid", assertion.getID(), notBefore));
       return ValidationResult.INVALID;
     }
-
-    Instant notOnOrAfter = conditions.getNotOnOrAfter();
-    log.debug("Evaluating Conditions NotOnOrAfter '{}' against 'skewed now' time '{}'", notOnOrAfter, receiveInstant.minusMillis(clockSkew));
-    if (notOnOrAfter != null && notOnOrAfter.isBefore(receiveInstant.minusMillis(clockSkew))) {
+    
+    final Instant notOnOrAfter = conditions.getNotOnOrAfter();
+    log.debug("Evaluating Conditions NotOnOrAfter '{}' against 'skewed now' time '{}'", notOnOrAfter, receiveInstant.minus(clockSkew));
+    if (notOnOrAfter != null && notOnOrAfter.isBefore(receiveInstant.minus(clockSkew))) {
       context.setValidationFailureMessage(String.format(
         "Assertion '%s' with NotOnOrAfter condition of '%s' is no longer valid", assertion.getID(), notOnOrAfter));
       return ValidationResult.INVALID;

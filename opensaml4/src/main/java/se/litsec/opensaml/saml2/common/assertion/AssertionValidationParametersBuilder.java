@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2021 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ public class AssertionValidationParametersBuilder extends AbstractAssertionValid
    */
   public static AssertionValidationParametersBuilder builder() {
     return new AssertionValidationParametersBuilder();
-  }  
+  }
   
   /** {@inheritDoc} */
   @Override

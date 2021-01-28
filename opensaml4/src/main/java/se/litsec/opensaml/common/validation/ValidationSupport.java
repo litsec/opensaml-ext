@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2021 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class ValidationSupport {
    * @throws ValidationResultException
    *           for non VALID results
    */
-  public static void check(ValidationResult result) throws ValidationResultException {
+  public static void check(final ValidationResult result) throws ValidationResultException {
     if (!ValidationResult.VALID.equals(result)) {
       throw new ValidationResultException(result);
     }
@@ -59,7 +59,7 @@ public class ValidationSupport {
      * @param result
      *          the validation result - must not be {@link ValidationResult#VALID}
      */
-    public ValidationResultException(ValidationResult result) {
+    public ValidationResultException(final ValidationResult result) {
       if (ValidationResult.VALID.equals(result)) {
         throw new IllegalArgumentException("Result is valid - can not throw ValidationResultException");
       }

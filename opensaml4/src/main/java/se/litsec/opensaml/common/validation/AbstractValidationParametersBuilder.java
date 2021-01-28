@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2021 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,13 @@
  */
 package se.litsec.opensaml.common.validation;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.opensaml.saml.common.assertion.ValidationContext;
+import org.opensaml.saml.saml2.assertion.SAML2AssertionValidationParameters;
 
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 
@@ -40,7 +43,7 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
   /** {@inheritDoc} */
   @Override
   public ValidationContext build() {
-    ValidationContext context = new ValidationContext(this.staticParameters);
+    final ValidationContext context = new ValidationContext(this.staticParameters);
     context.getDynamicParameters().putAll(this.dynamicParameters);
     return context;
   }
@@ -54,7 +57,7 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
    *          the parameter value
    * @return the builder
    */
-  public T staticParameter(String name, Object value) {
+  public T staticParameter(final String name, final Object value) {
     this.addStaticParameter(name, value);
     return this.getThis();
   }
@@ -68,7 +71,7 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
    *          the parameter value
    * @return the builder
    */
-  public T dynamicParameter(String name, Object value) {
+  public T dynamicParameter(final String name, final Object value) {
     this.addStaticParameter(name, value);
     return this.getThis();
   }
@@ -80,8 +83,20 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
    *          true/false
    * @return the builder
    */
-  public T strictValidation(Boolean flag) {
+  public T strictValidation(final boolean flag) {
     this.addStaticParameter(CoreValidatorParameters.STRICT_VALIDATION, flag);
+    return this.getThis();
+  }
+
+  /**
+   * Gives the duration that is the maximum allowed clock skew when verifying time stamps.
+   * 
+   * @param skew
+   *          duration
+   * @return the builder
+   */
+  public T allowedClockSkew(final Duration skew) {
+    this.addStaticParameter(SAML2AssertionValidationParameters.CLOCK_SKEW, skew);
     return this.getThis();
   }
 
@@ -92,8 +107,20 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
    *          number of milliseconds
    * @return the builder
    */
-  public T allowedClockSkew(Long millis) {
-    this.addStaticParameter(CoreValidatorParameters.ALLOWED_CLOCK_SKEW, millis);
+  public T allowedClockSkew(final long millis) {
+    return this.allowedClockSkew(Duration.ofMillis(millis));
+  }
+
+  /**
+   * Gives the maximum age (difference between issuance time and the validation time) that a received message is allowed
+   * to have.
+   * 
+   * @param millis
+   *          number of milliseconds
+   * @return the builder
+   */
+  public T maxAgeReceivedMessage(final Duration maxAge) {
+    this.addStaticParameter(CoreValidatorParameters.MAX_AGE_MESSAGE, maxAge);
     return this.getThis();
   }
 
@@ -105,9 +132,31 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
    *          number of milliseconds
    * @return the builder
    */
-  public T maxAgeReceivedMessage(Long millis) {
-    this.addStaticParameter(CoreValidatorParameters.MAX_AGE_MESSAGE, millis);
+  public T maxAgeReceivedMessage(final long millis) {
+    return this.maxAgeReceivedMessage(Duration.ofMillis(millis));
+  }
+
+  /**
+   * Sets the receive instant (i.e., when a message being validated was received).
+   * 
+   * @param instant
+   *          the receive instant
+   * @return the builder
+   */
+  public T receiveInstant(final Instant instant) {
+    this.addStaticParameter(CoreValidatorParameters.RECEIVE_INSTANT, instant);
     return this.getThis();
+  }
+
+  /**
+   * Sets the receive instant (i.e., when a message being validated was received).
+   * 
+   * @param instant
+   *          the receive instant
+   * @return the builder
+   */
+  public T receiveInstant(final long instant) {
+    return this.receiveInstant(Instant.ofEpochMilli(instant));
   }
 
   /**
@@ -117,8 +166,8 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
    *          true/false
    * @return the builder
    */
-  public T signatureRequired(Boolean required) {
-    this.addStaticParameter(CoreValidatorParameters.SIGNATURE_REQUIRED, required);
+  public T signatureRequired(final boolean required) {
+    this.addStaticParameter(SAML2AssertionValidationParameters.SIGNATURE_REQUIRED, required);
     return this.getThis();
   }
 
@@ -129,8 +178,10 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
    *          the criteria set
    * @return the builder
    */
-  public T signatureValidationCriteriaSet(CriteriaSet criteriaSet) {
-    this.addStaticParameter(CoreValidatorParameters.SIGNATURE_VALIDATION_CRITERIA_SET, criteriaSet);
+  public T signatureValidationCriteriaSet(final CriteriaSet criteriaSet) {
+    if (criteriaSet != null) {
+      this.addStaticParameter(SAML2AssertionValidationParameters.SIGNATURE_VALIDATION_CRITERIA_SET, criteriaSet);
+    }
     return this.getThis();
   }
 
@@ -149,8 +200,24 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
    * @param value
    *          the value of the parameter
    */
-  public final void addStaticParameter(String name, Object value) {
-    this.staticParameters.put(name, value);
+  public final void addStaticParameter(final String name, final Object value) {
+    if (name != null) {
+      this.staticParameters.put(name, value);
+    }
+  }
+
+  /**
+   * Adds a static validation parameter if it is not set yet.
+   * 
+   * @param name
+   *          the name of the parameter
+   * @param value
+   *          the value of the parameter
+   */
+  public final void addStaticParameterIfMissing(final String name, final Object value) {
+    if (name != null && !this.staticParameters.containsKey(name)) {
+      this.addStaticParameter(name, value);
+    }
   }
 
   /**
@@ -159,8 +226,10 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
    * @param pars
    *          static validation parameters
    */
-  public final void addStaticParameters(Map<String, Object> pars) {
-    this.staticParameters.putAll(pars);
+  public final void addStaticParameters(final Map<String, Object> pars) {
+    if (pars != null) {
+      this.staticParameters.putAll(pars);
+    }
   }
 
   /**
@@ -171,8 +240,10 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
    * @param value
    *          the value of the parameter
    */
-  public final void addDynamicParameter(String name, Object value) {
-    this.staticParameters.put(name, value);
+  public final void addDynamicParameter(final String name, final Object value) {
+    if (name != null) {
+      this.staticParameters.put(name, value);
+    }
   }
 
   /**
@@ -181,8 +252,10 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
    * @param pars
    *          dynamic validation parameters
    */
-  public final void addDynamicParameters(Map<String, Object> pars) {
-    this.dynamicParameters.putAll(pars);
+  public final void addDynamicParameters(final Map<String, Object> pars) {
+    if (pars != null) {
+      this.dynamicParameters.putAll(pars);
+    }
   }
 
 }
