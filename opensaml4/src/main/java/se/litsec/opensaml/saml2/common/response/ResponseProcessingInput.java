@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2021 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package se.litsec.opensaml.saml2.common.response;
 
+import java.time.Instant;
+
 import org.opensaml.saml.saml2.core.AuthnRequest;
 
 /**
@@ -27,14 +29,14 @@ public interface ResponseProcessingInput {
   /**
    * Returns the authentication request message that corresponds to the response message being processed.
    * 
-   * @return the AuthnRequest message or {@code null} if no message is available
+   * @return the AuthnRequest message or null if no message is available
    */
   AuthnRequest getAuthnRequest();
 
   /**
    * Returns the RelayState that was included in the request (or {@code null} if none was sent).
    * 
-   * @return the RelayState variable or {@code null}
+   * @return the RelayState variable or null
    */
   String getRelayState();
 
@@ -46,17 +48,17 @@ public interface ResponseProcessingInput {
   String getReceiveURL();
 
   /**
-   * Returns the timestamp (epoch since 1970) when the response was received.
+   * Returns the timestamp when the response was received.
    * 
    * @return the receive timestamp
    */
-  long getReceiveInstant();
+  Instant getReceiveInstant();
 
   /**
    * If the validation should perform a check of the Address(es) found in the assertion, this method should return the
    * address of the client, otherwise return {@code null}.
    * 
-   * @return the client IP address of {@code null} if no check should be made
+   * @return the client IP address of null if no check should be made
    */
   String getClientIpAddress();
 

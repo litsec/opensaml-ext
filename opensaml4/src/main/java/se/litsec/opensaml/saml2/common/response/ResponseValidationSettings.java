@@ -15,6 +15,9 @@
  */
 package se.litsec.opensaml.saml2.common.response;
 
+import java.time.Duration;
+import java.util.Optional;
+
 /**
  * Configuration settings for response and assertion validation.
  *
@@ -23,22 +26,22 @@ package se.litsec.opensaml.saml2.common.response;
 public class ResponseValidationSettings {
 
   /** The default allowed clock skew (in milliseconds) - 30 seconds. */
-  public static final long DEFAULT_ALLOWED_CLOCK_SKEW = 30000L;
+  public static final Duration DEFAULT_ALLOWED_CLOCK_SKEW = Duration.ofSeconds(30); 
 
   /** The default age for a response message that we allow (in milliseconds) - 3 minutes. */
-  public static final long DEFAULT_MAX_AGE_RESPONSE = 180000L;
+  public static final Duration DEFAULT_MAX_AGE_RESPONSE = Duration.ofMinutes(3); 
 
   /** Default max session age (in milliseconds) - 1 hour. */
-  public static final long DEFAULT_MAX_SESSION_AGE = 3600000L;
+  public static final Duration DEFAULT_MAX_SESSION_AGE = Duration.ofHours(1); 
 
   /** The allowed clock skew (in milliseconds). */
-  private long allowedClockSkew = DEFAULT_ALLOWED_CLOCK_SKEW;
+  private Duration allowedClockSkew;
 
   /** Maximum allowed "age" of a response message (in milliseconds). */
-  private long maxAgeResponse;
+  private Duration maxAgeResponse;
 
   /** Maximum session age allowed for SSO (in milliseconds). */
-  private long maxSessionAge;
+  private Duration maxSessionAge;
 
   /** Should validation be strict? Default is false. */
   private boolean strictValidation = false;
@@ -47,77 +50,77 @@ public class ResponseValidationSettings {
   private boolean requireSignedAssertions = false;
 
   /**
-   * Returns the allowed clock skew (in milliseconds).
+   * Returns the allowed clock skew.
    * <p>
    * The default is {@link #DEFAULT_ALLOWED_CLOCK_SKEW}.
    * </p>
    *
-   * @return the allowed clock skew (in milliseconds)
+   * @return the allowed clock skew
    */
-  public long getAllowedClockSkew() {
-    return this.allowedClockSkew;
+  public Duration getAllowedClockSkew() {
+    return Optional.ofNullable(this.allowedClockSkew).orElse(DEFAULT_ALLOWED_CLOCK_SKEW);
   }
 
   /**
-   * Assigns the allowed clock skew (in milliseconds).
+   * Assigns the allowed clock skew.
    * <p>
    * The default is {@link #DEFAULT_ALLOWED_CLOCK_SKEW}.
    * </p>
    * 
    * @param allowedClockSkew
-   *          the allowed clock skew (in milliseconds)
+   *          the allowed clock skew
    */
-  public void setAllowedClockSkew(long allowedClockSkew) {
+  public void setAllowedClockSkew(final Duration allowedClockSkew) {
     this.allowedClockSkew = allowedClockSkew;
   }
 
   /**
-   * Returns the maximum allowed "age" of a response message (in milliseconds).
+   * Returns the maximum allowed "age" of a response message.
    * <p>
    * The default is {@link #DEFAULT_MAX_AGE_RESPONSE}.
    * </p>
    * 
-   * @return the maximum allowed "age" of a response message (in milliseconds)
+   * @return the maximum allowed "age" of a response message
    */
-  public long getMaxAgeResponse() {
-    return this.maxAgeResponse;
+  public Duration getMaxAgeResponse() {
+    return Optional.ofNullable(this.maxAgeResponse).orElse(DEFAULT_MAX_AGE_RESPONSE);
   }
 
   /**
-   * Assigns the maximum allowed "age" of a response message (in milliseconds).
+   * Assigns the maximum allowed "age" of a response message
    * <p>
    * The default is {@link #DEFAULT_MAX_AGE_RESPONSE}.
    * </p>
    * 
    * @param maxAgeResponse
-   *          the maximum allowed "age" of a response message (in milliseconds)
+   *          the maximum allowed "age" of a response message
    */
-  public void setMaxAgeResponse(long maxAgeResponse) {
+  public void setMaxAgeResponse(final Duration maxAgeResponse) {
     this.maxAgeResponse = maxAgeResponse;
   }
 
   /**
-   * Returns the maximum session age allowed for SSO (in milliseconds).
+   * Returns the maximum session age allowed for SSO.
    * <p>
    * The default is {@link #DEFAULT_MAX_SESSION_AGE}.
    * </p>
    * 
-   * @return the maximum session age allowed for SSO (in milliseconds)
+   * @return the maximum session age allowed for SSO
    */
-  public long getMaxSessionAge() {
-    return this.maxSessionAge;
+  public Duration getMaxSessionAge() {
+    return Optional.ofNullable(this.maxSessionAge).orElse(DEFAULT_MAX_SESSION_AGE);
   }
 
   /**
-   * Assigns the maximum session age allowed for SSO (in milliseconds).
+   * Assigns the maximum session age allowed for SSO.
    * <p>
    * The default is {@link #DEFAULT_MAX_SESSION_AGE}.
    * </p>
    * 
    * @param maxSessionAge
-   *          the maximum session age allowed for SSO (in milliseconds)
+   *          the maximum session age allowed for SSO
    */
-  public void setMaxSessionAge(long maxSessionAge) {
+  public void setMaxSessionAge(final Duration maxSessionAge) {
     this.maxSessionAge = maxSessionAge;
   }
 
@@ -142,7 +145,7 @@ public class ResponseValidationSettings {
    * @param strictValidation
    *          whether strict validation should be performed
    */
-  public void setStrictValidation(boolean strictValidation) {
+  public void setStrictValidation(final boolean strictValidation) {
     this.strictValidation = strictValidation;
   }
 
@@ -167,10 +170,11 @@ public class ResponseValidationSettings {
    * @param requireSignedAssertions
    *          whether we require signed assertions?
    */
-  public void setRequireSignedAssertions(boolean requireSignedAssertions) {
+  public void setRequireSignedAssertions(final boolean requireSignedAssertions) {
     this.requireSignedAssertions = requireSignedAssertions;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String toString() {
     return String.format("allowedClockSkew=%s, maxAgeResponse=%s, maxSessionAge=%s, strictValidation=%s, requireSignedAssertions=%s",

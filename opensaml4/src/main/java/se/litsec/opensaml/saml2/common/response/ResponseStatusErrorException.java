@@ -42,7 +42,7 @@ public class ResponseStatusErrorException extends Exception {
    * @param responseId
    *          the response ID
    */
-  public ResponseStatusErrorException(Status status, String responseId) {
+  public ResponseStatusErrorException(final Status status, final String responseId) {
     super(statusToString(status));
     this.status = status;
     this.responseId = responseId;
@@ -77,7 +77,7 @@ public class ResponseStatusErrorException extends Exception {
    *          the Status to print
    * @return a status string
    */
-  public static String statusToString(Status status) {
+  public static String statusToString(final Status status) {
     StringBuffer sb = new StringBuffer("Status: ");
     sb.append(status.getStatusCode().getValue());
     if (status.getStatusCode().getStatusCode() != null) {

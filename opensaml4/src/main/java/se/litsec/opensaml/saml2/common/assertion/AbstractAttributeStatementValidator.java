@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2021 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ public abstract class AbstractAttributeStatementValidator implements StatementVa
    * Validates that all required attributes were received in the {@code AttributeStatement}.
    */
   @Override
-  public ValidationResult validate(Statement statement, Assertion assertion, ValidationContext context)
+  public ValidationResult validate(final Statement statement, final Assertion assertion, final ValidationContext context)
       throws AssertionValidationException {
 
     if (statement instanceof AttributeStatement) {
@@ -72,7 +72,7 @@ public abstract class AbstractAttributeStatementValidator implements StatementVa
    *          the validation context
    * @return validation result
    */
-  protected abstract ValidationResult validateRequiredAttributes(List<Attribute> attributes, AttributeStatement statement,
-      Assertion assertion, ValidationContext context);
+  protected abstract ValidationResult validateRequiredAttributes(final List<Attribute> attributes, 
+      final AttributeStatement statement, final Assertion assertion, final ValidationContext context);
 
 }

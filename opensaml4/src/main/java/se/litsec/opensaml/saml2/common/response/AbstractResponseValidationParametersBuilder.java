@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2021 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package se.litsec.opensaml.saml2.common.response;
 
 import org.opensaml.saml.common.assertion.ValidationContext;
+import org.opensaml.saml.saml2.assertion.SAML2AssertionValidationParameters;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 
 import se.litsec.opensaml.common.validation.AbstractValidationParametersBuilder;
@@ -35,24 +36,13 @@ public abstract class AbstractResponseValidationParametersBuilder<T extends Abst
     AbstractValidationParametersBuilder<T> {
 
   /**
-   * Assigns the instant (millisecond since epoch) when the response message was received.
-   * 
-   * @param receiveInstant
-   *          timestamp for when the message was received
-   * @return the builder
-   */
-  public T receiveInstant(Long receiveInstant) {
-    return this.staticParameter(CoreValidatorParameters.RECEIVE_INSTANT, receiveInstant);
-  }
-
-  /**
    * Assigns the URL on which the message was received.
    * 
    * @param receiveUrl
    *          the URL
    * @return the builder
    */
-  public T receiveUrl(String receiveUrl) {
+  public T receiveUrl(final String receiveUrl) {
     return this.staticParameter(CoreValidatorParameters.RECEIVE_URL, receiveUrl);
   }
 
@@ -63,7 +53,7 @@ public abstract class AbstractResponseValidationParametersBuilder<T extends Abst
    *          the issuer entityID
    * @return the builder
    */
-  public T expectedIssuer(String expectedIssuer) {
+  public T expectedIssuer(final String expectedIssuer) {
     return this.staticParameter(CoreValidatorParameters.EXPECTED_ISSUER, expectedIssuer);
   }
 
@@ -74,7 +64,10 @@ public abstract class AbstractResponseValidationParametersBuilder<T extends Abst
    *          an AuthnRequest message
    * @return the builder
    */
-  public T authnRequest(AuthnRequest authnRequest) {
+  public T authnRequest(final AuthnRequest authnRequest) {
+    if (authnRequest != null && authnRequest.getID() != null) {
+      this.authnRequestID(authnRequest.getID());      
+    }
     return this.staticParameter(CoreValidatorParameters.AUTHN_REQUEST, authnRequest);
   }
 
@@ -85,7 +78,12 @@ public abstract class AbstractResponseValidationParametersBuilder<T extends Abst
    *          ID
    * @return the builder
    */
-  public T authnRequestID(String authnRequestID) {
+  public T authnRequestID(final String authnRequestID) {
+    if (authnRequestID != null) {
+      this.addStaticParameter(SAML2AssertionValidationParameters.SC_VALID_IN_RESPONSE_TO, authnRequestID);    
+      this.addStaticParameter(SAML2AssertionValidationParameters.SC_IN_RESPONSE_TO_REQUIRED, Boolean.TRUE);
+    }
+    
     return this.staticParameter(CoreValidatorParameters.AUTHN_REQUEST_ID, authnRequestID);
   }
 

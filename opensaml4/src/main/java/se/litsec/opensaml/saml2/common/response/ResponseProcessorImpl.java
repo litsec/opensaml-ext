@@ -16,6 +16,7 @@
 package se.litsec.opensaml.saml2.common.response;
 
 import java.io.ByteArrayInputStream;
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.opensaml.core.xml.io.UnmarshallingException;
@@ -24,8 +25,11 @@ import org.opensaml.saml.common.assertion.ValidationContext;
 import org.opensaml.saml.common.assertion.ValidationResult;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.criterion.RoleDescriptorCriterion;
+import org.opensaml.saml.saml2.assertion.impl.AudienceRestrictionConditionValidator;
+import org.opensaml.saml.saml2.assertion.impl.BearerSubjectConfirmationValidator;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.AuthnRequest;
+import org.opensaml.saml.saml2.core.Issuer;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.saml.saml2.core.StatusCode;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
@@ -49,6 +53,7 @@ import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 import net.shibboleth.utilities.java.support.xml.XMLParserException;
 import se.litsec.opensaml.saml2.common.assertion.AssertionValidationParametersBuilder;
 import se.litsec.opensaml.saml2.common.assertion.AssertionValidator;
+import se.litsec.opensaml.saml2.common.assertion.AuthnStatementValidator;
 import se.litsec.opensaml.saml2.metadata.PeerMetadataResolver;
 import se.litsec.opensaml.utils.ObjectUtils;
 import se.litsec.opensaml.xmlsec.SAMLObjectDecrypter;
@@ -95,14 +100,14 @@ public class ResponseProcessorImpl implements ResponseProcessor {
 
   /** {@inheritDoc} */
   @Override
-  public ResponseProcessingResult processSamlResponse(String samlResponse, String relayState, ResponseProcessingInput input,
-      PeerMetadataResolver peerMetadataResolver, ValidationContext validationContext) throws ResponseStatusErrorException,
-      ResponseProcessingException {
+  public ResponseProcessingResult processSamlResponse(final String samlResponse, final String relayState,
+      final ResponseProcessingInput input, final PeerMetadataResolver peerMetadataResolver,
+      final ValidationContext validationContext) throws ResponseStatusErrorException, ResponseProcessingException {
 
     try {
       // Step 1: Decode the SAML response message.
       //
-      Response response = this.decodeResponse(samlResponse);
+      final Response response = this.decodeResponse(samlResponse);
 
       if (log.isTraceEnabled()) {
         log.trace("[{}] Decoded Response: {}", logId(response), ObjectUtils.toStringSafe(response));
@@ -110,7 +115,7 @@ public class ResponseProcessorImpl implements ResponseProcessor {
 
       // The IdP metadata is required for all steps below ...
       //
-      final String issuer = response.getIssuer() != null ? response.getIssuer().getValue() : null;
+      final String issuer = Optional.ofNullable(response.getIssuer()).map(Issuer::getValue).orElse(null);
       final EntityDescriptor idpMetadata = issuer != null ? peerMetadataResolver.getMetadata(issuer) : null;
 
       // Step 2: Validate the Response (including its signature).
@@ -124,8 +129,8 @@ public class ResponseProcessorImpl implements ResponseProcessor {
       // Step 4. Check Status
       //
       if (!StatusCode.SUCCESS.equals(response.getStatus().getStatusCode().getValue())) {
-        log.info("Authentication failed with status '{}' [{}]", ResponseStatusErrorException.statusToString(response.getStatus()), logId(
-          response));
+        log.info("Authentication failed with status '{}' [{}]",
+          ResponseStatusErrorException.statusToString(response.getStatus()), logId(response));
         throw new ResponseStatusErrorException(response.getStatus(), response.getID());
       }
 
@@ -204,8 +209,8 @@ public class ResponseProcessorImpl implements ResponseProcessor {
    *          validator for checking the a Signature is correct with respect to the standards
    * @return the created response validator
    */
-  protected ResponseValidator createResponseValidator(SignatureTrustEngine signatureTrustEngine,
-      SignaturePrevalidator signatureProfileValidator) {
+  protected ResponseValidator createResponseValidator(final SignatureTrustEngine signatureTrustEngine,
+      final SignaturePrevalidator signatureProfileValidator) {
     return new ResponseValidator(signatureTrustEngine, signatureProfileValidator);
   }
 
@@ -223,9 +228,13 @@ public class ResponseProcessorImpl implements ResponseProcessor {
    *          validator for checking the a Signature is correct with respect to the standards
    * @return the created assertion validator
    */
-  protected AssertionValidator createAssertionValidator(SignatureTrustEngine signatureTrustEngine,
-      SignaturePrevalidator signatureProfileValidator) {
-    return null;
+  protected AssertionValidator createAssertionValidator(
+      final SignatureTrustEngine signatureTrustEngine, final SignaturePrevalidator signatureProfileValidator) {
+
+    return new AssertionValidator(signatureTrustEngine, signatureProfileValidator,
+      Arrays.asList(new BearerSubjectConfirmationValidator()),
+      Arrays.asList(new AudienceRestrictionConditionValidator()),
+      Arrays.asList(new AuthnStatementValidator()));
   }
 
   /**
@@ -237,7 +246,7 @@ public class ResponseProcessorImpl implements ResponseProcessor {
    * @throws ResponseProcessingException
    *           for decoding errors
    */
-  protected Response decodeResponse(String samlResponse) throws ResponseProcessingException {
+  protected Response decodeResponse(final String samlResponse) throws ResponseProcessingException {
     try {
       final byte[] decodedBytes = Base64Support.decode(samlResponse);
       if (decodedBytes == null) {
@@ -267,9 +276,8 @@ public class ResponseProcessorImpl implements ResponseProcessor {
    * @throws ResponseValidationException
    *           for validation errors
    */
-  protected void validateResponse(Response response, String relayState, ResponseProcessingInput input, EntityDescriptor idpMetadata,
-      ValidationContext validationContext)
-      throws ResponseValidationException {
+  protected void validateResponse(final Response response, final String relayState, final ResponseProcessingInput input,
+      final EntityDescriptor idpMetadata, final ValidationContext validationContext) throws ResponseValidationException {
 
     if (input.getAuthnRequest() == null) {
       String msg = String.format("No AuthnRequest available when processing Response [%s]", logId(response));
@@ -328,13 +336,14 @@ public class ResponseProcessorImpl implements ResponseProcessor {
    * @throws ResponseValidationException
    *           for validation errors
    */
-  protected void validateRelayState(Response response, String relayState, ResponseProcessingInput input)
+  protected void validateRelayState(final Response response, final String relayState, final ResponseProcessingInput input)
       throws ResponseValidationException {
 
     Optional<String> relayStateOptional = relayState == null || relayState.trim().length() == 0 ? Optional.empty()
         : Optional.of(relayState);
     Optional<String> relayStateInputOptional = input.getRelayState() == null || input.getRelayState().trim().length() == 0
-        ? Optional.empty() : Optional.of(input.getRelayState());
+        ? Optional.empty()
+        : Optional.of(input.getRelayState());
 
     boolean relayStateMatch = (!relayStateOptional.isPresent() && !relayStateInputOptional.isPresent())
         || (relayStateOptional.isPresent() && relayState.equals(input.getRelayState()))
@@ -364,21 +373,18 @@ public class ResponseProcessorImpl implements ResponseProcessor {
    * @throws ResponseValidationException
    *           for validation errors
    */
-  protected void validateAssertion(Assertion assertion, Response response, ResponseProcessingInput input, EntityDescriptor idpMetadata,
-      ValidationContext validationContext) throws ResponseValidationException {
+  protected void validateAssertion(final Assertion assertion, final Response response, final ResponseProcessingInput input,
+      final EntityDescriptor idpMetadata, final ValidationContext validationContext) throws ResponseValidationException {
 
-    IDPSSODescriptor descriptor = idpMetadata != null ? idpMetadata.getIDPSSODescriptor(SAMLConstants.SAML20P_NS) : null;
+    final IDPSSODescriptor descriptor = idpMetadata != null ? idpMetadata.getIDPSSODescriptor(SAMLConstants.SAML20P_NS) : null;
     if (descriptor == null) {
       throw new ResponseValidationException("Invalid/missing IdP metadata - cannot verify Assertion");
     }
 
-    AuthnRequest authnRequest = input.getAuthnRequest();
-    String entityID = null;
-    if (authnRequest != null) {
-      entityID = authnRequest.getIssuer().getValue();
-    }
+    final AuthnRequest authnRequest = input.getAuthnRequest();
+    final String entityID = Optional.ofNullable(authnRequest).map(AuthnRequest::getIssuer).map(Issuer::getValue).orElse(null);
 
-    AssertionValidationParametersBuilder b = AssertionValidationParametersBuilder.builder()
+    final AssertionValidationParametersBuilder b = AssertionValidationParametersBuilder.builder()
       .strictValidation(this.responseValidationSettings.isStrictValidation())
       .allowedClockSkew(this.responseValidationSettings.getAllowedClockSkew())
       .maxAgeReceivedMessage(this.responseValidationSettings.getMaxAgeResponse())
@@ -391,6 +397,10 @@ public class ResponseProcessorImpl implements ResponseProcessor {
       .responseIssueInstant(response.getIssueInstant().toEpochMilli())
       .validAudiences(entityID)
       .validRecipients(input.getReceiveURL(), entityID);
+
+    if (input.getClientIpAddress() != null) {
+      b.validAddresses(input.getClientIpAddress());
+    }
 
     if (validationContext != null) {
       b.addStaticParameters(validationContext.getStaticParameters());
@@ -421,7 +431,7 @@ public class ResponseProcessorImpl implements ResponseProcessor {
    * @param decrypter
    *          the decrypter
    */
-  public void setDecrypter(SAMLObjectDecrypter decrypter) {
+  public void setDecrypter(final SAMLObjectDecrypter decrypter) {
     this.decrypter = decrypter;
   }
 
@@ -431,7 +441,7 @@ public class ResponseProcessorImpl implements ResponseProcessor {
    * @param messageReplayChecker
    *          message replay checker
    */
-  public void setMessageReplayChecker(MessageReplayChecker messageReplayChecker) {
+  public void setMessageReplayChecker(final MessageReplayChecker messageReplayChecker) {
     this.messageReplayChecker = messageReplayChecker;
   }
 
@@ -441,18 +451,18 @@ public class ResponseProcessorImpl implements ResponseProcessor {
    * @param responseValidationSettings
    *          validation settings
    */
-  public void setResponseValidationSettings(ResponseValidationSettings responseValidationSettings) {
+  public void setResponseValidationSettings(final ResponseValidationSettings responseValidationSettings) {
     this.responseValidationSettings = responseValidationSettings;
   }
 
-  private static String logId(Response response) {
-    return String.format("response-id:'%s'", response.getID() != null ? response.getID() : "<empty>");
+  private static String logId(final Response response) {
+    return String.format("response-id:'%s'", Optional.ofNullable(response.getID()).orElse("<empty>"));
   }
 
-  private static String logId(Response response, Assertion assertion) {
+  private static String logId(final Response response, final Assertion assertion) {
     return String.format("response-id:'%s',assertion-id:'%s'",
-      response.getID() != null ? response.getID() : "<empty>",
-      assertion.getID() != null ? assertion.getID() : "<empty>");
+      Optional.ofNullable(response.getID()).orElse("<empty>"),
+      Optional.ofNullable(assertion.getID()).orElse("<empty>"));
   }
 
 }
