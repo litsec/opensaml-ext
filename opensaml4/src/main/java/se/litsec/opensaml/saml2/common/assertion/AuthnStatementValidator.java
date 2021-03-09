@@ -104,8 +104,8 @@ public class AuthnStatementValidator extends org.opensaml.saml.saml2.assertion.i
    * @param context
    *          validation context
    * @return validation result
-   * @throws for
-   *           internal validation errors
+   * @throws AssertionValidationException
+   *           for internal validation errors
    */
   protected ValidationResult validate(final AuthnStatement statement, final Assertion assertion, final ValidationContext context)
       throws AssertionValidationException {

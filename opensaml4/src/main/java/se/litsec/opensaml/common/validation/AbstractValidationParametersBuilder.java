@@ -115,8 +115,8 @@ public abstract class AbstractValidationParametersBuilder<T extends AbstractVali
    * Gives the maximum age (difference between issuance time and the validation time) that a received message is allowed
    * to have.
    * 
-   * @param millis
-   *          number of milliseconds
+   * @param maxAge
+   *          maximum allowed age on messages
    * @return the builder
    */
   public T maxAgeReceivedMessage(final Duration maxAge) {
