@@ -95,6 +95,9 @@ public class ResponseProcessorImpl implements ResponseProcessor {
   /** Static response validation settings. */
   protected ResponseValidationSettings responseValidationSettings;
 
+  /** Do we require assertions to be encrypted? The default is {@code true}. */
+  protected boolean requireEncryptedAssertions = true;
+
   /** Is this component initialized? */
   private boolean isInitialized = false;
 
@@ -138,11 +141,23 @@ public class ResponseProcessorImpl implements ResponseProcessor {
       //
       this.validateRelayState(response, relayState, input);
 
-      // Step 6. Decrypt assertion
+      // Step 6. Decrypt assertion (if needed)
       //
-      Assertion assertion = this.decrypter.decrypt(response.getEncryptedAssertions().get(0), Assertion.class);
-      if (log.isTraceEnabled()) {
-        log.trace("[{}] Decrypted Assertion: {}", logId(response, assertion), ObjectUtils.toStringSafe(assertion));
+      Assertion assertion = null;
+      if (!response.getEncryptedAssertions().isEmpty()) {
+        assertion = this.decrypter.decrypt(response.getEncryptedAssertions().get(0), Assertion.class);
+        if (log.isTraceEnabled()) {
+          log.trace("[{}] Decrypted Assertion: {}", logId(response, assertion), ObjectUtils.toStringSafe(assertion));
+        }
+      }
+      else if (this.requireEncryptedAssertions) {
+        throw new ResponseProcessingException("Assertion in response message is not encrypted - this is required");
+      }
+      else {
+        assertion = response.getAssertions().get(0);
+        if (log.isTraceEnabled()) {
+          log.trace("[{}] Assertion: {}", logId(response, assertion), ObjectUtils.toStringSafe(assertion));
+        }
       }
 
       // Step 7. Validate the assertion
@@ -168,7 +183,14 @@ public class ResponseProcessorImpl implements ResponseProcessor {
    *           for initialization errors
    */
   public void initialize() throws Exception {
-    Assert.notNull(this.decrypter, "Property 'decrypter' must be assigned");
+    if (this.requireEncryptedAssertions) {
+      Assert.notNull(this.decrypter, "Property 'decrypter' must be assigned");
+    }
+    else {
+      if (this.decrypter == null) {
+        log.warn("Property 'decrypter' is not assigned - the processor will not be able to decrypt assertions");
+      }
+    }
     Assert.notNull(this.messageReplayChecker, "Property 'messageReplayChecker' must be assigned");
 
     if (this.responseValidationSettings == null) {
@@ -453,6 +475,16 @@ public class ResponseProcessorImpl implements ResponseProcessor {
    */
   public void setResponseValidationSettings(final ResponseValidationSettings responseValidationSettings) {
     this.responseValidationSettings = responseValidationSettings;
+  }
+
+  /**
+   * Assigns whether require assertions to be encrypted? The default is {@code true}.
+   * 
+   * @param requireEncryptedAssertions
+   *          boolean
+   */
+  public void setRequireEncryptedAssertions(boolean requireEncryptedAssertions) {
+    this.requireEncryptedAssertions = requireEncryptedAssertions;
   }
 
   private static String logId(final Response response) {
