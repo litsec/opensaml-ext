@@ -206,7 +206,7 @@ public class SAMLObjectEncrypterTest extends OpenSAMLTestBase {
     
     // RSA 1.5 is black-listed in the default OpenSAML config, so we make our own config.
     BasicEncryptionConfiguration customConfig = DefaultSecurityConfigurationBootstrap.buildDefaultEncryptionConfiguration();
-    customConfig.setBlacklistedAlgorithms(Collections.emptyList());
+    customConfig.setExcludedAlgorithms(Collections.emptyList());
     
     SAMLObjectEncrypter encrypter = new SAMLObjectEncrypter(provider);
     EncryptedData encryptedData = encrypter.encrypt(msg, new SAMLObjectEncrypter.Peer(ENTITY_ID), customConfig);
