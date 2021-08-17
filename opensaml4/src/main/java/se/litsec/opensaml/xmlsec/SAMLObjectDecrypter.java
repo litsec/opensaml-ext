@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2021 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ public class SAMLObjectDecrypter {
    * @param decryptionCredential
    *          decryption credential
    */
-  public SAMLObjectDecrypter(Credential decryptionCredential) {
+  public SAMLObjectDecrypter(final Credential decryptionCredential) {
     this(Collections.singletonList(decryptionCredential));
   }
 
@@ -79,14 +79,14 @@ public class SAMLObjectDecrypter {
    * @param decryptionCredentials
    *          decryption credentials
    */
-  public SAMLObjectDecrypter(List<Credential> decryptionCredentials) {
+  public SAMLObjectDecrypter(final List<Credential> decryptionCredentials) {
     Constraint.isNotEmpty(decryptionCredentials, "At least one credential must be supplied to SAMLObjectDecrypter");
     this.parameters = DecryptionUtils.createDecryptionParameters(
       decryptionCredentials.stream().toArray(Credential[]::new));
     
     // Should be assigned explicitly
-    this.parameters.setBlacklistedAlgorithms(Collections.emptyList());
-    this.parameters.setWhitelistedAlgorithms(Collections.emptyList());    
+    this.parameters.setExcludedAlgorithms(Collections.emptyList());
+    this.parameters.setIncludedAlgorithms(Collections.emptyList());    
   }
 
   /**
@@ -95,13 +95,13 @@ public class SAMLObjectDecrypter {
    * @param decryptionParameters
    *          parameters
    */
-  public SAMLObjectDecrypter(DecryptionParameters decryptionParameters) {
+  public SAMLObjectDecrypter(final DecryptionParameters decryptionParameters) {
     this.parameters = new DecryptionParameters();
     this.parameters.setDataKeyInfoCredentialResolver(decryptionParameters.getDataKeyInfoCredentialResolver());
     this.parameters.setKEKKeyInfoCredentialResolver(decryptionParameters.getKEKKeyInfoCredentialResolver());
     this.parameters.setEncryptedKeyResolver(decryptionParameters.getEncryptedKeyResolver());
-    this.parameters.setBlacklistedAlgorithms(decryptionParameters.getBlacklistedAlgorithms());
-    this.parameters.setWhitelistedAlgorithms(decryptionParameters.getWhitelistedAlgorithms());
+    this.parameters.setExcludedAlgorithms(decryptionParameters.getExcludedAlgorithms());
+    this.parameters.setIncludedAlgorithms(decryptionParameters.getIncludedAlgorithms());
   }
 
   /**
@@ -110,13 +110,13 @@ public class SAMLObjectDecrypter {
    * @param decryptionConfiguration
    *          parameters
    */
-  public SAMLObjectDecrypter(DecryptionConfiguration decryptionConfiguration) {
+  public SAMLObjectDecrypter(final DecryptionConfiguration decryptionConfiguration) {
     this.parameters = new DecryptionParameters();
     this.parameters.setDataKeyInfoCredentialResolver(decryptionConfiguration.getDataKeyInfoCredentialResolver());
     this.parameters.setKEKKeyInfoCredentialResolver(decryptionConfiguration.getKEKKeyInfoCredentialResolver());
     this.parameters.setEncryptedKeyResolver(decryptionConfiguration.getEncryptedKeyResolver());
-    this.parameters.setBlacklistedAlgorithms(decryptionConfiguration.getBlacklistedAlgorithms());
-    this.parameters.setWhitelistedAlgorithms(decryptionConfiguration.getWhitelistedAlgorithms());
+    this.parameters.setExcludedAlgorithms(decryptionConfiguration.getExcludedAlgorithms());
+    this.parameters.setIncludedAlgorithms(decryptionConfiguration.getIncludedAlgorithms());
   }
 
   /**
@@ -134,7 +134,7 @@ public class SAMLObjectDecrypter {
    * @throws DecryptionException
    *           for decryption errors
    */
-  public <T extends XMLObject, E extends EncryptedElementType> T decrypt(E encryptedObject, Class<T> destinationClass)
+  public <T extends XMLObject, E extends EncryptedElementType> T decrypt(final E encryptedObject, final Class<T> destinationClass)
       throws DecryptionException {
 
     if (encryptedObject.getEncryptedData() == null) {
@@ -156,10 +156,10 @@ public class SAMLObjectDecrypter {
    * @throws DecryptionException
    *           for decryption errors
    */
-  public <T extends XMLObject> T decrypt(EncryptedData encryptedData, Class<T> destinationClass)
+  public <T extends XMLObject> T decrypt(final EncryptedData encryptedData, final Class<T> destinationClass)
       throws DecryptionException {
 
-    XMLObject object = this.getDecrypter().decryptData(encryptedData);
+    final XMLObject object = this.getDecrypter().decryptData(encryptedData);
     if (!destinationClass.isInstance(object)) {
       throw new DecryptionException(String.format("Decrypted object can not be cast to %s - is %s",
         destinationClass.getSimpleName(), object.getClass().getSimpleName()));
@@ -175,7 +175,7 @@ public class SAMLObjectDecrypter {
   private synchronized Decrypter getDecrypter() {
     if (this.decrypter == null) {
       if (this.pkcs11Workaround) {
-        Pkcs11Decrypter p11Decrypter = new Pkcs11Decrypter(this.parameters);
+        final Pkcs11Decrypter p11Decrypter = new Pkcs11Decrypter(this.parameters);
         p11Decrypter.setTestMode(this.pkcs11testMode);
         this.decrypter = p11Decrypter;
       }
@@ -193,11 +193,11 @@ public class SAMLObjectDecrypter {
    * @param blacklistedAlgorithms
    *          non allowed algorithms
    */
-  public void setBlacklistedAlgorithms(Collection<String> blacklistedAlgorithms) {
+  public void setBlacklistedAlgorithms(final Collection<String> blacklistedAlgorithms) {
     if (this.decrypter != null) {
       throw new IllegalStateException("Object has already been initialized");
     }
-    this.parameters.setBlacklistedAlgorithms(blacklistedAlgorithms);
+    this.parameters.setExcludedAlgorithms(blacklistedAlgorithms);
   }
 
   /**
@@ -206,11 +206,11 @@ public class SAMLObjectDecrypter {
    * @param whitelistedAlgorithms
    *          white listed algorithms
    */
-  public void setWhitelistedAlgorithms(Collection<String> whitelistedAlgorithms) {
+  public void setWhitelistedAlgorithms(final Collection<String> whitelistedAlgorithms) {
     if (this.decrypter != null) {
       throw new IllegalStateException("Object has already been initialized");
     }
-    this.parameters.setWhitelistedAlgorithms(whitelistedAlgorithms);
+    this.parameters.setIncludedAlgorithms(whitelistedAlgorithms);
   }
 
   /**
@@ -222,7 +222,7 @@ public class SAMLObjectDecrypter {
    * @param pkcs11Workaround
    *          whether to run in PKCS11 workaround mode
    */
-  public void setPkcs11Workaround(boolean pkcs11Workaround) {
+  public void setPkcs11Workaround(final boolean pkcs11Workaround) {
     this.pkcs11Workaround = pkcs11Workaround;
   }
 
@@ -232,7 +232,7 @@ public class SAMLObjectDecrypter {
    * @param pkcs11testMode
    *          test flag
    */
-  public void setPkcs11testMode(boolean pkcs11testMode) {
+  public void setPkcs11testMode(final boolean pkcs11testMode) {
     this.pkcs11testMode = pkcs11testMode;
   }
 
