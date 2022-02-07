@@ -48,6 +48,10 @@ public class SingleSignOnServiceFactoryBean extends AbstractSAMLObjectBuilderFac
   public void setBinding(String binding) {
     this.builder.binding(binding);
   }
+  
+  public void setProtocolBinding(final String binding) {
+    this.builder.protocolBinding(binding);
+  }
 
   /**
    * Assigns the location URL.

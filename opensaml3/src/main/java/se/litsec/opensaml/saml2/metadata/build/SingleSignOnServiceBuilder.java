@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Litsec AB
+ * Copyright 2016-2022 Litsec AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package se.litsec.opensaml.saml2.metadata.build;
+
+import javax.xml.namespace.QName;
 
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.metadata.SingleSignOnService;
@@ -84,6 +86,12 @@ public class SingleSignOnServiceBuilder extends AbstractSAMLObjectBuilder<Single
     return this;
   }
 
+  public SingleSignOnServiceBuilder protocolBinding(final String binding) {
+    this.object()
+      .getUnknownAttributes()
+      .put(new QName("urn:oasis:names:tc:SAML:2.0:profiles:holder-of-key:SSO:browser", "ProtocolBinding", "hoksso"), binding);
+    return this;
+  }
 
   /** {@inheritDoc} */
   @Override
