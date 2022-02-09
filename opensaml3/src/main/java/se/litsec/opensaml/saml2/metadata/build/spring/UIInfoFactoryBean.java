@@ -64,6 +64,10 @@ public class UIInfoFactoryBean extends AbstractSAMLObjectBuilderFactoryBean<UIIn
     this.builder.keywords(keywords);
   }
   
+  public void setKeywordsMap(Map<String, List<String>> keywords) {
+    this.builder.keywords(keywords);
+  }
+  
   /**
    * Assigns a set of keywords that do not have the language tag.
    * 
