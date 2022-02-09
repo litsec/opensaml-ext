@@ -6,7 +6,7 @@
   <groupId>se.litsec.opensaml</groupId>
   <artifactId>opensaml3-ext</artifactId>
   <packaging>jar</packaging>
-  <version>1.4.5-SNAPSHOT</version>
+  <version>1.4.5</version>
 
   <name>Litsec :: OpenSAML 3.X utility extensions</name>
   <description>OpenSAML 3.X utility extension library</description>
@@ -46,13 +46,14 @@
 
     <!-- Versions on dependencies -->
     <opensaml.version>3.4.5</opensaml.version>
-    <opensaml-security-ext.version>1.0.6</opensaml-security-ext.version>    
+    <opensaml-security-ext.version>1.0.7</opensaml-security-ext.version>    
     <slf4j.version>1.7.25</slf4j.version>
     <spring.version>4.3.19.RELEASE</spring.version>
     
     <commons-lang.version>2.4</commons-lang.version>
     <joda-time.version>2.9</joda-time.version>    
-    <junit.version>4.12</junit.version>
+    <junit.version>4.13.2</junit.version>
+    <jetty.version>9.4.41.v20210516</jetty.version>
 
   </properties>
   
@@ -91,7 +92,7 @@
       <dependency>
         <groupId>se.swedenconnect.opensaml</groupId>
         <artifactId>opensaml-bom</artifactId>
-        <version>${opensaml.version}.R1</version>
+        <version>${opensaml.version}.R2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -187,23 +188,6 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
-      <version>4.5.3</version>
-      <scope>compile</scope>
-      <type>jar</type>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-codec</groupId>
-          <artifactId>commons-codec</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.httpcomponents</groupId>
-          <artifactId>httpcore</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     
     <dependency>
@@ -265,9 +249,15 @@
     <dependency>
       <groupId>pl.pragmatists</groupId>
       <artifactId>JUnitParams</artifactId>
-      <version>1.0.5</version>
+      <version>1.1.0</version>
       <scope>test</scope>
-      <type>jar</type>      
+      <type>jar</type>
+      <exclusions>
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+        </exclusion>
+      </exclusions>      
     </dependency>
     
     <dependency>
@@ -281,14 +271,14 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
-      <version>9.4.18.v20190429</version>
+      <version>${jetty.version}</version>
       <scope>test</scope>
     </dependency>
     
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-util</artifactId>
-      <version>9.4.18.v20190429</version>
+      <version>${jetty.version}</version>
       <scope>test</scope>
     </dependency>    
 
@@ -298,39 +288,6 @@
       <version>1.3.2</version>
       <scope>test</scope>
       <type>jar</type>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>${slf4j.version}</version>
-      <type>jar</type>
-      <scope>test</scope>
-    </dependency>    
-
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.17</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>javax.mail</groupId>
-          <artifactId>mail</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>javax.jms</groupId>
-          <artifactId>jms</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.sun.jdmk</groupId>
-          <artifactId>jmxtools</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.sun.jmx</groupId>
-          <artifactId>jmxri</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
   </dependencies>

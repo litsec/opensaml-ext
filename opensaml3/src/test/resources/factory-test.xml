@@ -30,7 +30,7 @@
     p:displayNames="${metadata.uiinfo.display-names}"
     p:descriptions="${metadata.uiinfo.descriptions}">
     
-    <property name="keywords">
+    <property name="keywordsMap">
       <util:constant static-field="se.litsec.opensaml.saml2.metadata.build.UIInfoBuilderTest.KEYWORDS" />
     </property>
     
