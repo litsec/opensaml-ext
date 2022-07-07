@@ -244,7 +244,7 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
-      <version>11.0.0</version>
+      <version>11.0.10</version>
       <!-- <version>9.4.18.v20190429</version> -->
       <scope>test</scope>
       <exclusions>
